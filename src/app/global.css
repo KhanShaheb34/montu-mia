@@ -1,3 +1,40 @@
-@import 'tailwindcss';
-@import 'fumadocs-ui/css/neutral.css';
-@import 'fumadocs-ui/css/preset.css';
+@import "tailwindcss";
+@import "fumadocs-ui/css/neutral.css";
+@import "fumadocs-ui/css/preset.css";
+
+@theme {
+  --font-sans: var(--font-inter), var(--font-bengali), ui-sans-serif, system-ui,
+    sans-serif;
+  --font-heading: var(--font-inter), var(--font-bengali), ui-sans-serif,
+    system-ui, sans-serif;
+}
+
+/* Fix for Bengali font vertical clipping */
+body {
+  line-height: 1.6;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  line-height: 1.8;
+  padding-bottom: 0.2em;
+  padding-top: 0.2em;
+}
+
+/* Fix for Bengali text in truncated UI elements (e.g. footer links, cards) */
+.truncate,
+p,
+span,
+div {
+  line-height: 1.6; /* Ensure safe default line-height */
+}
+
+/* Specific fix for tight containers causing clipping */
+.truncate {
+  padding-bottom: 0.2em; /* Add breathing room for descenders */
+  height: auto !important; /* Allow container to grow if needed */
+}
