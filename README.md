@@ -11,11 +11,12 @@
 
 ## 🛠 প্রযুক্তি (Tech Stack)
 
-এই ডকুমেন্টেশন সাইটটি তৈরি করা হয়েছে:
+এই সাইটটি তৈরি করতে ব্যবহৃত হয়েছে:
 
 - [Fumadocs](https://fumadocs.dev)
 - [Next.js](https://nextjs.org)
 - [Tailwind CSS](https://tailwindcss.com)
+- [Shadcn UI](https://ui.shadcn.com)
 
 ## 🏃‍♂️ লোকাল মেশিনে রান করুন
 
@@ -39,3 +40,8 @@ bun dev
 This book is licensed under the **Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License**.
 
 > **Note:** The code snippets and configuration examples provided in this repository are dual-licensed under the **MIT License**, allowing you to use them freely in your own projects.
+
+## Credits
+
+- **Author**: [Shakirul Hasan Khan](https://www.linkedin.com/in/shakirulhasan/)
+- **Illustrations**: All of the illustrations are generated using [ChatGPT](https://chatgpt.com/) and [Gemini](https://gemini.google.com/)

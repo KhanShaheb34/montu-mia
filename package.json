@@ -1,7 +1,14 @@
 {
   "name": "montu-mia",
   "version": "0.0.0",
-  "private": true,
+  "description": "System design resources in Bengali using simple analogies.",
+  "private": false,
+  "license": "CC-BY-NC-SA-4.0",
+  "author": "Shakirul Hasan Khan",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shakirulhkhan/montu-mia"
+  },
   "scripts": {
     "build": "next build",
     "dev": "next dev",
