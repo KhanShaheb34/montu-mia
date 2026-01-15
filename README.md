@@ -1,45 +1,41 @@
-# montu-mia
+<p align="center">
+  <img src="./public/montu_hero.png" alt="মন্টু মিয়াঁ" />
+</p>
 
-This is a Next.js application generated with
-[Create Fumadocs](https://github.com/fuma-nama/fumadocs).
+# মন্টু মিয়াঁর সিস্টেম ডিজাইন অভিযান
 
-Run development server:
+বিড়ালটিউবের হাজারো ইউজার সামলাতে হিমশিম খাচ্ছেন মন্টু মিয়াঁ!
+কোডিং তো শিখলেন, কিন্তু সিস্টেম ডিজাইন না জানলে কি অ্যাপ বাঁচানো সম্ভব?
+
+বাংলা ভাষায় গল্পে গল্পে মন্টু মিয়াঁর সাথে আমরা ও শিখব সিস্টেম ডিজাইন।
+
+## 🛠 প্রযুক্তি (Tech Stack)
+
+এই ডকুমেন্টেশন সাইটটি তৈরি করা হয়েছে:
+
+- [Fumadocs](https://fumadocs.dev)
+- [Next.js](https://nextjs.org)
+- [Tailwind CSS](https://tailwindcss.com)
+
+## 🏃‍♂️ লোকাল মেশিনে রান করুন
+
+প্রজেক্টটি ক্লোন করে নিচের কমান্ড দিন:
 
 ```bash
-npm run dev
-# or
-pnpm dev
-# or
-yarn dev
+bun install
+bun dev
 ```
 
-Open http://localhost:3000 with your browser to see the result.
+ব্রাউজারে ওপেন করুন: `http://localhost:3000`
 
-## Explore
+## কন্ট্রিবিউট করুন
 
-In the project, you can see:
+লেখায় কোনো ভুল থাকলে ইস্যু ওপেন অথবা সরাসরি পুল রিকোয়েস্ট করতে পারেন।
 
-- `lib/source.ts`: Code for content source adapter, [`loader()`](https://fumadocs.dev/docs/headless/source-api) provides the interface to access your content.
-- `lib/layout.shared.tsx`: Shared options for layouts, optional but preferred to keep.
+## License
 
-| Route                     | Description                                            |
-| ------------------------- | ------------------------------------------------------ |
-| `app/(home)`              | The route group for your landing page and other pages. |
-| `app/docs`                | The documentation layout and pages.                    |
-| `app/api/search/route.ts` | The Route Handler for search.                          |
+[![License: CC BY-NC-SA 4.0](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 
-### Fumadocs MDX
+This book is licensed under the **Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License**.
 
-A `source.config.ts` config file has been included, you can customise different options like frontmatter schema.
-
-Read the [Introduction](https://fumadocs.dev/docs/mdx) for further details.
-
-## Learn More
-
-To learn more about Next.js and Fumadocs, take a look at the following
-resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js
-  features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-- [Fumadocs](https://fumadocs.dev) - learn about Fumadocs
+> **Note:** The code snippets and configuration examples provided in this repository are dual-licensed under the **MIT License**, allowing you to use them freely in your own projects.
