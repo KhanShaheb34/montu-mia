@@ -22,7 +22,7 @@ export default async function Page(props: PageProps<"/sd/[[...slug]]">) {
     repo: "montu-mia",
     branch: "main",
   };
-  const githubUrl = `https://github.com/${gitConfig.user}/${gitConfig.repo}/blob/${gitConfig.branch}/docs/content/docs/${page.path}`;
+  const githubUrl = `https://github.com/${gitConfig.user}/${gitConfig.repo}/blob/${gitConfig.branch}/content/sd/${page.path}`;
 
   return (
     <DocsPage toc={page.data.toc} full={page.data.full}>
