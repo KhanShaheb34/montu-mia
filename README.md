@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./public/montu_hero.png" alt="মন্টু মিয়াঁ" />
+  <img src="./public/montu_hero.png" alt="মন্টু মিয়াঁ" width="250" />
 </p>
 
 # মন্টু মিয়াঁর সিস্টেম ডিজাইন অভিযান
