@@ -19,7 +19,7 @@ export default async function Page(props: PageProps<"/sd/[[...slug]]">) {
   const MDX = page.data.body;
   const gitConfig = {
     user: "KhanShaheb34",
-    repo: "MontuMia",
+    repo: "montu-mia",
     branch: "main",
   };
   const githubUrl = `https://github.com/${gitConfig.user}/${gitConfig.repo}/blob/${gitConfig.branch}/docs/content/docs/${page.path}`;

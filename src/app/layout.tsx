@@ -16,8 +16,36 @@ const notoSansBengali = Noto_Sans_Bengali({
 });
 
 export const metadata: Metadata = {
-  title: "Montu Mia's System Design",
-  description: "মন্টু মিয়াঁর সিস্টেম ডিজাইন - A System Design Book in Bengali",
+  title: {
+    template: "%s | Montu Mia's System Design",
+    default: "Montu Mia's System Design",
+  },
+  description:
+    "মন্টু মিয়াঁর সিস্টেম ডিজাইন - A System Design Book in Bengali. Learn system design concepts with simple analogies.",
+  metadataBase: new URL("https://montumia.com"),
+  authors: [{ name: "Shakirul Hasan Khan" }],
+  keywords: [
+    "System Design",
+    "Bangla System Design",
+    "Software Engineering",
+    "Montu Mia",
+    "Load Balancer",
+    "Scaling",
+    "System Design in Bengali",
+  ],
+  openGraph: {
+    title: "Montu Mia's System Design",
+    description: "Learn System Design in Bengali with fun stories!",
+    url: "https://montumia.com",
+    siteName: "Montu Mia's System Design",
+    locale: "bn_BD",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Montu Mia's System Design",
+    description: "Learn System Design in Bengali with fun stories!",
+  },
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {
