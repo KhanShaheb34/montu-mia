@@ -1,5 +1,5 @@
 {
   "title": "মন্টু মিয়াঁর সিস্টেম ডিজাইন",
   "root": true,
-  "pages": ["introduction", "what-is-system-design", "scaling"]
+  "pages": ["introduction", "what-is-system-design", "scaling", "load-balancer"]
 }
