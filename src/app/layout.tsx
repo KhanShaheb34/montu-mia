@@ -1,12 +1,7 @@
 import { RootProvider } from "fumadocs-ui/provider/next";
 import "./global.css";
-import { Outfit, Google_Sans } from "next/font/google";
+import { Google_Sans } from "next/font/google";
 import type { Metadata } from "next";
-
-// const outfit = Outfit({
-//   subsets: ["latin"],
-//   variable: "--font-outfit",
-// });
 
 const googleSans = Google_Sans({
   subsets: ["latin", "bengali"],
