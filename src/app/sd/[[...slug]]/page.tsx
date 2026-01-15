@@ -11,7 +11,7 @@ import type { Metadata } from "next";
 import { createRelativeLink } from "fumadocs-ui/mdx";
 import { LLMCopyButton, ViewOptions } from "@/components/ai/page-actions";
 
-export default async function Page(props: PageProps<"/book/[[...slug]]">) {
+export default async function Page(props: PageProps<"/sd/[[...slug]]">) {
   const params = await props.params;
   const page = source.getPage(params.slug);
   if (!page) notFound();
@@ -54,7 +54,7 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata(
-  props: PageProps<"/book/[[...slug]]">
+  props: PageProps<"/sd/[[...slug]]">
 ): Promise<Metadata> {
   const params = await props.params;
   const page = source.getPage(params.slug);

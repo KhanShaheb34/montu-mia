@@ -5,12 +5,12 @@ export function baseOptions(): BaseLayoutProps {
     nav: {
       title: "Montu Mia's System Design",
     },
-    links: [
-      {
-        text: "Documentation",
-        url: "/docs",
-        active: "nested-url",
-      },
-    ],
+    // links: [
+    //   {
+    //     text: "Documentation",
+    //     url: "/docs",
+    //     active: "nested-url",
+    //   },
+    // ],
   };
 }

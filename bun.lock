@@ -5,6 +5,9 @@
     "": {
       "name": "mmsd-fumadocs",
       "dependencies": {
+        "@radix-ui/react-slot": "^1.2.4",
+        "class-variance-authority": "^0.7.1",
+        "clsx": "^2.1.1",
         "fumadocs-core": "16.4.6",
         "fumadocs-mdx": "14.2.4",
         "fumadocs-ui": "16.4.6",
