@@ -2,6 +2,8 @@ import { RootProvider } from "fumadocs-ui/provider/next";
 import "./global.css";
 import { Noto_Sans_Bengali, Outfit } from "next/font/google";
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -59,6 +61,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         className={`flex flex-col min-h-screen font-sans ${outfit.className} ${notoSansBengali.className}`}
       >
         <RootProvider>{children}</RootProvider>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
