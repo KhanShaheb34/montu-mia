@@ -5,10 +5,8 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  --font-sans: var(--font-inter), var(--font-bengali), ui-sans-serif, system-ui,
-    sans-serif;
-  --font-heading: var(--font-inter), var(--font-bengali), ui-sans-serif,
-    system-ui, sans-serif;
+  --font-sans: var(--font-bengali), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-bengali), ui-sans-serif, system-ui, sans-serif;
 }
 
 /* Fix for Bengali font vertical clipping */
