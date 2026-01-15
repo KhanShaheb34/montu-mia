@@ -6,10 +6,10 @@ import { Input } from "@/components/ui/input";
 export default function HomePage() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-6 text-center bg-background text-foreground animate-in fade-in duration-500">
-      <div className="container max-w-4xl space-y-12">
+      <div className="container max-w-4xl space-y-8">
         {/* Hero Section */}
         <div className="flex flex-col items-center space-y-8">
-          <div className="relative w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 transition-all duration-700">
+          <div className="relative md:w-64 md:h-64 lg:w-80 lg:h-80 transition-all duration-700">
             <Image
               src="/montu_hero.png"
               alt="Montu Mia System Design"
@@ -19,22 +19,19 @@ export default function HomePage() {
             />
           </div>
 
-          <div className="space-y-4 max-w-2xl mx-auto">
-            <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl text-foreground">
+          <div className="space-y-2 max-w-4xl mx-auto">
+            <h1 className="text-xl font-bold sm:text-2xl md:text-4xl text-foreground">
               মন্টু মিয়াঁর সিস্টেম ডিজাইন
             </h1>
-            <p className="text-lg text-muted-foreground md:text-xl font-medium leading-relaxed">
-              গল্পের ছলে শিখুন সিস্টেম ডিজাইনের জটিল সব কনসেপ্ট।{" "}
+            <p className="text-md text-muted-foreground md:text-lg font-medium leading-relaxed">
+              বিড়ালটিউবের হাজারো ইউজার সামলাতে হিমশিম খাচ্ছেন মন্টু মিয়াঁ! 🐈
               <br className="hidden sm:inline" />
-              সহজ বাংলায়, সবার জন্য।
+              কোডিং তো শিখলেন, কিন্তু সিস্টেম ডিজাইন না জানলে কি অ্যাপ বাঁচানো
+              সম্ভব?
             </p>
           </div>
 
-          <Button
-            asChild
-            size="lg"
-            className="rounded-full px-8 text-lg font-bold"
-          >
+          <Button asChild size="lg" className="rounded-lg px-8 text-md">
             <Link href="/sd/introduction">পড়া শুরু করুন</Link>
           </Button>
         </div>

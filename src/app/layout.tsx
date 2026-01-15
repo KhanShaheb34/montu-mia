@@ -1,10 +1,17 @@
 import { RootProvider } from "fumadocs-ui/provider/next";
 import "./global.css";
-import { Google_Sans } from "next/font/google";
+import { Noto_Sans_Bengali, Outfit } from "next/font/google";
 import type { Metadata } from "next";
 
-const googleSans = Google_Sans({
-  subsets: ["latin", "bengali"],
+const outfit = Outfit({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-outfit",
+});
+
+const notoSansBengali = Noto_Sans_Bengali({
+  subsets: ["bengali"],
+  weight: ["300", "400", "500", "600", "700"],
   variable: "--font-bengali",
 });
 
@@ -17,11 +24,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html
       lang="bn"
-      className={`${googleSans.variable}`}
+      className={`${outfit.variable} ${notoSansBengali.variable}`}
       suppressHydrationWarning
     >
       <body
-        className={`flex flex-col min-h-screen font-sans ${googleSans.className}`}
+        className={`flex flex-col min-h-screen font-sans ${outfit.className} ${notoSansBengali.className}`}
       >
         <RootProvider>{children}</RootProvider>
       </body>
