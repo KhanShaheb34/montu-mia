@@ -19,7 +19,7 @@ export default async function Page(props: PageProps<"/sd/[[...slug]]">) {
   const MDX = page.data.body;
   const gitConfig = {
     user: "KhanShaheb34",
-    repo: "MontuMiaSystemDesign",
+    repo: "MontuMia",
     branch: "main",
   };
 
