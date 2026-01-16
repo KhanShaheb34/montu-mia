@@ -2,6 +2,7 @@ import { Github, Linkedin } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { SubscribeModal } from "@/components/subscribe-modal";
 
 export default function HomePage() {
   return (
@@ -31,31 +32,33 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="flex flex-col items-center gap-4">
+          <div className="flex flex-col sm:flex-row items-center gap-4">
             <Button asChild size="lg">
               <Link href="/sd/introduction">পড়া শুরু করুন</Link>
             </Button>
 
-            <div className="flex items-center gap-4 text-muted-foreground">
-              <Link
-                href="https://github.com/KhanShaheb34/montu-mia"
-                target="_blank"
-                rel="noreferrer"
-                className="hover:text-foreground transition-colors"
-                aria-label="GitHub Repository"
-              >
-                <Github className="w-6 h-6" />
-              </Link>
-              <Link
-                href="https://www.linkedin.com/in/shakirulhasan/"
-                target="_blank"
-                rel="noreferrer"
-                className="hover:text-foreground transition-colors"
-                aria-label="LinkedIn Profile"
-              >
-                <Linkedin className="w-6 h-6" />
-              </Link>
-            </div>
+            <SubscribeModal />
+          </div>
+
+          <div className="flex items-center gap-4 text-muted-foreground mt-4">
+            <Link
+              href="https://github.com/KhanShaheb34/montu-mia"
+              target="_blank"
+              rel="noreferrer"
+              className="hover:text-foreground transition-colors"
+              aria-label="GitHub Repository"
+            >
+              <Github className="w-6 h-6" />
+            </Link>
+            <Link
+              href="https://www.linkedin.com/in/shakirulhasan/"
+              target="_blank"
+              rel="noreferrer"
+              className="hover:text-foreground transition-colors"
+              aria-label="LinkedIn Profile"
+            >
+              <Linkedin className="w-6 h-6" />
+            </Link>
           </div>
         </div>
       </div>
