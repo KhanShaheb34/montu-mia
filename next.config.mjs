@@ -5,6 +5,11 @@ const withMDX = createMDX();
 /** @type {import('next').NextConfig} */
 const config = {
   reactStrictMode: true,
+  compress: true,
+  poweredByHeader: false,
+  images: {
+    formats: ['image/webp', 'image/avif'],
+  },
   async rewrites() {
     return [
       {

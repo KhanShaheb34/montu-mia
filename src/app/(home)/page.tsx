@@ -1,22 +1,38 @@
 import { Github, Linkedin } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/button";
-import { SubscribeModal } from "@/components/subscribe-modal";
+
+const SubscribeModal = dynamic(
+  () =>
+    import("@/components/subscribe-modal").then((mod) => ({
+      default: mod.SubscribeModal,
+    })),
+  {
+    loading: () => (
+      <Button variant="secondary" size="lg" disabled>
+        সাবস্ক্রাইব করুন
+      </Button>
+    ),
+  }
+);
 
 export default function HomePage() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-6 text-center bg-background text-foreground animate-in fade-in duration-500">
+    <main className="flex min-h-screen flex-col items-center justify-center p-6 text-center bg-background text-foreground">
       <div className="container max-w-4xl space-y-8">
         {/* Hero Section */}
         <div className="flex flex-col items-center space-y-4">
-          <div className="relative w-60 h-60 md:w-64 md:h-64 lg:w-80 lg:h-80 transition-all duration-700">
+          <div className="relative w-60 h-60 md:w-64 md:h-64 lg:w-80 lg:h-80">
             <Image
-              src="/montu_hero.png"
+              src="/montu_hero.webp"
               alt="Montu Mia System Design"
               fill
               className="object-contain"
               priority
+              fetchPriority="high"
+              sizes="(max-width: 768px) 240px, (max-width: 1024px) 256px, 320px"
             />
           </div>
 
