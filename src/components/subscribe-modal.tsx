@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -23,6 +23,7 @@ export function SubscribeModal() {
     text: string;
     type: "success" | "error";
   } | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,12 +41,23 @@ export function SubscribeModal() {
       setMessage({ text: result.error, type: "error" });
     } else {
       setMessage({
-        text: "ধন্যবাদ! সফলভাবে সাবস্ক্রাইব করা হয়েছে।",
+        text: "ধন্যবাদ! সফলভাবে সাবস্ক্রাইব করা হয়েছে।",
         type: "success",
       });
       setEmail("");
       setTimeout(() => setOpen(false), 2000);
     }
+  };
+
+  // Auto-scroll input into view when focused on mobile
+  const handleInputFocus = () => {
+    // Small delay to allow keyboard to appear first
+    setTimeout(() => {
+      inputRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }, 300);
   };
 
   return (
@@ -55,11 +67,11 @@ export function SubscribeModal() {
           সাবস্ক্রাইব করুন
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md max-h-[90dvh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>আপডেট পেতে সাবস্ক্রাইব করুন</DialogTitle>
           <DialogDescription>
-            নতুন অধ্যায় রিলিজ হলে আমরা আপনাকে ইমেইলে জানিয়ে দিব।
+            নতুন অধ্যায় রিলিজ হলে আমরা আপনাকে ইমেইলে জানিয়ে দিব।
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -69,11 +81,13 @@ export function SubscribeModal() {
                 Email
               </label>
               <Input
+                ref={inputRef}
                 id="email"
                 placeholder="name@example.com"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                onFocus={handleInputFocus}
                 required
               />
             </div>
