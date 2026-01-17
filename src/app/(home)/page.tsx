@@ -15,7 +15,7 @@ const SubscribeModal = dynamic(
         সাবস্ক্রাইব করুন
       </Button>
     ),
-  }
+  },
 );
 
 export default function HomePage() {
@@ -43,8 +43,7 @@ export default function HomePage() {
             <p className="text-md text-muted-foreground md:text-lg font-medium leading-relaxed">
               বিড়ালটিউবের হাজারো ইউজার সামলাতে হিমশিম খাচ্ছেন মন্টু মিয়াঁ!
               <br className="hidden sm:inline" />
-              কোডিং তো শিখলেন, কিন্তু সিস্টেম ডিজাইন না জানলে কি অ্যাপ বাঁচানো
-              সম্ভব?
+              কোডিং তো শিখলেন, কিন্তু সিস্টেম ডিজাইন না জানলে কি অ্যাপ বাঁচানো সম্ভব?
             </p>
           </div>
 

@@ -16,7 +16,50 @@ import {
   PopoverTrigger,
 } from "fumadocs-ui/components/ui/popover";
 
-const cache = new Map<string, string>();
+/**
+ * Simple LRU cache implementation with max size
+ */
+class LRUCache<K, V> {
+  private cache: Map<K, V>;
+  private maxSize: number;
+
+  constructor(maxSize: number) {
+    this.cache = new Map();
+    this.maxSize = maxSize;
+  }
+
+  get(key: K): V | undefined {
+    const value = this.cache.get(key);
+    if (value !== undefined) {
+      // Move to end (most recently used)
+      this.cache.delete(key);
+      this.cache.set(key, value);
+    }
+    return value;
+  }
+
+  set(key: K, value: V): void {
+    // Delete if exists to reinsert at end
+    if (this.cache.has(key)) {
+      this.cache.delete(key);
+    }
+    // Evict oldest if at capacity
+    else if (this.cache.size >= this.maxSize) {
+      const firstKey = this.cache.keys().next().value;
+      if (firstKey !== undefined) {
+        this.cache.delete(firstKey);
+      }
+    }
+    this.cache.set(key, value);
+  }
+
+  has(key: K): boolean {
+    return this.cache.has(key);
+  }
+}
+
+// LRU cache with max 50 entries to prevent memory leaks
+const cache = new LRUCache<string, string>(50);
 
 export function LLMCopyButton({
   /**
@@ -59,7 +102,7 @@ export function LLMCopyButton({
           size: "sm",
           className:
             "gap-2 [&_svg]:size-3.5 [&_svg]:text-fd-muted-foreground cursor-pointer",
-        })
+        }),
       )}
       onClick={onClick}
     >
@@ -148,7 +191,7 @@ export function ViewOptions({
             color: "secondary",
             size: "sm",
             className: "gap-2 cursor-pointer",
-          })
+          }),
         )}
       >
         Open
@@ -267,7 +310,7 @@ export function ShareOptions({
             color: "secondary",
             size: "sm",
             className: "gap-2 cursor-pointer",
-          })
+          }),
         )}
       >
         <ShareIcon className="size-3.5" />

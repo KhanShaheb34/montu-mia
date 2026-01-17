@@ -1,4 +1,4 @@
-import { createMDX } from 'fumadocs-mdx/next';
+import { createMDX } from "fumadocs-mdx/next";
 
 const withMDX = createMDX();
 
@@ -8,15 +8,7 @@ const config = {
   compress: true,
   poweredByHeader: false,
   images: {
-    formats: ['image/webp', 'image/avif'],
-  },
-  async rewrites() {
-    return [
-      {
-        source: '/docs/:path*.mdx',
-        destination: '/llms.mdx/docs/:path*',
-      },
-    ];
+    formats: ["image/webp", "image/avif"],
   },
 };
 
