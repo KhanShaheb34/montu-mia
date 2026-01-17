@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     default: "Montu Mia's System Design",
   },
   description:
-    "মন্টু মিয়াঁর সিস্টেম ডিজাইন - A System Design Book in Bengali. Learn system design concepts with simple analogies.",
+    "মন্টু মিয়াঁর সিস্টেম ডিজাইন - A System Design Book in Bengali. Learn system design concepts with simple analogies.",
   metadataBase: new URL("https://montumia.com"),
   authors: [{ name: "Shakirul Hasan Khan" }],
   keywords: [
@@ -72,7 +72,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <body
         className={`flex flex-col min-h-screen font-sans ${outfit.className} ${notoSansBengali.className}`}
       >
-        <RootProvider>{children}</RootProvider>
+        <RootProvider
+          search={{
+            enabled: false,
+          }}
+        >
+          {children}
+        </RootProvider>
         <Analytics />
         <SpeedInsights />
       </body>
