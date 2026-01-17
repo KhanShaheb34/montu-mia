@@ -9,12 +9,16 @@ const outfit = Outfit({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
   variable: "--font-outfit",
+  display: "swap",
+  preload: true,
 });
 
 const notoSansBengali = Noto_Sans_Bengali({
   subsets: ["bengali"],
   weight: ["300", "400", "500", "600", "700"],
   variable: "--font-bengali",
+  display: "swap",
+  preload: true,
 });
 
 export const metadata: Metadata = {
@@ -57,6 +61,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       className={`${outfit.variable} ${notoSansBengali.variable}`}
       suppressHydrationWarning
     >
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+      </head>
       <body
         className={`flex flex-col min-h-screen font-sans ${outfit.className} ${notoSansBengali.className}`}
       >
