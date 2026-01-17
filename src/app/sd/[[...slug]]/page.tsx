@@ -6,7 +6,7 @@ import {
   DocsTitle,
 } from "fumadocs-ui/layouts/docs/page";
 import { notFound } from "next/navigation";
-import { getMDXComponents, ImageCountProvider } from "@/mdx-components";
+import { getMDXComponents } from "@/mdx-components";
 import type { Metadata } from "next";
 import { createRelativeLink } from "fumadocs-ui/mdx";
 import { ViewOptions, ShareOptions } from "@/components/ai/page-actions";
@@ -32,13 +32,11 @@ export default async function Page(props: PageProps<"/sd/[[...slug]]">) {
       </DocsDescription>
 
       <DocsBody>
-        <ImageCountProvider>
-          <MDX
-            components={getMDXComponents({
-              a: createRelativeLink(source, page),
-            })}
-          />
-        </ImageCountProvider>
+        <MDX
+          components={getMDXComponents({
+            a: createRelativeLink(source, page),
+          })}
+        />
       </DocsBody>
 
       <div className="flex flex-row gap-2 items-center">
