@@ -46,11 +46,13 @@ export const metadata: Metadata = {
     siteName: "Montu Mia's System Design",
     locale: "bn_BD",
     type: "website",
+    images: ["/og.webp"],
   },
   twitter: {
     card: "summary_large_image",
     title: "Montu Mia's System Design",
     description: "Learn System Design in Bengali with fun stories!",
+    images: ["/og.webp"],
   },
 };
 

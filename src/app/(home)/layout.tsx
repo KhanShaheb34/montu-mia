@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   openGraph: {
-    images: ["/montu_hero.webp"],
+    images: ["/og.webp"],
   },
   twitter: {
-    images: ["/montu_hero.webp"],
+    images: ["/og.webp"],
   },
 };
 

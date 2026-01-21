@@ -45,3 +45,4 @@ This book is licensed under the **Creative Commons Attribution-NonCommercial-Sha
 
 - **Author**: [Shakirul Hasan Khan](https://www.linkedin.com/in/shakirulhasan/)
 - **Illustrations**: All of the illustrations are generated using [ChatGPT](https://chatgpt.com/) and [Gemini](https://gemini.google.com/)
+- **Coding**: This website is mostly vibe-coded by [Claude Code](https://claude.ai/code) and [Antigravity](https://antigravity.google/). So there might be some issues, please open an issue if you find any.
