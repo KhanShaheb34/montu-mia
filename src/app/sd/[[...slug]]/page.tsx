@@ -61,11 +61,33 @@ export async function generateMetadata(
   const page = source.getPage(params.slug);
   if (!page) notFound();
 
+  const pageUrl = `https://montumia.com${page.url}`;
+  const ogImage = getPageImage(page).url;
+
   return {
     title: page.data.title,
     description: page.data.description,
     openGraph: {
-      images: getPageImage(page).url,
+      title: page.data.title,
+      description: page.data.description,
+      url: pageUrl,
+      siteName: "মন্টু মিয়াঁর সিস্টেম ডিজাইন",
+      images: [
+        {
+          url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: page.data.title,
+        },
+      ],
+      locale: "bn_BD",
+      type: "article",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: page.data.title,
+      description: page.data.description,
+      images: [ogImage],
     },
   };
 }
