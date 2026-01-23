@@ -15,18 +15,23 @@ export async function GET(
   if (!page) notFound();
 
   // Fetch Noto Sans Bengali font for proper Bengali text rendering
+  // We use the RAW TrueType file from the Google Fonts GitHub repo.
+  // This file preserves the GSUB tables needed for Bengali ligatures (juktakkhor).
+  // WOFF/WOFF2 fonts strip these tables, causing garbled text in Satori.
   let notoSansBengali: ArrayBuffer | undefined;
   try {
     const res = await fetch(
-      "https://fonts.gstatic.com/s/notosansbengali/v20/Cn-SJsCGWQxOjaGwMQ6fIiMywrNJIky6nvd8BjzVMvJx2mcSPVFpVEqE-6KmsolKudCk8izI0lc.woff",
+      "https://raw.githubusercontent.com/google/fonts/main/ofl/notosansbengali/static/NotoSansBengali-Regular.ttf",
       { cache: "force-cache" },
     );
     if (res.ok) {
       notoSansBengali = await res.arrayBuffer();
+    } else {
+      console.warn(`Failed to fetch Bengali font: HTTP ${res.status}`);
     }
-  } catch {
+  } catch (e) {
     // Fallback to default font if remote fetch fails
-    console.warn("Failed to fetch Bengali font, using default font");
+    console.warn("Failed to fetch Bengali font, using default font", e);
   }
 
   // Use English site name as fallback when Bengali font isn't available
