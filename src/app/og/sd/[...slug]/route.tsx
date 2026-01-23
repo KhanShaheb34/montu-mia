@@ -1,13 +1,15 @@
-import { getPageImage, source } from "@/lib/source";
+import { source } from "@/lib/source";
 import { notFound } from "next/navigation";
 import chromium from "@sparticuz/chromium-min";
 import puppeteer from "puppeteer-core";
 
 // 1. Force Node.js runtime (Chrome won't run on Edge)
 export const runtime = "nodejs";
-// 2. Increase timeout for browser startup
+// 2. Ensure dynamic rendering (never static)
+export const dynamic = "force-dynamic";
+// 3. Increase timeout for browser startup
 export const maxDuration = 60;
-// 3. Cache OG images for 24 hours
+// 4. Cache OG images for 24 hours
 export const revalidate = 86400;
 
 // HTML escape utility to prevent broken output
@@ -156,8 +158,5 @@ export async function GET(
 	}
 }
 
-export function generateStaticParams() {
-	return source.getPages().map((page) => ({
-		slug: getPageImage(page).segments,
-	}));
-}
+// Removed generateStaticParams to avoid running Puppeteer at build time
+// OG images will be generated on-demand at runtime and cached via revalidate
