@@ -14,15 +14,30 @@ export async function GET(
   const page = source.getPage(slug.slice(0, -1));
   if (!page) notFound();
 
+  // Fetch Noto Sans Bengali font for proper Bengali text rendering
+  const notoSansBengali = await fetch(
+    new URL(
+      "https://fonts.gstatic.com/s/notosansbengali/v20/Cn-SJsCGWQxOjaGwMQ6fIiMywrNJIky6nvd8BjzVMvJx2mcSPVFpVEqE-6KmsolKudCk8izI0lc.woff",
+    ),
+  ).then((res) => res.arrayBuffer());
+
   return new ImageResponse(
     <DefaultImage
       title={page.data.title}
       description={page.data.description}
-      site="My App"
+      site="মন্টু মিয়াঁর সিস্টেম ডিজাইন"
     />,
     {
       width: 1200,
       height: 630,
+      fonts: [
+        {
+          name: "Noto Sans Bengali",
+          data: notoSansBengali,
+          weight: 400,
+          style: "normal",
+        },
+      ],
     },
   );
 }
