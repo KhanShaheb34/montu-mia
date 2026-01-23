@@ -91,6 +91,34 @@ Required environment variables (see `src/app/actions.ts`):
 - `RESEND_API_KEY` - Resend API key for email service
 - `RESEND_SEGMENT_ID` - Resend audience/segment ID for newsletter
 
+### OG Image Generation
+
+The project uses Puppeteer with Chromium to generate dynamic OG images for each content page. Key implementation details:
+
+1. **Technology Stack**:
+   - `puppeteer-core` (v22.x) - Headless browser control
+   - `@sparticuz/chromium-min` (v131.x) - Chromium binary for serverless environments
+   - Configured to use Bengali web fonts (Hind Siliguri)
+
+2. **Vercel Deployment Requirements**:
+
+   **CRITICAL**: Add this environment variable in Vercel Dashboard (Project Settings → Environment Variables):
+   - `AWS_LAMBDA_JS_RUNTIME=nodejs22.x` - Required for shared library compatibility
+
+   This environment variable **MUST** be set in the Vercel dashboard before module loading, not in code.
+
+3. **How It Works**:
+   - Route: `/og/sd/[...slug]` (dynamic route in `src/app/og/sd/[...slug]/route.tsx`)
+   - Images generated on-demand at runtime (not at build time)
+   - Cached for 24 hours via `revalidate = 86400`
+   - Uses Bengali fonts loaded from Google Fonts CDN
+
+4. **Next.js Configuration**:
+   - `serverExternalPackages` in `next.config.mjs` prevents bundling Puppeteer/Chromium
+   - `LD_LIBRARY_PATH` set automatically to find Chromium shared libraries
+   - Runtime: `nodejs` (not Edge)
+   - Max duration: 60 seconds
+
 ## Important Patterns
 
 ### Adding New Content Pages

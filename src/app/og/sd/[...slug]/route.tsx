@@ -2,6 +2,7 @@ import { source } from "@/lib/source";
 import { notFound } from "next/navigation";
 import chromium from "@sparticuz/chromium-min";
 import puppeteer from "puppeteer-core";
+import path from "node:path";
 
 // 1. Force Node.js runtime (Chrome won't run on Edge)
 export const runtime = "nodejs";
@@ -41,6 +42,12 @@ async function launchBrowserWithRetry(
 				: await chromium.executablePath(
 						"https://github.com/Sparticuz/chromium/releases/download/v131.0.1/chromium-v131.0.1-pack.tar",
 					);
+
+			// Set LD_LIBRARY_PATH so Chromium can find shared libraries in serverless environment
+			if (!isLocal) {
+				const execDir = path.dirname(executablePath);
+				process.env.LD_LIBRARY_PATH = execDir;
+			}
 
 			return await puppeteer.launch({
 				args: isLocal ? [] : chromium.args,
