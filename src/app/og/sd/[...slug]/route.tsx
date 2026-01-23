@@ -29,25 +29,32 @@ export async function GET(
     console.warn("Failed to fetch Bengali font, using default font");
   }
 
+  // Use English site name as fallback when Bengali font isn't available
+  const siteName = notoSansBengali
+    ? "মন্টু মিয়াঁর সিস্টেম ডিজাইন"
+    : "Montu Mia's System Design";
+
   return new ImageResponse(
     <DefaultImage
       title={page.data.title}
       description={page.data.description}
-      site="মন্টু মিয়াঁর সিস্টেম ডিজাইন"
+      site={siteName}
     />,
     {
       width: 1200,
       height: 630,
-      fonts: notoSansBengali
-        ? [
-            {
-              name: "Noto Sans Bengali",
-              data: notoSansBengali,
-              weight: 400,
-              style: "normal",
-            },
-          ]
-        : [],
+      // Only include fonts array if Bengali font loaded successfully
+      // Otherwise Next.js/Satori will use default fonts
+      ...(notoSansBengali && {
+        fonts: [
+          {
+            name: "Noto Sans Bengali",
+            data: notoSansBengali,
+            weight: 400,
+            style: "normal",
+          },
+        ],
+      }),
     },
   );
 }
