@@ -15,11 +15,19 @@ export async function GET(
   if (!page) notFound();
 
   // Fetch Noto Sans Bengali font for proper Bengali text rendering
-  const notoSansBengali = await fetch(
-    new URL(
+  let notoSansBengali: ArrayBuffer | undefined;
+  try {
+    const res = await fetch(
       "https://fonts.gstatic.com/s/notosansbengali/v20/Cn-SJsCGWQxOjaGwMQ6fIiMywrNJIky6nvd8BjzVMvJx2mcSPVFpVEqE-6KmsolKudCk8izI0lc.woff",
-    ),
-  ).then((res) => res.arrayBuffer());
+      { cache: "force-cache" },
+    );
+    if (res.ok) {
+      notoSansBengali = await res.arrayBuffer();
+    }
+  } catch {
+    // Fallback to default font if remote fetch fails
+    console.warn("Failed to fetch Bengali font, using default font");
+  }
 
   return new ImageResponse(
     <DefaultImage
@@ -30,14 +38,16 @@ export async function GET(
     {
       width: 1200,
       height: 630,
-      fonts: [
-        {
-          name: "Noto Sans Bengali",
-          data: notoSansBengali,
-          weight: 400,
-          style: "normal",
-        },
-      ],
+      fonts: notoSansBengali
+        ? [
+            {
+              name: "Noto Sans Bengali",
+              data: notoSansBengali,
+              weight: 400,
+              style: "normal",
+            },
+          ]
+        : [],
     },
   );
 }

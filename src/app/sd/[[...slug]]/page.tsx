@@ -62,7 +62,8 @@ export async function generateMetadata(
   if (!page) notFound();
 
   const pageUrl = `https://montumia.com${page.url}`;
-  const ogImage = getPageImage(page).url;
+  const ogImagePath = getPageImage(page).url;
+  const ogImageUrl = new URL(ogImagePath, "https://montumia.com").toString();
 
   return {
     title: page.data.title,
@@ -74,7 +75,7 @@ export async function generateMetadata(
       siteName: "মন্টু মিয়াঁর সিস্টেম ডিজাইন",
       images: [
         {
-          url: ogImage,
+          url: ogImageUrl,
           width: 1200,
           height: 630,
           alt: page.data.title,
@@ -87,7 +88,7 @@ export async function generateMetadata(
       card: "summary_large_image",
       title: page.data.title,
       description: page.data.description,
-      images: [ogImage],
+      images: [ogImageUrl],
     },
   };
 }
