@@ -101,7 +101,8 @@ export async function GET(
 	const buffer = await pageTab.screenshot({ type: "png" });
 	await browser.close();
 
-	return new Response(buffer, {
+	// Convert Buffer to Uint8Array for Response compatibility
+	return new Response(new Uint8Array(buffer), {
 		headers: {
 			"Content-Type": "image/png",
 			"Cache-Control": "public, max-age=86400, immutable",
