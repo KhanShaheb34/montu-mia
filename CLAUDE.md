@@ -97,7 +97,7 @@ The project uses Puppeteer with Chromium to generate dynamic OG images for each 
 
 1. **Technology Stack**:
    - `puppeteer-core` (v22.x) - Headless browser control
-   - `@sparticuz/chromium-min` (v131.x) - Chromium binary for serverless environments
+   - `@sparticuz/chromium` (v131.x) - Chromium binary with required shared libraries for serverless environments
    - Configured to use Bengali web fonts (Hind Siliguri)
 
 2. **Vercel Deployment Requirements**:

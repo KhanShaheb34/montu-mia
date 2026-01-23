@@ -1,6 +1,6 @@
 import { source } from "@/lib/source";
 import { notFound } from "next/navigation";
-import chromium from "@sparticuz/chromium-min";
+import chromium from "@sparticuz/chromium";
 import puppeteer from "puppeteer-core";
 import path from "node:path";
 
@@ -39,9 +39,7 @@ async function launchBrowserWithRetry(
 					: process.platform === "darwin"
 						? "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 						: "/usr/bin/google-chrome"
-				: await chromium.executablePath(
-						"https://github.com/Sparticuz/chromium/releases/download/v131.0.1/chromium-v131.0.1-pack.tar",
-					);
+				: await chromium.executablePath();
 
 			// Set LD_LIBRARY_PATH so Chromium can find shared libraries in serverless environment
 			if (!isLocal) {
