@@ -55,6 +55,12 @@ async function generateOGImage(
 		const page = await browser.newPage();
 		await page.setViewport({ width: 1200, height: 630 });
 
+		// Read and convert Montu Mia image to base64
+		const montuImagePath = path.join(process.cwd(), "public", "montu_hero.png");
+		const montuImageBuffer = fs.readFileSync(montuImagePath);
+		const montuImageBase64 = montuImageBuffer.toString("base64");
+		const montuImageDataUrl = `data:image/png;base64,${montuImageBase64}`;
+
 		const htmlContent = `
     <!DOCTYPE html>
     <html>
@@ -64,7 +70,7 @@ async function generateOGImage(
 
           body {
             margin: 0;
-            padding: 80px;
+            padding: 0;
             width: 1200px;
             height: 630px;
             box-sizing: border-box;
@@ -72,37 +78,65 @@ async function generateOGImage(
             background-image: linear-gradient(to bottom right, #fef08a, #bfdbfe);
             font-family: 'Hind Siliguri', sans-serif;
             display: flex;
+            flex-direction: row;
+            align-items: center;
+            padding: 60px 80px;
+            gap: 60px;
+          }
+
+          .image-container {
+            flex-shrink: 0;
+            width: 300px;
+            height: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+
+          .image-container img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+          }
+
+          .content {
+            flex: 1;
+            display: flex;
             flex-direction: column;
             justify-content: center;
-            align-items: flex-start;
           }
 
           .site-name {
-            font-size: 42px;
+            font-size: 36px;
             color: #0f172a;
             margin-bottom: 20px;
             font-weight: 600;
           }
 
           .title {
-            font-size: 84px;
+            font-size: 68px;
             font-weight: 700;
             color: #0f172a;
             line-height: 1.1;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
           }
 
           .desc {
-            font-size: 42px;
+            font-size: 32px;
             color: #475569;
-            max-width: 900px;
+            line-height: 1.3;
           }
         </style>
       </head>
       <body>
-        <div class="site-name">মন্টু মিয়াঁর সিস্টেম ডিজাইন</div>
-        <div class="title">${escapeHtml(title)}</div>
-        <div class="desc">${escapeHtml(description)}</div>
+        <div class="image-container">
+          <img src="${montuImageDataUrl}" alt="Montu Mia" />
+        </div>
+        <div class="content">
+          <div class="site-name">মন্টু মিয়াঁর সিস্টেম ডিজাইন</div>
+          <div class="title">${escapeHtml(title)}</div>
+          <div class="desc">${escapeHtml(description)}</div>
+        </div>
       </body>
     </html>
   `;
