@@ -143,6 +143,52 @@ The project uses static OG images generated locally using Puppeteer. Images are 
 - Processed markdown is available via `page.data.getText("processed")`
 - Custom MDX components can be added to `src/mdx-components.tsx`
 
+**Frontmatter Fields:**
+- `title` (required) - Page title in Bengali
+- `description` (optional) - Page description in Bengali
+- `tags` (optional) - Array of SEO keywords in English
+
+**Example:**
+```mdx
+---
+title: লোড ব্যালেন্সার আসলে কী?
+description: ট্রাফিক ম্যানেজমেন্ট এর মূল ধারণা
+tags:
+  - Load Balancer
+  - Load Balancing
+  - Server
+  - Traffic Management
+---
+
+Content goes here...
+```
+
+### SEO Tags/Keywords
+
+The site supports SEO tags for better search engine visibility:
+
+1. **Default Keywords** (auto-added to every page):
+   - Bangla, Bengali, System Design, সিস্টেম ডিজাইন
+   - Montu Mia, মন্টু মিয়াঁ
+   - Software Engineering, সফটওয়্যার ইঞ্জিনিয়ারিং
+
+2. **Page-Specific Tags**:
+   - Add `tags` array to frontmatter with English keywords
+   - These are combined with default keywords in the `<meta name="keywords">` tag
+   - Helps search engines index Bengali content via English terms
+
+3. **Why Tags Help SEO**:
+   - Bengali content is harder to discover via English searches
+   - English tags bridge the gap between English search queries and Bengali content
+   - Improves discoverability on Google, Bing, etc.
+   - Better indexing for technical terms (Load Balancer, Scaling, etc.)
+
+4. **Best Practices**:
+   - Use 4-8 specific, relevant keywords per page
+   - Include technical terms in English
+   - Mix general and specific terms (e.g., "Scaling" + "Horizontal Scaling")
+   - Don't repeat default keywords in page tags
+
 ### Type Checking
 
 Always run `bun run types:check` before committing. This command:

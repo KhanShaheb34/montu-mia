@@ -66,9 +66,24 @@ export async function generateMetadata(
   const ogImagePath = `/og/sd/${page.slugs.join("/")}/image.png`;
   const ogImageUrl = new URL(ogImagePath, "https://montumia.com").toString();
 
+  // Combine default keywords with page-specific tags
+  const defaultKeywords = [
+    "Bangla",
+    "Bengali",
+    "System Design",
+    "সিস্টেম ডিজাইন",
+    "Montu Mia",
+    "মন্টু মিয়াঁ",
+    "Software Engineering",
+    "সফটওয়্যার ইঞ্জিনিয়ারিং",
+  ];
+  const pageTags = (page.data as any).tags || [];
+  const keywords = [...defaultKeywords, ...pageTags].join(", ");
+
   return {
     title: page.data.title,
     description: page.data.description,
+    keywords,
     openGraph: {
       title: page.data.title,
       description: page.data.description,
