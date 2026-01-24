@@ -1,4 +1,4 @@
-import { getPageImage, source } from "@/lib/source";
+import { source } from "@/lib/source";
 import {
   DocsBody,
   DocsDescription,
@@ -62,7 +62,8 @@ export async function generateMetadata(
   if (!page) notFound();
 
   const pageUrl = `https://montumia.com${page.url}`;
-  const ogImagePath = getPageImage(page).url;
+  // Use static OG image from public folder
+  const ogImagePath = `/og/sd/${page.slugs.join("/")}/image.png`;
   const ogImageUrl = new URL(ogImagePath, "https://montumia.com").toString();
 
   return {

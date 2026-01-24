@@ -10,8 +10,6 @@ const config = {
   images: {
     formats: ["image/webp", "image/avif"],
   },
-  // Externalize Puppeteer and Chromium packages for serverless compatibility
-  serverExternalPackages: ["puppeteer-core", "@sparticuz/chromium"],
 };
 
 export default withMDX(config);

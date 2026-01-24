@@ -93,31 +93,40 @@ Required environment variables (see `src/app/actions.ts`):
 
 ### OG Image Generation
 
-The project uses Puppeteer with Chromium to generate dynamic OG images for each content page. Key implementation details:
+The project uses static OG images generated locally using Puppeteer. Images are pre-generated and committed to the repository.
 
 1. **Technology Stack**:
-   - `puppeteer-core` (v22.x) - Headless browser control
-   - `@sparticuz/chromium` (v131.x) - Chromium binary with required shared libraries for serverless environments
-   - Configured to use Bengali web fonts (Hind Siliguri)
+   - `puppeteer-core` (v22.x) - Headless browser control (dev dependency)
+   - `@sparticuz/chromium` (v131.x) - Chromium binary for local generation (dev dependency)
+   - `gray-matter` - For parsing MDX frontmatter
+   - Bengali web fonts (Hind Siliguri) loaded from Google Fonts CDN
 
-2. **Vercel Deployment Requirements**:
+2. **Generating OG Images**:
 
-   **CRITICAL**: Add this environment variable in Vercel Dashboard (Project Settings → Environment Variables):
-   - `AWS_LAMBDA_JS_RUNTIME=nodejs22.x` - Required for shared library compatibility
+   Run the generation script locally whenever you add/update content:
+   ```bash
+   bun run generate-og
+   ```
 
-   This environment variable **MUST** be set in the Vercel dashboard before module loading, not in code.
+   This script:
+   - Reads all MDX files from `content/sd/`
+   - Parses frontmatter (title, description)
+   - Generates OG images using Puppeteer
+   - Saves images to `public/og/sd/{slug}/image.png`
+   - Uses light color theme (yellow-blue gradient) matching the website design
 
 3. **How It Works**:
-   - Route: `/og/sd/[...slug]` (dynamic route in `src/app/og/sd/[...slug]/route.tsx`)
-   - Images generated on-demand at runtime (not at build time)
-   - Cached for 24 hours via `revalidate = 86400`
-   - Uses Bengali fonts loaded from Google Fonts CDN
+   - Static images served from `public/og/sd/` directory
+   - Pages reference images via `/og/sd/{slug}/image.png` path
+   - No serverless/runtime generation needed
+   - Faster page loads (static files)
+   - No Vercel deployment issues
 
-4. **Next.js Configuration**:
-   - `serverExternalPackages` in `next.config.mjs` prevents bundling Puppeteer/Chromium
-   - `LD_LIBRARY_PATH` set automatically to find Chromium shared libraries
-   - Runtime: `nodejs` (not Edge)
-   - Max duration: 60 seconds
+4. **Workflow**:
+   - Add or update MDX content
+   - Run `bun run generate-og` locally
+   - Commit generated images to git
+   - Deploy to Vercel (images served as static assets)
 
 ## Important Patterns
 
