@@ -1,4 +1,4 @@
-import { getPageImage, source } from "@/lib/source";
+import { source } from "@/lib/source";
 import {
   DocsBody,
   DocsDescription,
@@ -61,11 +61,52 @@ export async function generateMetadata(
   const page = source.getPage(params.slug);
   if (!page) notFound();
 
+  const pageUrl = `https://montumia.com${page.url}`;
+  // Use static OG image from public folder with version for cache busting
+  // Guard against empty slug array to avoid paths like /og/sd//image.png
+  const slugPath = page.slugs.length > 0 ? page.slugs.join("/") : "index";
+  const ogImagePath = `/og/sd/${slugPath}/image.png?v=2`;
+  const ogImageUrl = new URL(ogImagePath, "https://montumia.com").toString();
+
+  // Combine default keywords with page-specific tags
+  const defaultKeywords = [
+    "Bangla",
+    "Bengali",
+    "System Design",
+    "সিস্টেম ডিজাইন",
+    "Montu Mia",
+    "মন্টু মিয়াঁ",
+    "Software Engineering",
+    "সফটওয়্যার ইঞ্জিনিয়ারিং",
+  ];
+  const pageTags = (page.data as any).tags || [];
+  const keywords = [...defaultKeywords, ...pageTags].join(", ");
+
   return {
     title: page.data.title,
     description: page.data.description,
+    keywords,
     openGraph: {
-      images: getPageImage(page).url,
+      title: page.data.title,
+      description: page.data.description,
+      url: pageUrl,
+      siteName: "মন্টু মিয়াঁর সিস্টেম ডিজাইন",
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: page.data.title,
+        },
+      ],
+      locale: "bn_BD",
+      type: "article",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: page.data.title,
+      description: page.data.description,
+      images: [ogImageUrl],
     },
   };
 }

@@ -91,6 +91,43 @@ Required environment variables (see `src/app/actions.ts`):
 - `RESEND_API_KEY` - Resend API key for email service
 - `RESEND_SEGMENT_ID` - Resend audience/segment ID for newsletter
 
+### OG Image Generation
+
+The project uses static OG images generated locally using Puppeteer. Images are pre-generated and committed to the repository.
+
+1. **Technology Stack**:
+   - `puppeteer-core` (v22.x) - Headless browser control (dev dependency)
+   - `@sparticuz/chromium` (v131.x) - Chromium binary for local generation (dev dependency)
+   - `gray-matter` - For parsing MDX frontmatter
+   - Bengali web fonts (Hind Siliguri) loaded from Google Fonts CDN
+
+2. **Generating OG Images**:
+
+   Run the generation script locally whenever you add/update content:
+   ```bash
+   bun run generate-og
+   ```
+
+   This script:
+   - Reads all MDX files from `content/sd/`
+   - Parses frontmatter (title, description)
+   - Generates OG images using Puppeteer
+   - Saves images to `public/og/sd/{slug}/image.png`
+   - Uses light color theme (yellow-blue gradient) matching the website design
+
+3. **How It Works**:
+   - Static images served from `public/og/sd/` directory
+   - Pages reference images via `/og/sd/{slug}/image.png` path
+   - No serverless/runtime generation needed
+   - Faster page loads (static files)
+   - No Vercel deployment issues
+
+4. **Workflow**:
+   - Add or update MDX content
+   - Run `bun run generate-og` locally
+   - Commit generated images to git
+   - Deploy to Vercel (images served as static assets)
+
 ## Important Patterns
 
 ### Adding New Content Pages
@@ -105,6 +142,52 @@ Required environment variables (see `src/app/actions.ts`):
 - Frontmatter schema defined in `source.config.ts` using `frontmatterSchema`
 - Processed markdown is available via `page.data.getText("processed")`
 - Custom MDX components can be added to `src/mdx-components.tsx`
+
+**Frontmatter Fields:**
+- `title` (required) - Page title in Bengali
+- `description` (optional) - Page description in Bengali
+- `tags` (optional) - Array of SEO keywords in English
+
+**Example:**
+```mdx
+---
+title: লোড ব্যালেন্সার আসলে কী?
+description: ট্রাফিক ম্যানেজমেন্ট এর মূল ধারণা
+tags:
+  - Load Balancer
+  - Load Balancing
+  - Server
+  - Traffic Management
+---
+
+Content goes here...
+```
+
+### SEO Tags/Keywords
+
+The site supports SEO tags for better search engine visibility:
+
+1. **Default Keywords** (auto-added to every page):
+   - Bangla, Bengali, System Design, সিস্টেম ডিজাইন
+   - Montu Mia, মন্টু মিয়াঁ
+   - Software Engineering, সফটওয়্যার ইঞ্জিনিয়ারিং
+
+2. **Page-Specific Tags**:
+   - Add `tags` array to frontmatter with English keywords
+   - These are combined with default keywords in the `<meta name="keywords">` tag
+   - Helps search engines index Bengali content via English terms
+
+3. **Why Tags Help SEO**:
+   - Bengali content is harder to discover via English searches
+   - English tags bridge the gap between English search queries and Bengali content
+   - Improves discoverability on Google, Bing, etc.
+   - Better indexing for technical terms (Load Balancer, Scaling, etc.)
+
+4. **Best Practices**:
+   - Use 4-8 specific, relevant keywords per page
+   - Include technical terms in English
+   - Mix general and specific terms (e.g., "Scaling" + "Horizontal Scaling")
+   - Don't repeat default keywords in page tags
 
 ### Type Checking
 
