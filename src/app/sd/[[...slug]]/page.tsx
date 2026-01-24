@@ -63,7 +63,9 @@ export async function generateMetadata(
 
   const pageUrl = `https://montumia.com${page.url}`;
   // Use static OG image from public folder with version for cache busting
-  const ogImagePath = `/og/sd/${page.slugs.join("/")}/image.png?v=2`;
+  // Guard against empty slug array to avoid paths like /og/sd//image.png
+  const slugPath = page.slugs.length > 0 ? page.slugs.join("/") : "index";
+  const ogImagePath = `/og/sd/${slugPath}/image.png?v=2`;
   const ogImageUrl = new URL(ogImagePath, "https://montumia.com").toString();
 
   // Combine default keywords with page-specific tags
