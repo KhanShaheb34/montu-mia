@@ -15,7 +15,7 @@ import { Input } from "@/components/ui/input";
 import { subscribeToNewsletter } from "@/app/actions";
 import { Loader2 } from "lucide-react";
 
-export function SubscribeModal() {
+export function SubscribeModal({ trigger }: { trigger?: React.ReactNode }) {
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
@@ -63,9 +63,13 @@ export function SubscribeModal() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="secondary" size="lg" className="cursor-pointer">
-          সাবস্ক্রাইব করুন
-        </Button>
+        {trigger ? (
+          trigger
+        ) : (
+          <Button variant="secondary" size="lg" className="cursor-pointer">
+            সাবস্ক্রাইব করুন
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-md max-h-[90dvh] overflow-y-auto">
         <DialogHeader>

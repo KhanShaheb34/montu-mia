@@ -10,6 +10,10 @@ import { getMDXComponents } from "@/mdx-components";
 import type { Metadata } from "next";
 import { createRelativeLink } from "fumadocs-ui/mdx";
 import { ViewOptions, ShareOptions } from "@/components/ai/page-actions";
+import { SubscribeModal } from "@/components/subscribe-modal";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { Mail } from "lucide-react";
 
 export default async function Page(props: PageProps<"/sd/[[...slug]]">) {
   const params = await props.params;
@@ -44,6 +48,23 @@ export default async function Page(props: PageProps<"/sd/[[...slug]]">) {
         <ShareOptions
           url={`https://montumia.com${page.url}`}
           title={page.data.title}
+        />
+        <SubscribeModal
+          trigger={
+            <button
+              type="button"
+              className={cn(
+                buttonVariants({
+                  variant: "secondary",
+                  size: "sm",
+                  className: "gap-2 cursor-pointer",
+                }),
+              )}
+            >
+              <Mail className="size-3.5" />
+              Subscribe
+            </button>
+          }
         />
       </div>
     </DocsPage>
