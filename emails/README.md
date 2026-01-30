@@ -1,0 +1,343 @@
+# Email Templates & Sending Pipeline
+
+Email newsletter system using React Email and Resend for মন্টু মিয়াঁর সিস্টেম ডিজাইন.
+
+## Directory Structure
+
+```
+emails/
+├── README.md                   # This file
+├── newsletter-react.tsx        # React Email template (MAIN)
+├── newsletter.html            # Legacy HTML template (fallback)
+└── data/
+    └── past-posts.json        # List of past articles for newsletter
+```
+
+## Quick Start
+
+### 1. Preview Email Template
+
+Preview the email in your browser (hot reload enabled):
+
+```bash
+bun run email:preview
+```
+
+Then visit http://localhost:3001 to see your email template live.
+
+### 2. Send Test Email
+
+Send a test email to `shakirulhkhan@gmail.com`:
+
+```bash
+bun run send-emails
+```
+
+### 3. Customize Content
+
+Edit `scripts/send-emails.ts` and modify the `EMAIL_CONTENT` object:
+
+```typescript
+const EMAIL_CONTENT: EmailContentConfig = {
+  lastEpisodeSummary: "মন্টু মিয়া লোড ব্যালেন্সিং নিয়ে কাজ করছিলেন",
+  currentTopicTeaser: "ডাটাবেস রেপ্লিকেশনের সমস্যা",
+  articleImageUrl: "https://montumia.com/og/sd/introduction/image.png",
+  linkedinArticleUrl: "https://lnkd.in/example",
+  unsubscribeUrl: "https://montumia.com/unsubscribe",
+};
+```
+
+### 4. Update Past Posts List
+
+Edit `emails/data/past-posts.json` to add/update articles:
+
+```json
+[
+  {
+    "title": "লোড ব্যালেন্সার কী?",
+    "url": "https://montumia.com/sd/load-balancer"
+  }
+]
+```
+
+## Email Template Features
+
+### Current Template: `newsletter-react.tsx`
+
+Built with React Email components, the template includes:
+
+1. **OG Image** - Site logo/branding from `/og.png`
+2. **Bengali Title** - "মন্টু মিয়াঁর নতুন অভিযানে স্বাগতম"
+3. **Last Episode Summary** - Recap of previous content (variable)
+4. **Current Topic Teaser** - Preview of new content (variable)
+5. **Featured Image** - Dynamic article image (variable)
+6. **LinkedIn CTA** - Link to LinkedIn article (variable)
+7. **Past Adventures** - Auto-generated list from `past-posts.json`
+8. **Website CTA** - Link to montumia.com
+9. **Unsubscribe Link** - Customizable unsubscribe URL
+
+### Template Variables
+
+| Variable | Type | Description | Example |
+|----------|------|-------------|---------|
+| `lastEpisodeSummary` | string | Previous episode summary | "মন্টু মিয়া লোড ব্যালেন্সিং নিয়ে কাজ করছিলেন" |
+| `currentTopicTeaser` | string | Current topic preview | "ডাটাবেস রেপ্লিকেশনের সমস্যা" |
+| `articleImageUrl` | string | Featured article image URL | "https://montumia.com/og/sd/topic/image.png" |
+| `linkedinArticleUrl` | string | LinkedIn article short link | "https://lnkd.in/example" |
+| `unsubscribeUrl` | string (optional) | Unsubscribe page URL | "https://montumia.com/unsubscribe" |
+
+## Styling & Theme
+
+The email template uses the same color scheme as the main site (from `src/app/global.css`):
+
+- **Primary Color**: `#f59e0b` (amber/yellow)
+- **Background**: `#f9fafb` (light gray)
+- **Text**: `#4b5563` (dark gray)
+- **Headings**: `#1f2937` (near black)
+- **Links**: `#f59e0b` (amber, matching primary)
+
+### Email Client Compatibility
+
+The template is designed to work across all major email clients:
+
+- ✅ Gmail (Web, iOS, Android)
+- ✅ Outlook (Desktop, Web, Mobile)
+- ✅ Apple Mail (macOS, iOS)
+- ✅ Yahoo Mail
+- ✅ ProtonMail
+- ✅ Thunderbird
+
+**Key Compatibility Features:**
+- Inline styles (no external CSS)
+- Table-based layouts where needed
+- Fallback fonts for Bengali text
+- Centered content with max-width constraint
+- Left-aligned links list for readability
+
+## Workflow
+
+### For Each Newsletter Issue
+
+1. **Create/publish your article** on the website and LinkedIn
+2. **Generate OG image** for the new article: `bun run generate-og`
+3. **Update past posts** in `emails/data/past-posts.json`
+4. **Update content variables** in `scripts/send-emails.ts`:
+   ```typescript
+   const EMAIL_CONTENT = {
+     lastEpisodeSummary: "Previous topic summary",
+     currentTopicTeaser: "New topic teaser",
+     articleImageUrl: "https://montumia.com/og/sd/new-topic/image.png",
+     linkedinArticleUrl: "https://lnkd.in/your-short-link",
+   };
+   ```
+5. **Preview the email**: `bun run email:preview`
+6. **Send test email**: `bun run send-emails`
+7. **Check the email** in your inbox
+8. **Update recipients** for bulk send (see below)
+9. **Send to all subscribers**
+
+### Sending to All Subscribers
+
+#### Option 1: Manual Recipient List
+
+Edit `scripts/send-emails.ts`:
+
+```typescript
+const RECIPIENTS: EmailRecipient[] = [
+  { email: "user1@example.com", name: "User One" },
+  { email: "user2@example.com", name: "User Two" },
+  // ... more recipients
+];
+
+// In main():
+await sendBulkEmails(RECIPIENTS, htmlContent);
+```
+
+#### Option 2: From Resend Audience (Recommended)
+
+Fetch contacts from your Resend audience programmatically:
+
+```typescript
+// Add this to scripts/send-emails.ts
+async function getSubscribersFromResend(): Promise<EmailRecipient[]> {
+  const audienceId = process.env.RESEND_SEGMENT_ID;
+  const { data: contacts } = await resend.contacts.list({
+    audienceId: audienceId,
+  });
+
+  return contacts.map(contact => ({
+    email: contact.email,
+    name: contact.first_name || "Subscriber"
+  }));
+}
+
+// In main():
+const recipients = await getSubscribersFromResend();
+await sendBulkEmails(recipients, htmlContent);
+```
+
+#### Option 3: CSV Import
+
+Create a script to read emails from a CSV file:
+
+```typescript
+import { readFileSync } from "fs";
+
+function loadRecipientsFromCSV(filepath: string): EmailRecipient[] {
+  const csv = readFileSync(filepath, "utf-8");
+  const lines = csv.split("\n").slice(1); // Skip header
+  return lines.map(line => {
+    const [email, name] = line.split(",");
+    return { email: email.trim(), name: name?.trim() };
+  });
+}
+```
+
+## Environment Configuration
+
+Required environment variables in `.env.local`:
+
+```env
+RESEND_API_KEY=re_xxxxxxxxxxxxx
+RESEND_SEGMENT_ID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+```
+
+Get these from your [Resend Dashboard](https://resend.com/api-keys).
+
+## Development
+
+### Preview in Browser
+
+The React Email dev server provides a live preview:
+
+```bash
+bun run email:preview
+```
+
+Features:
+- Hot reload on file changes
+- Preview with different content
+- Responsive design testing
+- Export HTML for debugging
+
+### Modifying the Template
+
+Edit `emails/newsletter-react.tsx`. The template uses React Email components:
+
+```tsx
+import {
+  Body,
+  Container,
+  Head,
+  Heading,
+  Html,
+  Img,
+  Link,
+  Section,
+  Text,
+  Hr,
+} from "@react-email/components";
+```
+
+**Styling Tips:**
+- Use inline styles via the `style` prop
+- Define style objects outside the component for reusability
+- Use TypeScript const assertions for text-align: `textAlign: "center" as const`
+- Test in the preview server before sending
+
+### Adding New Sections
+
+Example: Add a "Featured Comment" section:
+
+```tsx
+{/* In newsletter-react.tsx, add after the main content */}
+<Hr style={divider} />
+
+<Heading style={h2}>পাঠকদের মন্তব্য</Heading>
+<Text style={text}>
+  "{featuredComment}" - {commentAuthor}
+</Text>
+```
+
+Update the interface:
+
+```typescript
+interface NewsletterEmailProps {
+  // ... existing props
+  featuredComment?: string;
+  commentAuthor?: string;
+}
+```
+
+## Troubleshooting
+
+### "RESEND_API_KEY environment variable is not set"
+
+Make sure `.env.local` exists with your Resend API key:
+
+```env
+RESEND_API_KEY=re_xxxxxxxxxxxxx
+```
+
+### "Failed to load template"
+
+Check that:
+- The file exists at `emails/newsletter-react.tsx`
+- No syntax errors in the React component
+- All imports are correct
+
+### "Failed to send" / Validation errors
+
+Common issues:
+- Invalid email addresses
+- FROM email domain not verified in Resend
+- Malformed HTML (check the preview first)
+- Rate limiting (reduce sending speed)
+
+### Email looks broken in certain clients
+
+- Check the preview server for visual issues
+- Test send to multiple email clients
+- Ensure all styles are inline
+- Avoid using `<style>` tags (not supported in many clients)
+- Use tables for complex layouts if needed
+
+### Past posts not showing
+
+- Verify `emails/data/past-posts.json` exists and is valid JSON
+- Check console output for "Loaded X past posts"
+- Ensure the JSON array is not empty
+
+## Best Practices
+
+1. **Always Preview First** - Use `bun run email:preview` before sending
+2. **Test Send** - Send to yourself first, check on multiple devices/clients
+3. **Update Past Posts** - Keep the list current and relevant
+4. **Use OG Images** - Generate proper OG images for visual consistency
+5. **Short LinkedIn Links** - Use LinkedIn's URL shortener for tracking
+6. **Bengali + English** - Mix languages appropriately for your audience
+7. **Mobile First** - Most users will read on mobile, keep it simple
+8. **Accessibility** - Use semantic HTML and alt text for images
+9. **Unsubscribe** - Always include an easy way to unsubscribe
+10. **Rate Limiting** - Don't send too fast (current: 1 email/second)
+
+## Future Improvements
+
+- [ ] Add personalization (first name in greeting)
+- [ ] A/B testing for subject lines
+- [ ] Email analytics tracking (open rates, click rates)
+- [ ] Scheduled sending via cron job
+- [ ] Multiple template variants (announcement, digest, etc.)
+- [ ] Dark mode email support
+- [ ] Interactive elements (polls, buttons)
+- [ ] RSS-to-email automation
+- [ ] Segment-based content customization
+- [ ] Welcome email sequence for new subscribers
+
+## Resources
+
+- [React Email Documentation](https://react.email/docs)
+- [Resend Documentation](https://resend.com/docs)
+- [Email on Acid - Testing Tool](https://www.emailonacid.com/)
+- [Can I Email - Compatibility Guide](https://www.caniemail.com/)
+- [HTML Email Best Practices](https://www.campaignmonitor.com/dev-resources/guides/coding/)

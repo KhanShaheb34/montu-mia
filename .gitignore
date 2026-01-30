@@ -3,6 +3,7 @@
 
 # generated content
 .source
+.react-email
 
 # test & build
 /coverage
