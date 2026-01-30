@@ -64,12 +64,14 @@ export const NewsletterEmail = ({
 
             {/* Article Featured Image */}
             <Section style={imageSection}>
-              <Img
-                src={articleImageUrl}
-                width="560"
-                alt="Article preview"
-                style={articleImage}
-              />
+              <Link href={linkedinArticleUrl}>
+                <Img
+                  src={articleImageUrl}
+                  width="560"
+                  alt="Article preview"
+                  style={articleImage}
+                />
+              </Link>
             </Section>
 
             {/* Article CTA */}

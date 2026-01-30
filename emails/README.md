@@ -105,7 +105,7 @@ Built with React Email components, the template includes:
 2. **Bengali Title** - "মন্টু মিয়াঁর নতুন অভিযানে স্বাগতম"
 3. **Last Episode Summary** - Recap of previous content (variable)
 4. **Current Topic Teaser** - Preview of new content (variable)
-5. **Featured Image** - Dynamic article image (variable)
+5. **Featured Image** - Dynamic article image (variable) - **Clickable**, links to LinkedIn article
 6. **LinkedIn CTA** - Link to LinkedIn article (variable)
 7. **Past Adventures** - Auto-generated list from `past-posts.json`
 8. **Website CTA** - Link to montumia.com
