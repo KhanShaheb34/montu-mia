@@ -25,13 +25,29 @@ bun run email:preview
 
 Then visit http://localhost:3001 to see your email template live.
 
-### 2. Send Test Email
+### 2. Send Emails
 
-Send a test email to `shakirulhkhan@gmail.com`:
+**Send test email** to `shakirulhkhan@gmail.com`:
 
 ```bash
-bun run send-emails
+bun run send-emails:test
+# or
+bun run send-emails -- --test
 ```
+
+**Send to all subscribers** in your Resend audience:
+
+```bash
+bun run send-emails:all
+# or
+bun run send-emails -- --all
+```
+
+⚠️ When sending to all subscribers, you'll see:
+- Total number of recipients
+- Preview of first 5 email addresses
+- Email details (from, subject, article)
+- Confirmation prompt - **Type "yes"** to proceed or anything else to cancel
 
 ### 3. Customize Content
 
@@ -173,60 +189,44 @@ The template is designed to work across all major email clients:
 
 ### Sending to All Subscribers
 
-#### Option 1: Manual Recipient List
+The script automatically fetches all subscribers from your Resend audience:
 
-Edit `scripts/send-emails.ts`:
-
-```typescript
-const RECIPIENTS: EmailRecipient[] = [
-  { email: "user1@example.com", name: "User One" },
-  { email: "user2@example.com", name: "User Two" },
-  // ... more recipients
-];
-
-// In main():
-await sendBulkEmails(RECIPIENTS, htmlContent);
+```bash
+bun run send-emails:all
 ```
 
-#### Option 2: From Resend Audience (Recommended)
+**What happens:**
+1. Fetches all contacts from `RESEND_SEGMENT_ID` audience
+2. Shows preview of recipients (first 5)
+3. Shows email details
+4. **Asks for confirmation** - Type "yes" to proceed
+5. Sends emails with 1-second delay between each
+6. Each recipient gets a unique unsubscribe link
 
-Fetch contacts from your Resend audience programmatically:
+**Example output:**
+```
+📬 ALL SUBSCRIBERS MODE
+📡 Fetching subscribers from Resend audience...
+✓ Found 27 subscriber(s)
 
-```typescript
-// Add this to scripts/send-emails.ts
-async function getSubscribersFromResend(): Promise<EmailRecipient[]> {
-  const audienceId = process.env.RESEND_SEGMENT_ID;
-  const { data: contacts } = await resend.contacts.list({
-    audienceId: audienceId,
-  });
+==================================================
+⚠️  You are about to send emails to 27 subscriber(s)
+==================================================
 
-  return contacts.map(contact => ({
-    email: contact.email,
-    name: contact.first_name || "Subscriber"
-  }));
-}
+Recipients preview (first 5):
+  1. user1@example.com
+  2. user2@example.com
+  ...
 
-// In main():
-const recipients = await getSubscribersFromResend();
-await sendBulkEmails(recipients, htmlContent);
+⚠️  Are you sure you want to send to ALL subscribers?
+Type "yes" to confirm, or anything else to cancel:
 ```
 
-#### Option 3: CSV Import
-
-Create a script to read emails from a CSV file:
-
-```typescript
-import { readFileSync } from "fs";
-
-function loadRecipientsFromCSV(filepath: string): EmailRecipient[] {
-  const csv = readFileSync(filepath, "utf-8");
-  const lines = csv.split("\n").slice(1); // Skip header
-  return lines.map(line => {
-    const [email, name] = line.split(",");
-    return { email: email.trim(), name: name?.trim() };
-  });
-}
-```
+**Safety features:**
+- Requires explicit "yes" confirmation
+- Shows recipient count and preview before sending
+- Any other input cancels the operation
+- No emails sent if cancelled
 
 ## Environment Configuration
 

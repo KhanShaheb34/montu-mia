@@ -25,8 +25,9 @@ bun run format       # Format code with Biome
 
 ### Email & Newsletter
 ```bash
-bun run email:preview  # Preview email template in browser at http://localhost:3001
-bun run send-emails    # Send test email to shakirulhkhan@gmail.com
+bun run email:preview      # Preview email template in browser at http://localhost:3001
+bun run send-emails:test   # Send test email to shakirulhkhan@gmail.com
+bun run send-emails:all    # Send to all subscribers (requires confirmation)
 ```
 
 ### OG Image Generation

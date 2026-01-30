@@ -19,6 +19,8 @@
     "format": "biome format --write",
     "generate-og": "bun run scripts/generate-og-images.ts",
     "send-emails": "bun run scripts/send-emails.ts",
+    "send-emails:test": "bun run scripts/send-emails.ts --test",
+    "send-emails:all": "bun run scripts/send-emails.ts --all",
     "email:preview": "email dev --dir emails --port 3001"
   },
   "dependencies": {

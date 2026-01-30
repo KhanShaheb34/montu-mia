@@ -155,6 +155,50 @@ async function sendEmail(
 }
 
 /**
+ * Fetch all subscribers from Resend audience
+ */
+async function getAllSubscribers(): Promise<EmailRecipient[]> {
+  const audienceId = process.env.RESEND_SEGMENT_ID;
+
+  if (!audienceId) {
+    console.error("❌ Error: RESEND_SEGMENT_ID environment variable is not set");
+    console.error(
+      "Please set it in your .env.local file or export it in your shell\n",
+    );
+    process.exit(1);
+  }
+
+  try {
+    console.log("📡 Fetching subscribers from Resend audience...");
+
+    const { data: response, error } = await resend.contacts.list({
+      audienceId: audienceId,
+    });
+
+    if (error) {
+      console.error("❌ Failed to fetch contacts from Resend:", error);
+      process.exit(1);
+    }
+
+    if (!response?.data || response.data.length === 0) {
+      console.warn("⚠️  No contacts found in Resend audience");
+      return [];
+    }
+
+    const subscribers: EmailRecipient[] = response.data.map((contact) => ({
+      email: contact.email,
+      name: contact.first_name || undefined,
+    }));
+
+    console.log(`✓ Found ${subscribers.length} subscriber(s)\n`);
+    return subscribers;
+  } catch (error) {
+    console.error("❌ Failed to fetch subscribers:", error);
+    process.exit(1);
+  }
+}
+
+/**
  * Send emails to multiple recipients with delay between sends
  * Each recipient gets a unique unsubscribe link
  */
@@ -197,12 +241,60 @@ async function sendBulkEmails(
 }
 
 /**
+ * Show usage instructions
+ */
+function showUsage() {
+  console.log("\nUsage:");
+  console.log("  bun run send-emails --test    # Send to test email only");
+  console.log("  bun run send-emails --all     # Send to all subscribers");
+  console.log("\nOptions:");
+  console.log("  --test    Send test email to shakirulhkhan@gmail.com");
+  console.log("  --all     Send to all subscribers in Resend audience");
+  console.log("  --help    Show this help message\n");
+}
+
+/**
+ * Ask for user confirmation (async stdin prompt)
+ */
+async function askForConfirmation(question: string): Promise<boolean> {
+  console.log(question);
+  console.log('Type "yes" to confirm, or anything else to cancel:');
+
+  // Read from stdin
+  const buffer = new Uint8Array(1024);
+  const n = await Bun.stdin.stream().getReader().read();
+  const input = new TextDecoder()
+    .decode(n.value)
+    .trim()
+    .toLowerCase();
+
+  return input === "yes";
+}
+
+/**
  * Main execution
  */
 async function main() {
   console.log("=".repeat(50));
   console.log("মন্টু মিয়াঁর সিস্টেম ডিজাইন - Email Sending Pipeline");
   console.log("=".repeat(50));
+
+  // Parse command-line arguments
+  const args = process.argv.slice(2);
+  const mode = args[0];
+
+  // Show help
+  if (mode === "--help" || mode === "-h") {
+    showUsage();
+    process.exit(0);
+  }
+
+  // Validate mode
+  if (!mode || (mode !== "--test" && mode !== "--all")) {
+    console.error("\n❌ Error: Invalid or missing argument\n");
+    showUsage();
+    process.exit(1);
+  }
 
   // Check for API key
   if (!process.env.RESEND_API_KEY) {
@@ -227,10 +319,56 @@ async function main() {
     // Load past posts
     const pastPosts = loadPastPosts();
     console.log(`✓ Loaded ${pastPosts.length} past posts`);
+
+    let recipients: EmailRecipient[];
+
+    if (mode === "--test") {
+      console.log("\n🧪 TEST MODE: Sending to test email only\n");
+      recipients = [TEST_RECIPIENT];
+    } else if (mode === "--all") {
+      console.log("\n📬 ALL SUBSCRIBERS MODE\n");
+
+      // Fetch all subscribers
+      recipients = await getAllSubscribers();
+
+      if (recipients.length === 0) {
+        console.error("❌ No subscribers found. Exiting.\n");
+        process.exit(1);
+      }
+
+      // Show confirmation prompt
+      console.log("=".repeat(50));
+      console.log(`⚠️  You are about to send emails to ${recipients.length} subscriber(s)`);
+      console.log("=".repeat(50));
+      console.log("\nRecipients preview (first 5):");
+      recipients.slice(0, 5).forEach((r, i) => {
+        console.log(`  ${i + 1}. ${r.email}`);
+      });
+      if (recipients.length > 5) {
+        console.log(`  ... and ${recipients.length - 5} more`);
+      }
+      console.log("\nEmail details:");
+      console.log(`  From: ${FROM_EMAIL}`);
+      console.log(`  Subject: ${SUBJECT}`);
+      console.log(`  Article: ${EMAIL_CONTENT.articleTitle}`);
+      console.log("\n" + "=".repeat(50));
+
+      const confirmed = await askForConfirmation(
+        "\n⚠️  Are you sure you want to send to ALL subscribers?",
+      );
+
+      if (!confirmed) {
+        console.log("\n❌ Send cancelled by user. No emails were sent.\n");
+        process.exit(0);
+      }
+
+      console.log("\n✅ Confirmed. Starting bulk send...\n");
+    }
+
     console.log("📧 Sending emails with unique unsubscribe links...\n");
 
-    // Send to test recipient(s)
-    await sendBulkEmails([TEST_RECIPIENT], EMAIL_CONTENT);
+    // Send emails
+    await sendBulkEmails(recipients, EMAIL_CONTENT);
 
     console.log("\n💡 Tip: Each recipient gets a unique unsubscribe link");
     console.log(
