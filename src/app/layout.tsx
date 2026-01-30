@@ -4,6 +4,7 @@ import { Noto_Sans_Bengali, Outfit } from "next/font/google";
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { GoogleTag } from "@/components/analytics/google-tag";
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -79,6 +80,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             enabled: false,
           }}
         >
+          <GoogleTag />
           {children}
         </RootProvider>
         <Analytics />
