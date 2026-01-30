@@ -1,25 +1,20 @@
 import { Resend } from "resend";
-import { NextRequest, NextResponse } from "next/server";
-import { createHash } from "crypto";
+import { type NextRequest, NextResponse } from "next/server";
+import { verifyEmailHash } from "@/lib/email-hash";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 /**
- * Generate a secure hash for email verification
+ * Escape HTML special characters in a string to prevent XSS.
  */
-function generateEmailHash(email: string): string {
-  const secret = process.env.UNSUBSCRIBE_SECRET || "default-secret-change-me";
-  return createHash("sha256")
-    .update(email + secret)
-    .digest("hex")
-    .substring(0, 16);
-}
-
-/**
- * Verify email hash
- */
-function verifyEmailHash(email: string, hash: string): boolean {
-  return generateEmailHash(email) === hash;
+function escapeHtml(unsafe: string): string {
+  return unsafe
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;")
+    .replace(/\//g, "&#x2F;");
 }
 
 /**
@@ -39,8 +34,16 @@ export async function POST(request: NextRequest) {
     }
 
     // Verify the hash
-    if (!verifyEmailHash(email, hash)) {
-      return NextResponse.json({ error: "Invalid hash" }, { status: 403 });
+    try {
+      if (!verifyEmailHash(email, hash)) {
+        return NextResponse.json({ error: "Invalid hash" }, { status: 403 });
+      }
+    } catch (error) {
+      console.error("Unsubscribe hash verification error:", error);
+      return NextResponse.json(
+        { error: "Server configuration error (UNSUBSCRIBE_SECRET missing)" },
+        { status: 500 },
+      );
     }
 
     // Remove from Resend audience
@@ -54,11 +57,10 @@ export async function POST(request: NextRequest) {
     }
 
     // Find and delete the contact
-    const { data: contacts } = await resend.contacts.list({
+    const { data: contact } = await resend.contacts.get({
       audienceId: audienceId,
+      email: email,
     });
-
-    const contact = contacts?.data?.find((c) => c.email === email);
 
     if (contact) {
       await resend.contacts.remove({
@@ -152,9 +154,10 @@ export async function GET(request: NextRequest) {
   }
 
   // Verify hash
-  if (!verifyEmailHash(email, hash)) {
-    return new NextResponse(
-      `<!DOCTYPE html>
+  try {
+    if (!verifyEmailHash(email, hash)) {
+      return new NextResponse(
+        `<!DOCTYPE html>
 <html lang="bn">
 <head>
   <meta charset="UTF-8">
@@ -179,12 +182,49 @@ export async function GET(request: NextRequest) {
   <p><a href="https://montumia.com">মূল পাতায় ফিরে যান</a></p>
 </body>
 </html>`,
+        {
+          status: 403,
+          headers: { "Content-Type": "text/html; charset=utf-8" },
+        },
+      );
+    }
+  } catch (error) {
+    console.error("Unsubscribe hash verification error:", error);
+    return new NextResponse(
+      `<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Server Error</title>
+  <style>
+    body {
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      max-width: 600px;
+      margin: 100px auto;
+      padding: 20px;
+      text-align: center;
+    }
+    h1 { color: #dc2626; }
+    p { color: #4b5563; line-height: 1.6; }
+    a { color: #f59e0b; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <h1>সার্ভার ত্রুটি</h1>
+  <p>দুঃখিত, একটি অভ্যন্তরীণ সমস্যা হয়েছে (UNSUBSCRIBE_SECRET missing)।</p>
+  <p><a href="https://montumia.com">মূল পাতায় ফিরে যান</a></p>
+</body>
+</html>`,
       {
-        status: 403,
+        status: 500,
         headers: { "Content-Type": "text/html; charset=utf-8" },
       },
     );
   }
+
+  const escapedEmail = escapeHtml(email);
+  const escapedHash = escapeHtml(hash);
 
   // Show confirmation page with button
   return new NextResponse(
@@ -226,11 +266,11 @@ export async function GET(request: NextRequest) {
 <body>
   <h1>নিউজলেটার থেকে আনসাবস্ক্রাইব</h1>
   <p>আপনি কি নিশ্চিত যে আপনি মন্টু মিয়াঁর সিস্টেম ডিজাইন নিউজলেটার থেকে আনসাবস্ক্রাইব করতে চান?</p>
-  <p><strong>${email}</strong></p>
+  <p><strong>${escapedEmail}</strong></p>
 
   <form method="POST" action="/api/unsubscribe">
-    <input type="hidden" name="email" value="${email}">
-    <input type="hidden" name="hash" value="${hash}">
+    <input type="hidden" name="email" value="${escapedEmail}">
+    <input type="hidden" name="hash" value="${escapedHash}">
     <button type="submit">হ্যাঁ, আনসাবস্ক্রাইব করুন</button>
     <a href="https://montumia.com" class="cancel">না, থাক</a>
   </form>

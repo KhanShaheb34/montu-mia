@@ -3,9 +3,9 @@
 import { Resend } from "resend";
 import { readFileSync } from "fs";
 import { join } from "path";
-import { createHash } from "crypto";
 import { render } from "@react-email/components";
 import { NewsletterEmail } from "../emails/newsletter-react";
+import { generateEmailHash } from "../src/lib/email-hash";
 
 // Initialize Resend client
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -35,7 +35,7 @@ interface EmailContentConfig {
 
 // For testing, we'll use a single recipient
 const TEST_RECIPIENT: EmailRecipient = {
-  email: "shakirulhkhan@gmail.com",
+  email: process.env.TEST_EMAIL || "",
   name: "Test User",
 };
 
@@ -51,17 +51,6 @@ const EMAIL_CONTENT: EmailContentConfig = {
   linkedinArticleUrl:
     "https://www.linkedin.com/pulse/%E0%A6%AE%E0%A6%A8%E0%A6%9F-%E0%A6%AE%E0%A6%AF%E0%A6%B0-%E0%A6%B8%E0%A6%B8%E0%A6%9F%E0%A6%AE-%E0%A6%A1%E0%A6%9C%E0%A6%87%E0%A6%A8-%E0%A6%85%E0%A6%AD%E0%A6%AF%E0%A6%A8-%E0%A7%AA-%E0%A6%A8%E0%A6%9F%E0%A6%93%E0%A6%AF%E0%A6%B0%E0%A6%95-%E0%A6%AA%E0%A6%B0%E0%A6%9F%E0%A6%95%E0%A6%B2%E0%A6%B0-%E0%A6%97%E0%A6%B2%E0%A6%95%E0%A6%A7%E0%A6%A7-shakirul-hasan-khan-xcg5c",
 };
-
-/**
- * Generate a secure hash for email verification
- */
-function generateEmailHash(email: string): string {
-  const secret = process.env.UNSUBSCRIBE_SECRET || "default-secret-change-me";
-  return createHash("sha256")
-    .update(email + secret)
-    .digest("hex")
-    .substring(0, 16);
-}
 
 /**
  * Generate unsubscribe URL for a specific email
@@ -134,8 +123,9 @@ async function sendEmail(
         // List-Unsubscribe-Post for one-click unsubscribe (RFC 8058)
         "List-Unsubscribe-Post": `List-Unsubscribe=One-Click`,
         // Additional headers for better deliverability
-        "Precedence": "bulk",
-        "List-Id": "Montu Mia System Design Newsletter <newsletter.montumia.com>",
+        Precedence: "bulk",
+        "List-Id":
+          "Montu Mia System Design Newsletter <newsletter.montumia.com>",
       },
     });
 
@@ -161,7 +151,9 @@ async function getAllSubscribers(): Promise<EmailRecipient[]> {
   const audienceId = process.env.RESEND_SEGMENT_ID;
 
   if (!audienceId) {
-    console.error("❌ Error: RESEND_SEGMENT_ID environment variable is not set");
+    console.error(
+      "❌ Error: RESEND_SEGMENT_ID environment variable is not set",
+    );
     console.error(
       "Please set it in your .env.local file or export it in your shell\n",
     );
@@ -263,10 +255,7 @@ async function askForConfirmation(question: string): Promise<boolean> {
   // Read from stdin
   const buffer = new Uint8Array(1024);
   const n = await Bun.stdin.stream().getReader().read();
-  const input = new TextDecoder()
-    .decode(n.value)
-    .trim()
-    .toLowerCase();
+  const input = new TextDecoder().decode(n.value).trim().toLowerCase();
 
   return input === "yes";
 }
@@ -305,14 +294,15 @@ async function main() {
     process.exit(1);
   }
 
-  // Warn about unsubscribe secret
+  // Ensure unsubscribe secret is set
   if (!process.env.UNSUBSCRIBE_SECRET) {
-    console.warn(
-      "⚠️  Warning: UNSUBSCRIBE_SECRET not set, using default (insecure)",
+    console.error(
+      "\n❌ Error: UNSUBSCRIBE_SECRET environment variable is not set",
     );
-    console.warn(
-      "   Set UNSUBSCRIBE_SECRET in .env.local for production use\n",
+    console.error(
+      "Please set it in your .env.local file or export it in your shell\n",
     );
+    process.exit(1);
   }
 
   try {
@@ -338,7 +328,9 @@ async function main() {
 
       // Show confirmation prompt
       console.log("=".repeat(50));
-      console.log(`⚠️  You are about to send emails to ${recipients.length} subscriber(s)`);
+      console.log(
+        `⚠️  You are about to send emails to ${recipients.length} subscriber(s)`,
+      );
       console.log("=".repeat(50));
       console.log("\nRecipients preview (first 5):");
       recipients.slice(0, 5).forEach((r, i) => {

@@ -9,6 +9,7 @@ This is "মন্টু মিয়াঁর সিস্টেম ডিজ�
 ## Commands
 
 ### Development
+
 ```bash
 bun install          # Install dependencies
 bun dev              # Start development server at http://localhost:3000
@@ -17,6 +18,7 @@ bun start            # Start production server
 ```
 
 ### Code Quality
+
 ```bash
 bun run types:check  # Run full type checking (includes MDX processing and Next.js type generation)
 bun run lint         # Run Biome linter
@@ -24,6 +26,7 @@ bun run format       # Format code with Biome
 ```
 
 ### Email & Newsletter
+
 ```bash
 bun run email:preview      # Preview email template in browser at http://localhost:3001
 bun run send-emails:test   # Send test email to shakirulhkhan@gmail.com
@@ -31,11 +34,13 @@ bun run send-emails:all    # Send to all subscribers (requires confirmation)
 ```
 
 ### OG Image Generation
+
 ```bash
 bun run generate-og    # Generate OG images for all MDX content
 ```
 
 ### Post-Install
+
 - `fumadocs-mdx` runs automatically after `bun install` via postinstall script
 
 ## Architecture
@@ -91,6 +96,7 @@ The project uses **Fumadocs** - a documentation framework built on Next.js. Cont
 ### Newsletter Feature
 
 The newsletter subscription flow:
+
 1. User clicks subscribe button (rendered via `SubscribeModal` component)
 2. Modal opens with email input form
 3. Form submission triggers `subscribeToNewsletter` server action in `src/app/actions.ts`
@@ -119,6 +125,7 @@ The project includes a complete email sending pipeline using React Email and Res
    - Matches site theme from `global.css` (amber/yellow color scheme)
 
 3. **Sending Emails**:
+
    ```bash
    # Preview email in browser (with hot reload)
    bun run email:preview    # Opens http://localhost:3001
@@ -165,6 +172,7 @@ See `emails/README.md` for detailed documentation.
 ### Environment Configuration
 
 Required environment variables:
+
 - `RESEND_API_KEY` - Resend API key for email service (see `src/app/actions.ts`)
 - `RESEND_SEGMENT_ID` - Resend audience/segment ID for newsletter (see `src/app/actions.ts`)
 - `UNSUBSCRIBE_SECRET` - Secret key for generating secure unsubscribe links (generate with `openssl rand -hex 32`)
@@ -182,6 +190,7 @@ The project uses static OG images generated locally using Puppeteer. Images are 
 2. **Generating OG Images**:
 
    Run the generation script locally whenever you add/update content:
+
    ```bash
    bun run generate-og
    ```
@@ -222,11 +231,13 @@ The project uses static OG images generated locally using Puppeteer. Images are 
 - Custom MDX components can be added to `src/mdx-components.tsx`
 
 **Frontmatter Fields:**
+
 - `title` (required) - Page title in Bengali
 - `description` (optional) - Page description in Bengali
 - `tags` (optional) - Array of SEO keywords in English
 
 **Example:**
+
 ```mdx
 ---
 title: লোড ব্যালেন্সার আসলে কী?
@@ -270,6 +281,7 @@ The site supports SEO tags for better search engine visibility:
 ### Type Checking
 
 Always run `bun run types:check` before committing. This command:
+
 1. Processes MDX files (`fumadocs-mdx`)
 2. Generates Next.js types (`next typegen`)
 3. Runs TypeScript compiler in check mode (`tsc --noEmit`)

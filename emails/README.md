@@ -4,11 +4,10 @@ Email newsletter system using React Email and Resend for মন্টু মি�
 
 ## Directory Structure
 
-```
+```text
 emails/
 ├── README.md                   # This file
 ├── newsletter-react.tsx        # React Email template (MAIN)
-├── newsletter.html            # Legacy HTML template (fallback)
 └── data/
     └── past-posts.json        # List of past articles for newsletter
 ```
@@ -23,7 +22,7 @@ Preview the email in your browser (hot reload enabled):
 bun run email:preview
 ```
 
-Then visit http://localhost:3001 to see your email template live.
+Then visit [http://localhost:3001](http://localhost:3001) to see your email template live.
 
 ### 2. Send Emails
 
@@ -44,6 +43,7 @@ bun run send-emails -- --all
 ```
 
 ⚠️ When sending to all subscribers, you'll see:
+
 - Total number of recipients
 - Preview of first 5 email addresses
 - Email details (from, subject, article)
@@ -108,6 +108,7 @@ The email system includes a robust unsubscribe mechanism:
 ### API Endpoint
 
 The unsubscribe API is at `/api/unsubscribe` and handles:
+
 - `GET` requests: Show confirmation page
 - `POST` requests: Process unsubscribe and remove from Resend
 
@@ -129,13 +130,13 @@ Built with React Email components, the template includes:
 
 ### Template Variables
 
-| Variable | Type | Description | Example |
-|----------|------|-------------|---------|
-| `lastEpisodeSummary` | string | Previous episode summary | "মন্টু মিয়া লোড ব্যালেন্সিং নিয়ে কাজ করছিলেন" |
-| `currentTopicTeaser` | string | Current topic preview | "ডাটাবেস রেপ্লিকেশনের সমস্যা" |
-| `articleImageUrl` | string | Featured article image URL | "https://montumia.com/og/sd/topic/image.png" |
-| `linkedinArticleUrl` | string | LinkedIn article short link | "https://lnkd.in/example" |
-| `unsubscribeUrl` | string (optional) | Unsubscribe page URL | "https://montumia.com/unsubscribe" |
+| Variable             | Type              | Description                 | Example                                                                                  |
+| -------------------- | ----------------- | --------------------------- | ---------------------------------------------------------------------------------------- |
+| `lastEpisodeSummary` | string            | Previous episode summary    | "মন্টু মিয়া লোড ব্যালেন্সিং নিয়ে কাজ করছিলেন"                                          |
+| `currentTopicTeaser` | string            | Current topic preview       | "ডাটাবেস রেপ্লিকেশনের সমস্যা"                                                            |
+| `articleImageUrl`    | string            | Featured article image URL  | [https://montumia.com/og/sd/topic/image.png](https://montumia.com/og/sd/topic/image.png) |
+| `linkedinArticleUrl` | string            | LinkedIn article short link | [https://lnkd.in/example](https://lnkd.in/example)                                       |
+| `unsubscribeUrl`     | string (optional) | Unsubscribe page URL        | [https://montumia.com/unsubscribe](https://montumia.com/unsubscribe)                     |
 
 ## Styling & Theme
 
@@ -159,6 +160,7 @@ The template is designed to work across all major email clients:
 - ✅ Thunderbird
 
 **Key Compatibility Features:**
+
 - Inline styles (no external CSS)
 - Table-based layouts where needed
 - Fallback fonts for Bengali text
@@ -196,6 +198,7 @@ bun run send-emails:all
 ```
 
 **What happens:**
+
 1. Fetches all contacts from `RESEND_SEGMENT_ID` audience
 2. Shows preview of recipients (first 5)
 3. Shows email details
@@ -204,7 +207,8 @@ bun run send-emails:all
 6. Each recipient gets a unique unsubscribe link
 
 **Example output:**
-```
+
+```text
 📬 ALL SUBSCRIBERS MODE
 📡 Fetching subscribers from Resend audience...
 ✓ Found 27 subscriber(s)
@@ -223,6 +227,7 @@ Type "yes" to confirm, or anything else to cancel:
 ```
 
 **Safety features:**
+
 - Requires explicit "yes" confirmation
 - Shows recipient count and preview before sending
 - Any other input cancels the operation
@@ -241,6 +246,7 @@ UNSUBSCRIBE_SECRET=your_random_secret_key_here
 Get API keys from your [Resend Dashboard](https://resend.com/api-keys).
 
 Generate `UNSUBSCRIBE_SECRET` using:
+
 ```bash
 openssl rand -hex 32
 ```
@@ -254,6 +260,7 @@ This secret is used to generate secure unsubscribe links for each recipient.
 The FROM email is set to `newsletter@montumia.com` in `scripts/send-emails.ts`.
 
 To verify `montumia.com`:
+
 1. Go to [Resend Dashboard → Domains](https://resend.com/domains)
 2. Click "Add Domain" and enter `montumia.com`
 3. Add the required DNS records to your domain registrar:
@@ -276,6 +283,7 @@ bun run email:preview
 ```
 
 Features:
+
 - Hot reload on file changes
 - Preview with different content
 - Responsive design testing
@@ -301,6 +309,7 @@ import {
 ```
 
 **Styling Tips:**
+
 - Use inline styles via the `style` prop
 - Define style objects outside the component for reusability
 - Use TypeScript const assertions for text-align: `textAlign: "center" as const`
@@ -343,6 +352,7 @@ RESEND_API_KEY=re_xxxxxxxxxxxxx
 ### "Failed to load template"
 
 Check that:
+
 - The file exists at `emails/newsletter-react.tsx`
 - No syntax errors in the React component
 - All imports are correct
@@ -350,6 +360,7 @@ Check that:
 ### "Failed to send" / Validation errors
 
 Common issues:
+
 - Invalid email addresses
 - FROM email domain not verified in Resend
 - Malformed HTML (check the preview first)
