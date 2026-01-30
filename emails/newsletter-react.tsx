@@ -30,7 +30,7 @@ export const NewsletterEmail = ({
   articleImageUrl = "https://montumia.com/og/sd/introduction/image.png",
   linkedinArticleUrl = "https://lnkd.in/example",
   pastPosts = [],
-  unsubscribeUrl = "https://montumia.com/unsubscribe",
+  unsubscribeUrl = "https://montumia.com/api/unsubscribe",
 }: NewsletterEmailProps) => {
   return (
     <Html lang="bn">

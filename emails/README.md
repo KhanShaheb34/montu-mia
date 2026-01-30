@@ -60,6 +60,41 @@ Edit `emails/data/past-posts.json` to add/update articles:
 ]
 ```
 
+## Unsubscribe System
+
+The email system includes a robust unsubscribe mechanism:
+
+### How It Works
+
+1. **Unique Links**: Each recipient gets a unique unsubscribe URL with a secure hash
+2. **Email Headers**: Includes `List-Unsubscribe` and `List-Unsubscribe-Post` headers (RFC 2369 & RFC 8058)
+3. **One-Click Unsubscribe**: Modern email clients (Gmail, Outlook, etc.) show an "Unsubscribe" button in the header
+4. **Fallback Link**: Footer includes a visible unsubscribe link for older clients
+5. **Automatic Removal**: Clicking unsubscribe removes the contact from your Resend audience
+
+### Unsubscribe Flow
+
+1. User clicks "Unsubscribe" button in email header OR footer link
+2. Browser opens `/api/unsubscribe?email=user@example.com&hash=abc123`
+3. System verifies the hash to ensure the request is legitimate
+4. Confirmation page is shown
+5. User confirms unsubscribe
+6. Contact is removed from Resend audience
+7. Success message is displayed
+
+### Security
+
+- Each unsubscribe link is secured with a SHA-256 hash
+- Hash is generated using the recipient's email + your `UNSUBSCRIBE_SECRET`
+- Links cannot be forged without knowing the secret
+- Prevents malicious unsubscribes
+
+### API Endpoint
+
+The unsubscribe API is at `/api/unsubscribe` and handles:
+- `GET` requests: Show confirmation page
+- `POST` requests: Process unsubscribe and remove from Resend
+
 ## Email Template Features
 
 ### Current Template: `newsletter-react.tsx`
@@ -74,7 +109,7 @@ Built with React Email components, the template includes:
 6. **LinkedIn CTA** - Link to LinkedIn article (variable)
 7. **Past Adventures** - Auto-generated list from `past-posts.json`
 8. **Website CTA** - Link to montumia.com
-9. **Unsubscribe Link** - Customizable unsubscribe URL
+9. **Unsubscribe Link** - Unique per-recipient secure unsubscribe URL
 
 ### Template Variables
 
@@ -200,9 +235,35 @@ Required environment variables in `.env.local`:
 ```env
 RESEND_API_KEY=re_xxxxxxxxxxxxx
 RESEND_SEGMENT_ID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+UNSUBSCRIBE_SECRET=your_random_secret_key_here
 ```
 
-Get these from your [Resend Dashboard](https://resend.com/api-keys).
+Get API keys from your [Resend Dashboard](https://resend.com/api-keys).
+
+Generate `UNSUBSCRIBE_SECRET` using:
+```bash
+openssl rand -hex 32
+```
+
+This secret is used to generate secure unsubscribe links for each recipient.
+
+### Domain Verification
+
+**Important:** Before sending emails, you must verify your domain in Resend.
+
+The FROM email is set to `newsletter@montumia.com` in `scripts/send-emails.ts`.
+
+To verify `montumia.com`:
+1. Go to [Resend Dashboard → Domains](https://resend.com/domains)
+2. Click "Add Domain" and enter `montumia.com`
+3. Add the required DNS records to your domain registrar:
+   - **SPF Record** (TXT) - Authorizes Resend to send on your behalf
+   - **DKIM Record** (TXT) - Email authentication
+   - **DMARC Record** (TXT) - Email policy (optional but recommended)
+4. Wait for verification (usually 5-15 minutes)
+5. Status will show "Verified" when ready
+
+**For Testing**: You can temporarily use `onboarding@resend.dev` (no verification needed) by changing `FROM_EMAIL` in the script.
 
 ## Development
 

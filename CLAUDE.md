@@ -151,13 +151,22 @@ The project includes a complete email sending pipeline using React Email and Res
    - Mobile-responsive design
    - Bengali font fallbacks
 
+7. **Unsubscribe System**:
+   - Each recipient gets a unique, secure unsubscribe link
+   - Includes `List-Unsubscribe` and `List-Unsubscribe-Post` headers (RFC 2369 & RFC 8058)
+   - Modern email clients show "Unsubscribe" button in header
+   - API endpoint at `/api/unsubscribe` handles unsubscribe requests
+   - Automatically removes contacts from Resend audience
+   - Secured with SHA-256 hash verification
+
 See `emails/README.md` for detailed documentation.
 
 ### Environment Configuration
 
-Required environment variables (see `src/app/actions.ts`):
-- `RESEND_API_KEY` - Resend API key for email service
-- `RESEND_SEGMENT_ID` - Resend audience/segment ID for newsletter
+Required environment variables:
+- `RESEND_API_KEY` - Resend API key for email service (see `src/app/actions.ts`)
+- `RESEND_SEGMENT_ID` - Resend audience/segment ID for newsletter (see `src/app/actions.ts`)
+- `UNSUBSCRIBE_SECRET` - Secret key for generating secure unsubscribe links (generate with `openssl rand -hex 32`)
 
 ### OG Image Generation
 
