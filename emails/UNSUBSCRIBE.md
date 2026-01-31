@@ -21,14 +21,15 @@ The email system now includes a complete unsubscribe mechanism that works with a
 ### For You (Sender)
 
 Each email sent includes:
-- **Unique URL**: `https://montumia.com/api/unsubscribe?email=user@example.com&hash=abc123`
+
+- **Unique URL**: `https://www.montumia.com/api/unsubscribe?email=user@example.com&hash=abc123`
 - **Secure Hash**: Prevents unauthorized unsubscribes
 - **Email Headers**: Standard RFC-compliant headers for email clients
 
 ## Email Headers Added
 
 ```
-List-Unsubscribe: <https://montumia.com/api/unsubscribe?email=...&hash=...>, <mailto:unsubscribe@montumia.com?subject=Unsubscribe>
+List-Unsubscribe: <https://www.montumia.com/api/unsubscribe?email=...&hash=...>, <mailto:unsubscribe@montumia.com?subject=Unsubscribe>
 List-Unsubscribe-Post: List-Unsubscribe=One-Click
 Precedence: bulk
 List-Id: Montu Mia System Design Newsletter <newsletter.montumia.com>
@@ -44,16 +45,19 @@ List-Id: Montu Mia System Design Newsletter <newsletter.montumia.com>
 ## API Endpoint
 
 ### URL
+
 `/api/unsubscribe`
 
 ### Supported Methods
 
 **GET**: Show confirmation page
+
 ```
 GET /api/unsubscribe?email=user@example.com&hash=abc123
 ```
 
 **POST**: Process unsubscribe
+
 ```
 POST /api/unsubscribe
 Body: email=user@example.com&hash=abc123
@@ -62,15 +66,18 @@ Body: email=user@example.com&hash=abc123
 ### Response
 
 **Success (GET)**:
+
 - Shows confirmation page in Bengali
 - User must click "হ্যাঁ, আনসাবস্ক্রাইব করুন" button
 
 **Success (POST)**:
+
 - Removes contact from Resend audience
 - Shows success message
 - Contact will no longer receive emails
 
 **Error**:
+
 - Invalid hash: Shows error page
 - Missing parameters: Shows error page
 - Server error: Returns JSON error
@@ -110,6 +117,7 @@ function verifyEmailHash(email: string, hash: string): boolean {
 ### Test Unsubscribe Link
 
 1. Send a test email:
+
    ```bash
    bun run send-emails
    ```
@@ -147,17 +155,20 @@ Visit the generated URL to see the confirmation page.
 ## Email Client Support
 
 ### ✅ Full Support (One-Click Unsubscribe)
+
 - Gmail (Web, iOS, Android)
 - Outlook.com (Web)
 - Apple Mail (macOS 10.15+, iOS 13+)
 - Yahoo Mail
 
 ### ⚠️ Partial Support (Manual Link Only)
+
 - Older Outlook desktop versions
 - Some corporate email systems
 - Custom email clients
 
 ### 🔄 Fallback
+
 All clients can use the footer link as fallback.
 
 ## Troubleshooting
@@ -203,6 +214,7 @@ All clients can use the footer link as fallback.
 ## Compliance
 
 This implementation follows:
+
 - **RFC 2369**: The Use of URLs as Meta-Syntax for Core Mail List Commands
 - **RFC 8058**: Signaling One-Click Functionality for List Email Headers
 - **CAN-SPAM Act**: Requires clear unsubscribe mechanism

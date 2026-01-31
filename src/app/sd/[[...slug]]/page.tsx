@@ -46,7 +46,7 @@ export default async function Page(props: PageProps<"/sd/[[...slug]]">) {
       <div className="flex flex-row gap-2 items-center">
         <ViewOptions markdownUrl={`${page.url}.mdx`} githubUrl={githubUrl} />
         <ShareOptions
-          url={`https://montumia.com${page.url}`}
+          url={`https://www.montumia.com${page.url}`}
           title={page.data.title}
         />
         <SubscribeModal
@@ -82,12 +82,15 @@ export async function generateMetadata(
   const page = source.getPage(params.slug);
   if (!page) notFound();
 
-  const pageUrl = `https://montumia.com${page.url}`;
+  const pageUrl = `https://www.montumia.com${page.url}`;
   // Use static OG image from public folder with version for cache busting
   // Guard against empty slug array to avoid paths like /og/sd//image.png
   const slugPath = page.slugs.length > 0 ? page.slugs.join("/") : "index";
   const ogImagePath = `/og/sd/${slugPath}/image.png?v=2`;
-  const ogImageUrl = new URL(ogImagePath, "https://montumia.com").toString();
+  const ogImageUrl = new URL(
+    ogImagePath,
+    "https://www.montumia.com",
+  ).toString();
 
   // Combine default keywords with page-specific tags
   const defaultKeywords = [

@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { source } from "@/lib/source";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const url = "https://montumia.com";
+  const url = "https://www.montumia.com";
 
   return [
     {

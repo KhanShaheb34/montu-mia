@@ -27,10 +27,10 @@ export const NewsletterEmail = ({
   lastEpisodeSummary = "মন্টু মিয়া লোড ব্যালেন্সিং নিয়ে কাজ করছিলেন",
   currentTopicTeaser = "ডাটাবেস রেপ্লিকেশনের সমস্যা",
   articleTitle = "ডাটাবেস রেপ্লিকেশনের সমস্যা",
-  articleImageUrl = "https://montumia.com/og/sd/introduction/image.png",
+  articleImageUrl = "https://www.montumia.com/og/sd/introduction/image.png",
   linkedinArticleUrl = "https://lnkd.in/example",
   pastPosts = [],
-  unsubscribeUrl = "https://montumia.com/api/unsubscribe",
+  unsubscribeUrl = "https://www.montumia.com/api/unsubscribe",
 }: NewsletterEmailProps) => {
   return (
     <Html lang="bn">
@@ -41,7 +41,7 @@ export const NewsletterEmail = ({
           {/* Logo/OG Image */}
           <Section style={logoSection}>
             <Img
-              src="https://montumia.com/og.png"
+              src="https://www.montumia.com/og.png"
               width="600"
               alt="মন্টু মিয়াঁর সিস্টেম ডিজাইন"
               style={logo}
@@ -106,7 +106,7 @@ export const NewsletterEmail = ({
             {/* Visit Website */}
             <Text style={text}>
               মন্টু মিয়ার সব অভিযানগুলো একসাথে পড়ুন এখান থেকে:{" "}
-              <Link href="https://montumia.com" style={link}>
+              <Link href="https://www.montumia.com" style={link}>
                 montumia.com
               </Link>
             </Text>

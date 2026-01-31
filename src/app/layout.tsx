@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   },
   description:
     "মন্টু মিয়াঁর সিস্টেম ডিজাইন - A System Design Book in Bengali. Learn system design concepts with simple analogies.",
-  metadataBase: new URL("https://montumia.com"),
+  metadataBase: new URL("https://www.montumia.com"),
   authors: [{ name: "Shakirul Hasan Khan" }],
   keywords: [
     "System Design",
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Montu Mia's System Design",
     description: "Learn System Design in Bengali with fun stories!",
-    url: "https://montumia.com",
+    url: "https://www.montumia.com",
     siteName: "Montu Mia's System Design",
     locale: "bn_BD",
     type: "website",

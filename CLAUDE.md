@@ -296,5 +296,5 @@ Always run `bun run types:check` before committing. This command:
 - Base URL for docs: `/sd` (configured in `src/lib/source.ts`)
 - Site title: "মন্টু মিয়াঁর সিস্টেম ডিজাইন" (Montu Mia's System Design)
 - Primary language: Bengali (`lang="bn"`)
-- Production URL: https://montumia.com
+- Production URL: https://www.montumia.com
 - License: CC-BY-NC-SA-4.0 (content), MIT (code snippets)

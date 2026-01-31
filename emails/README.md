@@ -57,9 +57,9 @@ Edit `scripts/send-emails.ts` and modify the `EMAIL_CONTENT` object:
 const EMAIL_CONTENT: EmailContentConfig = {
   lastEpisodeSummary: "মন্টু মিয়া লোড ব্যালেন্সিং নিয়ে কাজ করছিলেন",
   currentTopicTeaser: "ডাটাবেস রেপ্লিকেশনের সমস্যা",
-  articleImageUrl: "https://montumia.com/og/sd/introduction/image.png",
+  articleImageUrl: "https://www.montumia.com/og/sd/introduction/image.png",
   linkedinArticleUrl: "https://lnkd.in/example",
-  unsubscribeUrl: "https://montumia.com/unsubscribe",
+  unsubscribeUrl: "https://www.montumia.com/unsubscribe",
 };
 ```
 
@@ -71,7 +71,7 @@ Edit `emails/data/past-posts.json` to add/update articles:
 [
   {
     "title": "লোড ব্যালেন্সার কী?",
-    "url": "https://montumia.com/sd/load-balancer"
+    "url": "https://www.montumia.com/sd/load-balancer"
   }
 ]
 ```
@@ -130,13 +130,13 @@ Built with React Email components, the template includes:
 
 ### Template Variables
 
-| Variable             | Type              | Description                 | Example                                                                                  |
-| -------------------- | ----------------- | --------------------------- | ---------------------------------------------------------------------------------------- |
-| `lastEpisodeSummary` | string            | Previous episode summary    | "মন্টু মিয়া লোড ব্যালেন্সিং নিয়ে কাজ করছিলেন"                                          |
-| `currentTopicTeaser` | string            | Current topic preview       | "ডাটাবেস রেপ্লিকেশনের সমস্যা"                                                            |
-| `articleImageUrl`    | string            | Featured article image URL  | [https://montumia.com/og/sd/topic/image.png](https://montumia.com/og/sd/topic/image.png) |
-| `linkedinArticleUrl` | string            | LinkedIn article short link | [https://lnkd.in/example](https://lnkd.in/example)                                       |
-| `unsubscribeUrl`     | string (optional) | Unsubscribe page URL        | [https://montumia.com/unsubscribe](https://montumia.com/unsubscribe)                     |
+| Variable             | Type              | Description                 | Example                                                                                          |
+| -------------------- | ----------------- | --------------------------- | ------------------------------------------------------------------------------------------------ |
+| `lastEpisodeSummary` | string            | Previous episode summary    | "মন্টু মিয়া লোড ব্যালেন্সিং নিয়ে কাজ করছিলেন"                                                  |
+| `currentTopicTeaser` | string            | Current topic preview       | "ডাটাবেস রেপ্লিকেশনের সমস্যা"                                                                    |
+| `articleImageUrl`    | string            | Featured article image URL  | [https://www.montumia.com/og/sd/topic/image.png](https://www.montumia.com/og/sd/topic/image.png) |
+| `linkedinArticleUrl` | string            | LinkedIn article short link | [https://lnkd.in/example](https://lnkd.in/example)                                               |
+| `unsubscribeUrl`     | string (optional) | Unsubscribe page URL        | [https://www.montumia.com/unsubscribe](https://www.montumia.com/unsubscribe)                     |
 
 ## Styling & Theme
 
@@ -179,7 +179,7 @@ The template is designed to work across all major email clients:
    const EMAIL_CONTENT = {
      lastEpisodeSummary: "Previous topic summary",
      currentTopicTeaser: "New topic teaser",
-     articleImageUrl: "https://montumia.com/og/sd/new-topic/image.png",
+     articleImageUrl: "https://www.montumia.com/og/sd/new-topic/image.png",
      linkedinArticleUrl: "https://lnkd.in/your-short-link",
    };
    ```
