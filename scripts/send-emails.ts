@@ -40,16 +40,15 @@ const TEST_RECIPIENT: EmailRecipient = {
 };
 
 // Email content configuration
-// TODO: Update these values for each newsletter send
 const EMAIL_CONTENT: EmailContentConfig = {
   lastEpisodeSummary:
-    "মন্টু মিয়াঁ লোড ব্যালেন্সার সেটআপ করতে গিয়ে একগাদা প্রোটোকল এর নাম দেখে কিভাবে ভ্যাবাচ্যাকা খেয়ে গিয়েছিল।",
+    "বিড়ালটিউব এর ইউজার রা নানা রকম নালিশ করছিলো, তাদের ভিডিও বাফারিং হচ্ছে, ওয়েবসাইট অনেক স্লো।",
   currentTopicTeaser:
-    "মন্টু মিয়াঁর গুরু বল্টু ভাই কিভাবে বেশ কিছু কমন প্রোটোকল গুলো এর ব্যাপারে খুব সহজে বুঝিয়ে দেয় মন্টুকে।",
-  articleTitle: "নেটওয়ার্কিং প্রোটোকলের গোলকধাঁধা",
-  articleImageUrl: "https://www.montumia.com/linkedin/networking.png",
+    "বল্টু ভাইয়ের কথায় মন্টু মিয়াঁ এই সমস্যা সমাধানের জন্য Content Delivery Network (CDN) ব্যবহার করার সিদ্ধান্ত কেন নিলেন।",
+  articleTitle: "CDN এর জাদু",
+  articleImageUrl: "https://www.montumia.com/linkedin/cdn.png",
   linkedinArticleUrl:
-    "https://www.linkedin.com/pulse/%E0%A6%AE%E0%A6%A8%E0%A6%9F-%E0%A6%AE%E0%A6%AF%E0%A6%B0-%E0%A6%B8%E0%A6%B8%E0%A6%9F%E0%A6%AE-%E0%A6%A1%E0%A6%9C%E0%A6%87%E0%A6%A8-%E0%A6%85%E0%A6%AD%E0%A6%AF%E0%A6%A8-%E0%A7%AA-%E0%A6%A8%E0%A6%9F%E0%A6%93%E0%A6%AF%E0%A6%B0%E0%A6%95-%E0%A6%AA%E0%A6%B0%E0%A6%9F%E0%A6%95%E0%A6%B2%E0%A6%B0-%E0%A6%97%E0%A6%B2%E0%A6%95%E0%A6%A7%E0%A6%A7-shakirul-hasan-khan-xcg5c",
+    "https://www.linkedin.com/pulse/%E0%A6%AE%E0%A6%A8%E0%A6%9F-%E0%A6%AE%E0%A6%AF%E0%A6%B0-%E0%A6%B8%E0%A6%B8%E0%A6%9F%E0%A6%AE-%E0%A6%A1%E0%A6%9C%E0%A6%87%E0%A6%A8-%E0%A7%AB-cdn-%E0%A6%8F%E0%A6%B0-%E0%A6%9C%E0%A6%A6-shakirul-hasan-khan-he3oc",
 };
 
 /**
