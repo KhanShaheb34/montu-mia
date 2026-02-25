@@ -42,13 +42,13 @@ const TEST_RECIPIENT: EmailRecipient = {
 // Email content configuration
 const EMAIL_CONTENT: EmailContentConfig = {
   lastEpisodeSummary:
-    "বিড়ালটিউব এর ইউজার রা নানা রকম নালিশ করছিলো, তাদের ভিডিও বাফারিং হচ্ছে, ওয়েবসাইট অনেক স্লো।",
+    "বিড়ালটিউব এ দেখা যাচ্ছে এক ভুতুড়ে সমস্যা। লাইক দিলে হচ্ছে না, কমেন্ট করা যাচ্ছে না। মন্টু মিয়াঁর মাথায় হাত।",
   currentTopicTeaser:
-    "বল্টু ভাইয়ের কথায় মন্টু মিয়াঁ এই সমস্যা সমাধানের জন্য Content Delivery Network (CDN) ব্যবহার করার সিদ্ধান্ত কেন নিলেন।",
-  articleTitle: "CDN এর জাদু",
-  articleImageUrl: "https://www.montumia.com/linkedin/cdn.png",
+    "বল্টু ভাই কিভাবে মন্টু কে ক্যাশিং এর আদ্যোপান্ত বুঝিয়ে ভুতুড়ে সমস্যার সমাধান করে।",
+  articleTitle: "ডাটাবেসের জ্যাম ও ক্যাশিং",
+  articleImageUrl: "https://www.montumia.com/linkedin/caching.png",
   linkedinArticleUrl:
-    "https://www.linkedin.com/pulse/%E0%A6%AE%E0%A6%A8%E0%A6%9F-%E0%A6%AE%E0%A6%AF%E0%A6%B0-%E0%A6%B8%E0%A6%B8%E0%A6%9F%E0%A6%AE-%E0%A6%A1%E0%A6%9C%E0%A6%87%E0%A6%A8-%E0%A7%AB-cdn-%E0%A6%8F%E0%A6%B0-%E0%A6%9C%E0%A6%A6-shakirul-hasan-khan-he3oc",
+    "https://www.linkedin.com/pulse/%E0%A6%AE%E0%A6%A8%E0%A6%9F-%E0%A6%AE%E0%A6%AF%E0%A6%B0-%E0%A6%B8%E0%A6%B8%E0%A6%9F%E0%A6%AE-%E0%A6%A1%E0%A6%9C%E0%A6%87%E0%A6%A8-%E0%A7%AC-%E0%A6%A1%E0%A6%9F%E0%A6%AC%E0%A6%B8%E0%A6%B0-%E0%A6%9C%E0%A6%AF%E0%A6%AE-%E0%A6%8F%E0%A6%AC-%E0%A6%95%E0%A6%AF%E0%A6%B6-shakirul-hasan-khan-aqqkc",
 };
 
 /**
