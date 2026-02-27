@@ -33,6 +33,16 @@ bun dev
 
 লেখায় কোনো ভুল থাকলে ইস্যু ওপেন অথবা সরাসরি পুল রিকোয়েস্ট করতে পারেন।
 
+## Star History
+
+<a href="https://www.star-history.com/#KhanShaheb34/montu-mia&type=timeline&legend=top-left">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=KhanShaheb34/montu-mia&type=timeline&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=KhanShaheb34/montu-mia&type=timeline&legend=top-left" />
+   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=KhanShaheb34/montu-mia&type=timeline&legend=top-left" />
+ </picture>
+</a>
+
 ## License
 
 [![License: CC BY-NC-SA 4.0](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
@@ -45,4 +55,4 @@ This book is licensed under the **Creative Commons Attribution-NonCommercial-Sha
 
 - **Author**: [Shakirul Hasan Khan](https://www.linkedin.com/in/shakirulhasan/)
 - **Illustrations**: All of the illustrations are generated using [ChatGPT](https://chatgpt.com/) and [Gemini](https://gemini.google.com/)
-- **Coding**: This website is mostly vibe-coded by [Claude Code](https://claude.ai/code) and [Antigravity](https://antigravity.google/). So there might be some issues, please open an issue if you find any.
+- **Coding**: This website is mostly vibe-coded by [Claude Code](https://claude.ai/code) and [Antigravity](https://antigravity.google/). So there might be some bugs, please open an issue if you find any.
