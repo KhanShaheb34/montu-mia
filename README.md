@@ -9,14 +9,19 @@
 
 বাংলা ভাষায় গল্পে গল্পে মন্টু মিয়াঁর সাথে আমরা ও শিখব সিস্টেম ডিজাইন।
 
+## বই পড়া শুরু করুন
+
+- [মন্টু মিয়াঁর ওয়েবসাইট](https://montumia.com)
+- [মন্টু মিয়াঁর লিঙ্কডইন নিউজলেটার](https://www.linkedin.com/newsletters/7424152342251401216)
+
 ## 🛠 প্রযুক্তি (Tech Stack)
 
 এই সাইটটি তৈরি করতে ব্যবহৃত হয়েছে:
 
-- [Fumadocs](https://fumadocs.dev)
-- [Next.js](https://nextjs.org)
-- [Tailwind CSS](https://tailwindcss.com)
-- [Shadcn UI](https://ui.shadcn.com)
+- [Fumadocs](https://fumadocs.dev) - Documentation framework, book
+- [Next.js](https://nextjs.org) - React framework
+- [Tailwind CSS](https://tailwindcss.com) - CSS framework
+- [Shadcn UI](https://ui.shadcn.com) - UI components
 - [AWS SES](https://aws.amazon.com/ses/) - Email sending & subscriber management
 - [React Email](https://react.email) - Newsletter templates
 
