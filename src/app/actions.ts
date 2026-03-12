@@ -9,7 +9,7 @@ import { headers } from "next/headers";
 import { rateLimit, getClientIdentifier } from "@/lib/rate-limit";
 
 const sesClient = new SESv2Client({
-  region: process.env.AWS_REGION ?? "us-east-1",
+  region: process.env.AWS_REGION ?? "eu-west-1",
 });
 
 export async function subscribeToNewsletter(formData: FormData) {

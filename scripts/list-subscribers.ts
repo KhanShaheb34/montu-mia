@@ -5,12 +5,17 @@ import { SESv2Client, ListContactsCommand } from "@aws-sdk/client-sesv2";
 const sesClient = new SESv2Client({
   region: process.env.AWS_REGION ?? "eu-west-1",
 });
-const CONTACT_LIST =
-  process.env.SES_CONTACT_LIST_NAME ?? "montu-mia-subscribers";
+const CONTACT_LIST = process.env.SES_CONTACT_LIST_NAME;
+if (!CONTACT_LIST) {
+  console.error(
+    "❌ Error: SES_CONTACT_LIST_NAME environment variable is not set",
+  );
+  process.exit(1);
+}
 
 interface Contact {
   email: string;
-  createdAt: Date;
+  lastUpdated: Date;
 }
 
 async function getAllContacts(): Promise<Contact[]> {
@@ -30,7 +35,7 @@ async function getAllContacts(): Promise<Contact[]> {
       if (c.EmailAddress) {
         contacts.push({
           email: c.EmailAddress,
-          createdAt: c.LastUpdatedTimestamp ?? new Date(0),
+          lastUpdated: c.LastUpdatedTimestamp ?? new Date(0),
         });
       }
     }
@@ -52,14 +57,14 @@ async function main() {
   console.log(`Fetching subscribers from ${CONTACT_LIST}...\n`);
 
   const contacts = await getAllContacts();
-  contacts.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+  contacts.sort((a, b) => b.lastUpdated.getTime() - a.lastUpdated.getTime());
 
   console.log(`Total subscribers: ${contacts.length}\n`);
   console.log(`Latest ${Math.min(count, contacts.length)} subscriber(s):`);
   console.log("-".repeat(50));
 
   for (const c of contacts.slice(0, count)) {
-    const date = c.createdAt.toISOString().split("T")[0];
+    const date = c.lastUpdated.toISOString().split("T")[0];
     console.log(`  ${date}  ${c.email}`);
   }
 }

@@ -1,9 +1,13 @@
-import { SESv2Client, DeleteContactCommand } from "@aws-sdk/client-sesv2";
+import {
+  SESv2Client,
+  UpdateContactCommand,
+  NotFoundException,
+} from "@aws-sdk/client-sesv2";
 import { type NextRequest, NextResponse } from "next/server";
 import { verifyEmailHash } from "@/lib/email-hash";
 
 const sesClient = new SESv2Client({
-  region: process.env.AWS_REGION ?? "us-east-1",
+  region: process.env.AWS_REGION ?? "eu-west-1",
 });
 
 /**
@@ -60,14 +64,19 @@ export async function POST(request: NextRequest) {
 
     try {
       await sesClient.send(
-        new DeleteContactCommand({
+        new UpdateContactCommand({
           ContactListName: contactListName,
           EmailAddress: email,
+          UnsubscribeAll: true,
         }),
       );
     } catch (err) {
-      // Contact not found is fine — still show success page
-      console.warn("SES delete contact:", err);
+      if (err instanceof NotFoundException) {
+        // Contact not found is fine — still show success page
+        console.warn("SES contact not found:", email);
+      } else {
+        throw err;
+      }
     }
 
     // Return success (with simple HTML for browser view)

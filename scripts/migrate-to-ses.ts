@@ -15,10 +15,15 @@ import {
 import { readFileSync } from "fs";
 
 const sesClient = new SESv2Client({
-  region: process.env.AWS_REGION ?? "us-east-1",
+  region: process.env.AWS_REGION ?? "eu-west-1",
 });
-const CONTACT_LIST =
-  process.env.SES_CONTACT_LIST_NAME ?? "montu-mia-subscribers";
+const CONTACT_LIST = process.env.SES_CONTACT_LIST_NAME;
+if (!CONTACT_LIST) {
+  console.error(
+    "❌ Error: SES_CONTACT_LIST_NAME environment variable is not set",
+  );
+  process.exit(1);
+}
 
 async function main() {
   const file = process.argv[2];

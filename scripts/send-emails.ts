@@ -13,7 +13,7 @@ import { generateEmailHash } from "../src/lib/email-hash";
 
 // Initialize SES client
 const sesClient = new SESv2Client({
-  region: process.env.AWS_REGION ?? "us-east-1",
+  region: process.env.AWS_REGION ?? "eu-west-1",
 });
 
 // Email configuration
@@ -250,7 +250,7 @@ function showUsage() {
   console.log("  bun run send-emails --all     # Send to all subscribers");
   console.log("\nOptions:");
   console.log("  --test    Send test email to shakirulhkhan@gmail.com");
-  console.log("  --all     Send to all subscribers in Resend audience");
+  console.log("  --all     Send to all subscribers in SES contact list");
   console.log("  --help    Show this help message\n");
 }
 
