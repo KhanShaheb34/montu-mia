@@ -22,7 +22,8 @@
     "send-emails:test": "bun run scripts/send-emails.ts --test",
     "send-emails:all": "bun run scripts/send-emails.ts --all",
     "email:preview": "email dev --dir emails --port 3001",
-    "migrate-to-ses": "bun run scripts/migrate-to-ses.ts"
+    "migrate-to-ses": "bun run scripts/migrate-to-ses.ts",
+    "subscribers": "bun run scripts/list-subscribers.ts"
   },
   "dependencies": {
     "@aws-sdk/client-sesv2": "^3.1000.0",
