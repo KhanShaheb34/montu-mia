@@ -37,6 +37,7 @@ interface EmailContentConfig {
   articleTitle: string;
   articleImageUrl: string;
   linkedinArticleUrl: string;
+  campaign: string;
 }
 
 // For testing, we'll use a single recipient
@@ -55,6 +56,7 @@ const EMAIL_CONTENT: EmailContentConfig = {
   articleImageUrl: "https://www.montumia.com/linkedin/caching.png",
   linkedinArticleUrl:
     "https://www.linkedin.com/pulse/%E0%A6%AE%E0%A6%A8%E0%A6%9F-%E0%A6%AE%E0%A6%AF%E0%A6%B0-%E0%A6%B8%E0%A6%B8%E0%A6%9F%E0%A6%AE-%E0%A6%A1%E0%A6%9C%E0%A6%87%E0%A6%A8-%E0%A7%AC-%E0%A6%A1%E0%A6%9F%E0%A6%AC%E0%A6%B8%E0%A6%B0-%E0%A6%9C%E0%A6%AF%E0%A6%AE-%E0%A6%8F%E0%A6%AC-%E0%A6%95%E0%A6%AF%E0%A6%B6-shakirul-hasan-khan-aqqkc",
+  campaign: "caching",
 };
 
 /**
@@ -97,6 +99,7 @@ async function generateEmailHtml(
       linkedinArticleUrl: config.linkedinArticleUrl,
       pastPosts: pastPosts,
       unsubscribeUrl: unsubscribeUrl,
+      campaign: config.campaign,
     }),
   );
 
