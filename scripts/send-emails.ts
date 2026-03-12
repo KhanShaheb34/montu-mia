@@ -189,6 +189,9 @@ async function getAllSubscribers(): Promise<EmailRecipient[]> {
         }
       }
       nextToken = response.NextToken;
+      if (nextToken) {
+        await new Promise((r) => setTimeout(r, 500));
+      }
     } while (nextToken);
   } catch (error) {
     console.error("❌ Failed to fetch subscribers:", error);

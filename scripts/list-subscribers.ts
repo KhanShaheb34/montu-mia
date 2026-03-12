@@ -40,6 +40,9 @@ async function getAllContacts(): Promise<Contact[]> {
       }
     }
     nextToken = response.NextToken;
+    if (nextToken) {
+      await new Promise((r) => setTimeout(r, 500));
+    }
   } while (nextToken);
 
   return contacts;
