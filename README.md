@@ -17,6 +17,8 @@
 - [Next.js](https://nextjs.org)
 - [Tailwind CSS](https://tailwindcss.com)
 - [Shadcn UI](https://ui.shadcn.com)
+- [AWS SES](https://aws.amazon.com/ses/) - Email sending & subscriber management
+- [React Email](https://react.email) - Newsletter templates
 
 ## 🏃‍♂️ লোকাল মেশিনে রান করুন
 

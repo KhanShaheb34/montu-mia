@@ -74,7 +74,7 @@ The project uses **Fumadocs** - a documentation framework built on Next.js. Cont
 - `src/app/sd/` - System design docs section (main content)
 - `src/app/api/search/` - Search API endpoint
 - `src/app/og/` - Dynamic OG image generation
-- `src/app/actions.ts` - Server actions (newsletter subscription via Resend)
+- `src/app/actions.ts` - Server actions (newsletter subscription via AWS SES)
 
 ### Key Libraries
 
@@ -82,7 +82,7 @@ The project uses **Fumadocs** - a documentation framework built on Next.js. Cont
 - **Next.js 16**: App Router with React Server Components
 - **Tailwind CSS 4**: Styling via PostCSS
 - **Biome**: Linting and formatting
-- **Resend**: Email service for newsletter subscriptions
+- **AWS SES**: Email service for newsletter subscriptions (eu-west-1 region)
 - **Radix UI**: Headless UI components (Dialog, Slot, etc.)
 - **Vercel Analytics & Speed Insights**: Built-in tracking
 
@@ -100,12 +100,12 @@ The newsletter subscription flow:
 1. User clicks subscribe button (rendered via `SubscribeModal` component)
 2. Modal opens with email input form
 3. Form submission triggers `subscribeToNewsletter` server action in `src/app/actions.ts`
-4. Server action uses Resend API to add contact to audience segment
-5. Requires environment variables: `RESEND_API_KEY` and `RESEND_SEGMENT_ID`
+4. Server action uses AWS SES `CreateContactCommand` to add contact to SES contact list
+5. Requires environment variables: `AWS_REGION`, `SES_CONTACT_LIST_NAME`
 
 ### Email System (Newsletter Sending)
 
-The project includes a complete email sending pipeline using React Email and Resend:
+The project includes a complete email sending pipeline using React Email and AWS SES:
 
 1. **Email Templates**:
    - Located in `emails/` directory
@@ -131,7 +131,13 @@ The project includes a complete email sending pipeline using React Email and Res
    bun run email:preview    # Opens http://localhost:3001
 
    # Send test email to shakirulhkhan@gmail.com
-   bun run send-emails
+   bun run send-emails:test
+
+   # Send to all subscribers in SES contact list
+   bun run send-emails:all
+
+   # List current subscribers
+   bun run subscribers [count]
    ```
 
 4. **Customization**:
@@ -148,10 +154,9 @@ The project includes a complete email sending pipeline using React Email and Res
    - Update `emails/data/past-posts.json` with new article
    - Update `EMAIL_CONTENT` in `scripts/send-emails.ts`
    - Preview: `bun run email:preview`
-   - Test send: `bun run send-emails`
+   - Test send: `bun run send-emails:test`
    - Check email in inbox
-   - Update recipients list for bulk send
-   - Send to all subscribers
+   - Send to all: `bun run send-emails:all`
 
 6. **Email Client Compatibility**:
    - Template works on Gmail, Outlook, Apple Mail, Yahoo, ProtonMail
@@ -164,8 +169,8 @@ The project includes a complete email sending pipeline using React Email and Res
    - Includes `List-Unsubscribe` and `List-Unsubscribe-Post` headers (RFC 2369 & RFC 8058)
    - Modern email clients show "Unsubscribe" button in header
    - API endpoint at `/api/unsubscribe` handles unsubscribe requests
-   - Automatically removes contacts from Resend audience
-   - Secured with SHA-256 hash verification
+   - Marks contacts as unsubscribed in SES contact list (via `UpdateContactCommand` with `UnsubscribeAll`)
+   - Secured with HMAC-SHA256 hash verification
 
 See `emails/README.md` for detailed documentation.
 
@@ -173,9 +178,13 @@ See `emails/README.md` for detailed documentation.
 
 Required environment variables:
 
-- `RESEND_API_KEY` - Resend API key for email service (see `src/app/actions.ts`)
-- `RESEND_SEGMENT_ID` - Resend audience/segment ID for newsletter (see `src/app/actions.ts`)
+- `AWS_REGION` - AWS region for SES (default: `eu-west-1`)
+- `AWS_ACCESS_KEY_ID` - IAM access key (for Vercel; not needed locally if `~/.aws/credentials` is configured)
+- `AWS_SECRET_ACCESS_KEY` - IAM secret key (for Vercel; not needed locally if `~/.aws/credentials` is configured)
+- `SES_CONTACT_LIST_NAME` - SES contact list name (e.g., `montu-mia-subscribers`)
+- `SES_CONFIGURATION_SET` - SES configuration set name (e.g., `montu-mia-config`)
 - `UNSUBSCRIBE_SECRET` - Secret key for generating secure unsubscribe links (generate with `openssl rand -hex 32`)
+- `TEST_EMAIL` - Email address for test sends
 
 ### OG Image Generation
 
