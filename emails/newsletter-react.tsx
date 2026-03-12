@@ -21,6 +21,12 @@ interface NewsletterEmailProps {
   linkedinArticleUrl?: string;
   pastPosts?: Array<{ title: string; url: string }>;
   unsubscribeUrl?: string;
+  campaign?: string;
+}
+
+function withUtm(url: string, campaign: string): string {
+  const sep = url.includes("?") ? "&" : "?";
+  return `${url}${sep}utm_source=newsletter&utm_medium=email&utm_campaign=${encodeURIComponent(campaign)}`;
 }
 
 export const NewsletterEmail = ({
@@ -31,6 +37,7 @@ export const NewsletterEmail = ({
   linkedinArticleUrl = "https://lnkd.in/example",
   pastPosts = [],
   unsubscribeUrl = "https://www.montumia.com/api/unsubscribe",
+  campaign = "newsletter",
 }: NewsletterEmailProps) => {
   return (
     <Html lang="bn">
@@ -64,7 +71,7 @@ export const NewsletterEmail = ({
 
             {/* Article Featured Image */}
             <Section style={imageSection}>
-              <Link href={linkedinArticleUrl}>
+              <Link href={withUtm(linkedinArticleUrl, campaign)}>
                 <Img
                   src={articleImageUrl}
                   width="560"
@@ -77,7 +84,7 @@ export const NewsletterEmail = ({
             {/* Article CTA */}
             <Text style={text}>
               আর্টিকেল টি লিঙ্কডইন থেকে পড়ুন এখনই:{" "}
-              <Link href={linkedinArticleUrl} style={link}>
+              <Link href={withUtm(linkedinArticleUrl, campaign)} style={link}>
                 {articleTitle}
               </Link>
             </Text>
@@ -93,7 +100,7 @@ export const NewsletterEmail = ({
                 {pastPosts.map((post, index) => (
                   <Text key={post.url} style={listItem}>
                     •{" "}
-                    <Link href={post.url} style={link}>
+                    <Link href={withUtm(post.url, campaign)} style={link}>
                       {post.title}
                     </Link>
                   </Text>
@@ -106,7 +113,10 @@ export const NewsletterEmail = ({
             {/* Visit Website */}
             <Text style={text}>
               মন্টু মিয়ার সব অভিযানগুলো একসাথে পড়ুন এখান থেকে:{" "}
-              <Link href="https://www.montumia.com" style={link}>
+              <Link
+                href={withUtm("https://www.montumia.com", campaign)}
+                style={link}
+              >
                 montumia.com
               </Link>
             </Text>

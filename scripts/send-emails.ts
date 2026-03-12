@@ -1,14 +1,20 @@
 #!/usr/bin/env bun
 
-import { Resend } from "resend";
+import {
+  SESv2Client,
+  SendEmailCommand,
+  ListContactsCommand,
+} from "@aws-sdk/client-sesv2";
 import { readFileSync } from "fs";
 import { join } from "path";
 import { render } from "@react-email/components";
 import { NewsletterEmail } from "../emails/newsletter-react";
 import { generateEmailHash } from "../src/lib/email-hash";
 
-// Initialize Resend client
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Initialize SES client
+const sesClient = new SESv2Client({
+  region: process.env.AWS_REGION ?? "eu-west-1",
+});
 
 // Email configuration
 const FROM_EMAIL = "Montu Mia's Newsletter <newsletter@montumia.com>";
@@ -31,6 +37,7 @@ interface EmailContentConfig {
   articleTitle: string;
   articleImageUrl: string;
   linkedinArticleUrl: string;
+  campaign: string;
 }
 
 // For testing, we'll use a single recipient
@@ -49,6 +56,7 @@ const EMAIL_CONTENT: EmailContentConfig = {
   articleImageUrl: "https://www.montumia.com/linkedin/caching.png",
   linkedinArticleUrl:
     "https://www.linkedin.com/pulse/%E0%A6%AE%E0%A6%A8%E0%A6%9F-%E0%A6%AE%E0%A6%AF%E0%A6%B0-%E0%A6%B8%E0%A6%B8%E0%A6%9F%E0%A6%AE-%E0%A6%A1%E0%A6%9C%E0%A6%87%E0%A6%A8-%E0%A7%AC-%E0%A6%A1%E0%A6%9F%E0%A6%AC%E0%A6%B8%E0%A6%B0-%E0%A6%9C%E0%A6%AF%E0%A6%AE-%E0%A6%8F%E0%A6%AC-%E0%A6%95%E0%A6%AF%E0%A6%B6-shakirul-hasan-khan-aqqkc",
+  campaign: "caching",
 };
 
 /**
@@ -91,6 +99,7 @@ async function generateEmailHtml(
       linkedinArticleUrl: config.linkedinArticleUrl,
       pastPosts: pastPosts,
       unsubscribeUrl: unsubscribeUrl,
+      campaign: config.campaign,
     }),
   );
 
@@ -106,87 +115,91 @@ async function sendEmail(
   unsubscribeUrl: string,
 ): Promise<{ success: boolean; error?: string }> {
   try {
-    // Extract email and hash from unsubscribe URL for POST header
-    const url = new URL(unsubscribeUrl);
-    const email = url.searchParams.get("email");
-    const hash = url.searchParams.get("hash");
+    await sesClient.send(
+      new SendEmailCommand({
+        FromEmailAddress: FROM_EMAIL,
+        Destination: { ToAddresses: [recipient.email] },
+        Content: {
+          Simple: {
+            Subject: { Data: SUBJECT, Charset: "UTF-8" },
+            Body: { Html: { Data: htmlContent, Charset: "UTF-8" } },
+            Headers: [
+              {
+                Name: "List-Unsubscribe",
+                Value: `<${unsubscribeUrl}>, <mailto:unsubscribe@montumia.com?subject=Unsubscribe>`,
+              },
+              {
+                Name: "List-Unsubscribe-Post",
+                Value: "List-Unsubscribe=One-Click",
+              },
+              { Name: "Precedence", Value: "bulk" },
+              {
+                Name: "List-Id",
+                Value:
+                  "Montu Mia System Design Newsletter <newsletter.montumia.com>",
+              },
+            ],
+          },
+        },
+        ConfigurationSetName: process.env.SES_CONFIGURATION_SET,
+      }),
+    );
 
-    const { data, error } = await resend.emails.send({
-      from: FROM_EMAIL,
-      to: recipient.email,
-      subject: SUBJECT,
-      html: htmlContent,
-      headers: {
-        // List-Unsubscribe header with both HTTP and mailto (RFC 2369)
-        "List-Unsubscribe": `<${unsubscribeUrl}>, <mailto:unsubscribe@montumia.com?subject=Unsubscribe>`,
-        // List-Unsubscribe-Post for one-click unsubscribe (RFC 8058)
-        "List-Unsubscribe-Post": `List-Unsubscribe=One-Click`,
-        // Additional headers for better deliverability
-        Precedence: "bulk",
-        "List-Id":
-          "Montu Mia System Design Newsletter <newsletter.montumia.com>",
-      },
-    });
-
-    if (error) {
-      console.error(`Failed to send to ${recipient.email}:`, error);
-      return { success: false, error: error.message };
-    }
-
-    console.log(`✓ Email sent to ${recipient.email} (ID: ${data?.id})`);
+    console.log(`✓ Email sent to ${recipient.email}`);
     return { success: true };
   } catch (error) {
     const errorMessage =
       error instanceof Error ? error.message : "Unknown error";
-    console.error(`Failed to send to ${recipient.email}:`, errorMessage);
+    console.error(`✗ Failed to send to ${recipient.email}:`, errorMessage);
     return { success: false, error: errorMessage };
   }
 }
 
 /**
- * Fetch all subscribers from Resend audience
+ * Fetch all subscribers from SES contact list (handles pagination)
  */
 async function getAllSubscribers(): Promise<EmailRecipient[]> {
-  const audienceId = process.env.RESEND_SEGMENT_ID;
+  const contactListName = process.env.SES_CONTACT_LIST_NAME;
 
-  if (!audienceId) {
+  if (!contactListName) {
     console.error(
-      "❌ Error: RESEND_SEGMENT_ID environment variable is not set",
-    );
-    console.error(
-      "Please set it in your .env.local file or export it in your shell\n",
+      "❌ Error: SES_CONTACT_LIST_NAME environment variable is not set",
     );
     process.exit(1);
   }
 
+  console.log("📡 Fetching subscribers from SES contact list...");
+
+  const subscribers: EmailRecipient[] = [];
+  let nextToken: string | undefined;
+
   try {
-    console.log("📡 Fetching subscribers from Resend audience...");
+    do {
+      const response = await sesClient.send(
+        new ListContactsCommand({
+          ContactListName: contactListName,
+          Filter: { FilteredStatus: "OPT_IN" },
+          NextToken: nextToken,
+        }),
+      );
 
-    const { data: response, error } = await resend.contacts.list({
-      audienceId: audienceId,
-    });
-
-    if (error) {
-      console.error("❌ Failed to fetch contacts from Resend:", error);
-      process.exit(1);
-    }
-
-    if (!response?.data || response.data.length === 0) {
-      console.warn("⚠️  No contacts found in Resend audience");
-      return [];
-    }
-
-    const subscribers: EmailRecipient[] = response.data.map((contact) => ({
-      email: contact.email,
-      name: contact.first_name || undefined,
-    }));
-
-    console.log(`✓ Found ${subscribers.length} subscriber(s)\n`);
-    return subscribers;
+      for (const contact of response.Contacts ?? []) {
+        if (contact.EmailAddress) {
+          subscribers.push({ email: contact.EmailAddress });
+        }
+      }
+      nextToken = response.NextToken;
+      if (nextToken) {
+        await new Promise((r) => setTimeout(r, 500));
+      }
+    } while (nextToken);
   } catch (error) {
     console.error("❌ Failed to fetch subscribers:", error);
     process.exit(1);
   }
+
+  console.log(`✓ Found ${subscribers.length} subscriber(s)\n`);
+  return subscribers;
 }
 
 /**
@@ -240,7 +253,7 @@ function showUsage() {
   console.log("  bun run send-emails --all     # Send to all subscribers");
   console.log("\nOptions:");
   console.log("  --test    Send test email to shakirulhkhan@gmail.com");
-  console.log("  --all     Send to all subscribers in Resend audience");
+  console.log("  --all     Send to all subscribers in SES contact list");
   console.log("  --help    Show this help message\n");
 }
 
@@ -284,9 +297,11 @@ async function main() {
     process.exit(1);
   }
 
-  // Check for API key
-  if (!process.env.RESEND_API_KEY) {
-    console.error("\n❌ Error: RESEND_API_KEY environment variable is not set");
+  // Check for required env vars
+  if (!process.env.SES_CONTACT_LIST_NAME) {
+    console.error(
+      "\n❌ Error: SES_CONTACT_LIST_NAME environment variable is not set",
+    );
     console.error(
       "Please set it in your .env.local file or export it in your shell\n",
     );

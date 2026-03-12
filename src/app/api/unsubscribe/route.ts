@@ -1,8 +1,14 @@
-import { Resend } from "resend";
+import {
+  SESv2Client,
+  UpdateContactCommand,
+  NotFoundException,
+} from "@aws-sdk/client-sesv2";
 import { type NextRequest, NextResponse } from "next/server";
 import { verifyEmailHash } from "@/lib/email-hash";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const sesClient = new SESv2Client({
+  region: process.env.AWS_REGION ?? "eu-west-1",
+});
 
 /**
  * Escape HTML special characters in a string to prevent XSS.
@@ -46,27 +52,31 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Remove from Resend audience
-    const audienceId = process.env.RESEND_SEGMENT_ID;
-    if (!audienceId) {
-      console.error("RESEND_SEGMENT_ID not configured");
+    // Remove from SES contact list
+    const contactListName = process.env.SES_CONTACT_LIST_NAME;
+    if (!contactListName) {
+      console.error("SES_CONTACT_LIST_NAME not configured");
       return NextResponse.json(
         { error: "Server configuration error" },
         { status: 500 },
       );
     }
 
-    // Find and delete the contact
-    const { data: contact } = await resend.contacts.get({
-      audienceId: audienceId,
-      email: email,
-    });
-
-    if (contact) {
-      await resend.contacts.remove({
-        audienceId: audienceId,
-        id: contact.id,
-      });
+    try {
+      await sesClient.send(
+        new UpdateContactCommand({
+          ContactListName: contactListName,
+          EmailAddress: email,
+          UnsubscribeAll: true,
+        }),
+      );
+    } catch (err) {
+      if (err instanceof NotFoundException) {
+        // Contact not found is fine — still show success page
+        console.warn("SES contact not found:", email);
+      } else {
+        throw err;
+      }
     }
 
     // Return success (with simple HTML for browser view)
