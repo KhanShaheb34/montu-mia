@@ -1,0 +1,4 @@
+{
+  "title": "ডাটা পার্টিশনিং",
+  "pages": ["index", "types", "sharding-techniques", "trade-offs"]
+}

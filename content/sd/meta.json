@@ -9,6 +9,7 @@
     "networking",
     "cdn",
     "caching",
+    "data-partitioning",
     "hook"
   ]
 }
