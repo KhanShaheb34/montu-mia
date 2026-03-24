@@ -49,14 +49,14 @@ const TEST_RECIPIENT: EmailRecipient = {
 // Email content configuration
 const EMAIL_CONTENT: EmailContentConfig = {
   lastEpisodeSummary:
-    "বিড়ালটিউব এ দেখা যাচ্ছে এক ভুতুড়ে সমস্যা। লাইক দিলে হচ্ছে না, কমেন্ট করা যাচ্ছে না। মন্টু মিয়াঁর মাথায় হাত।",
+    "ক্যাশিং দিয়ে রিড ফাস্ট হলো ঠিকই, কিন্তু রাইট অপারেশনে ডাটাবেস আবার হাঁপিয়ে উঠেছে। মন্টু মিয়াঁ মাথায় হাত!",
   currentTopicTeaser:
-    "বল্টু ভাই কিভাবে মন্টু কে ক্যাশিং এর আদ্যোপান্ত বুঝিয়ে ভুতুড়ে সমস্যার সমাধান করে।",
-  articleTitle: "ডাটাবেসের জ্যাম ও ক্যাশিং",
-  articleImageUrl: "https://www.montumia.com/linkedin/caching.png",
+    "বল্টু ভাই কেন মন্টুকে নিয়ে গেলেন অপারেশন থিয়েটারে — ডাটাবেসকে কাটাছেঁড়া করে টুকরো টুকরো করতে!",
+  articleTitle: "ডাটার কাটাকুটি খেলা (ডাটা পার্টিশনিং ও শার্ডিং)",
+  articleImageUrl: "https://www.montumia.com/linkedin/data-partitioning.jpeg",
   linkedinArticleUrl:
-    "https://www.linkedin.com/pulse/%E0%A6%AE%E0%A6%A8%E0%A6%9F-%E0%A6%AE%E0%A6%AF%E0%A6%B0-%E0%A6%B8%E0%A6%B8%E0%A6%9F%E0%A6%AE-%E0%A6%A1%E0%A6%9C%E0%A6%87%E0%A6%A8-%E0%A7%AC-%E0%A6%A1%E0%A6%9F%E0%A6%AC%E0%A6%B8%E0%A6%B0-%E0%A6%9C%E0%A6%AF%E0%A6%AE-%E0%A6%8F%E0%A6%AC-%E0%A6%95%E0%A6%AF%E0%A6%B6-shakirul-hasan-khan-aqqkc",
-  campaign: "caching",
+    "https://www.linkedin.com/pulse/%25E0%25A6%25AE%25E0%25A6%25A8%25E0%25A6%259F-%25E0%25A6%25AE%25E0%25A6%25AF%25E0%25A6%25B0-%25E0%25A6%25B8%25E0%25A6%25B8%25E0%25A6%259F%25E0%25A6%25AE-%25E0%25A6%25A1%25E0%25A6%259C%25E0%25A6%2587%25E0%25A6%25A8-%25E0%25A7%25AD-%25E0%25A6%25A1%25E0%25A6%259F%25E0%25A6%25B0-%25E0%25A6%2595%25E0%25A6%259F%25E0%25A6%2595%25E0%25A6%259F-%25E0%25A6%2596%25E0%25A6%25B2-%25E0%25A6%25A1%25E0%25A6%259F-%25E0%25A6%25AA%25E0%25A6%25B0%25E0%25A6%259F%25E0%25A6%25B6%25E0%25A6%25A8-%25E0%25A6%2593-%25E0%25A6%25B6%25E0%25A6%25B0%25E0%25A6%25A1-shakirul-hasan-khan-2ycac",
+  campaign: "data-partitioning",
 };
 
 /**
