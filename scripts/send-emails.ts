@@ -49,14 +49,13 @@ const TEST_RECIPIENT: EmailRecipient = {
 // Email content configuration
 const EMAIL_CONTENT: EmailContentConfig = {
   lastEpisodeSummary:
-    "ক্যাশিং দিয়ে রিড ফাস্ট হলো ঠিকই, কিন্তু রাইট অপারেশনে ডাটাবেস আবার হাঁপিয়ে উঠেছে। মন্টু মিয়াঁ মাথায় হাত!",
+    "শার্ডিং করে মন্টু তার ডাটাবেসের ডাটা টুকরো টুকরো করে ছড়িয়ে দিল পৃথিবীর নানা প্রান্তের ডাটাসেন্টারে। রাইট অপারেশনের জ্যাম ছুটল ঠিকই, কিন্তু নতুন দুশ্চিন্তা — একটা সার্ভার গেলেই তো সব ডাটা হাওয়া!",
   currentTopicTeaser:
-    "বল্টু ভাই কেন মন্টুকে নিয়ে গেলেন অপারেশন থিয়েটারে — ডাটাবেসকে কাটাছেঁড়া করে টুকরো টুকরো করতে!",
-  articleTitle: "ডাটার কাটাকুটি খেলা (ডাটা পার্টিশনিং ও শার্ডিং)",
-  articleImageUrl: "https://www.montumia.com/linkedin/data-partitioning.jpeg",
-  linkedinArticleUrl:
-    "https://www.linkedin.com/pulse/%25E0%25A6%25AE%25E0%25A6%25A8%25E0%25A6%259F-%25E0%25A6%25AE%25E0%25A6%25AF%25E0%25A6%25B0-%25E0%25A6%25B8%25E0%25A6%25B8%25E0%25A6%259F%25E0%25A6%25AE-%25E0%25A6%25A1%25E0%25A6%259C%25E0%25A6%2587%25E0%25A6%25A8-%25E0%25A7%25AD-%25E0%25A6%25A1%25E0%25A6%259F%25E0%25A6%25B0-%25E0%25A6%2595%25E0%25A6%259F%25E0%25A6%2595%25E0%25A6%259F-%25E0%25A6%2596%25E0%25A6%25B2-%25E0%25A6%25A1%25E0%25A6%259F-%25E0%25A6%25AA%25E0%25A6%25B0%25E0%25A6%259F%25E0%25A6%25B6%25E0%25A6%25A8-%25E0%25A6%2593-%25E0%25A6%25B6%25E0%25A6%25B0%25E0%25A6%25A1-shakirul-hasan-khan-2ycac",
-  campaign: "data-partitioning",
+    "ডাটাসেন্টার ডুবে যাওয়ার দুঃস্বপ্নে ঘুম ভাঙল মন্টুর। এবার বল্টু ভাই শেখাবেন ডাটা বাঁচানোর জাদুমন্ত্র — রিডান্ডেন্সি আর রেপ্লিকেশন। সিঙ্ক্রোনাস না অ্যাসিঙ্ক্রোনাস? আর সার্ভারের দুনিয়ায় কে বস আর কে চামচা?",
+  articleTitle: "ডাটা বাঁচানোর জাদুমন্ত্র (রিডান্ডেন্সি ও রেপ্লিকেশন)",
+  articleImageUrl: "https://www.montumia.com/linkedin/replication.jpeg",
+  linkedinArticleUrl: "https://trak.sh/montu08",
+  campaign: "replication",
 };
 
 /**
