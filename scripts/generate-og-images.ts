@@ -163,22 +163,50 @@ async function generateOGImage(
 }
 
 async function main() {
-	console.log("Starting OG image generation...\n");
+	const filterArg = process.argv[2];
+
+	if (filterArg) {
+		console.log(`Starting OG image generation with filter: "${filterArg}"...\n`);
+	} else {
+		console.log("Starting OG image generation for all chapters...\n");
+	}
 
 	const contentDir = path.join(process.cwd(), "content", "sd");
 	const publicDir = path.join(process.cwd(), "public", "og", "sd");
 
-	// Clean existing OG images
-	if (fs.existsSync(publicDir)) {
+	// Clean existing OG images only when not filtering
+	if (!filterArg && fs.existsSync(publicDir)) {
 		fs.rmSync(publicDir, { recursive: true });
 	}
 
 	// Find all MDX files
-	const mdxFiles = findMdxFiles(contentDir);
+	let mdxFiles = findMdxFiles(contentDir);
+
+	if (filterArg) {
+		const cleanFilter = path.normalize(filterArg.trim()).toLowerCase();
+		mdxFiles = mdxFiles.filter((file) => {
+			const fullFilePath = path.join(contentDir, file).toLowerCase();
+			const relativePath = file.toLowerCase();
+			const slug = relativePath.replace(/\.mdx$/, "");
+			const slugWithoutIndex = slug.endsWith("/index") ? slug.replace(/\/index$/, "") : slug;
+
+			return (
+				relativePath.includes(cleanFilter) ||
+				slug.includes(cleanFilter) ||
+				slugWithoutIndex.includes(cleanFilter) ||
+				fullFilePath.includes(cleanFilter)
+			);
+		});
+
+		if (mdxFiles.length === 0) {
+			console.warn(`No chapters found matching filter: "${filterArg}"`);
+			return;
+		}
+	}
 
 	let count = 0;
 
-	// Generate OG images for all pages
+	// Generate OG images for matched pages
 	for (const file of mdxFiles) {
 		const filePath = path.join(contentDir, file);
 		const content = fs.readFileSync(filePath, "utf-8");
@@ -213,3 +241,4 @@ main().catch((error) => {
 	console.error("Error generating OG images:", error);
 	process.exit(1);
 });
+
