@@ -10,6 +10,7 @@
     "cdn",
     "caching",
     "data-partitioning",
+    "replication",
     "hook"
   ]
 }
