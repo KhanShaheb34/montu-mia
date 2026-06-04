@@ -8,8 +8,9 @@ import {
 import { useI18n } from "fumadocs-ui/contexts/i18n";
 import { Languages } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/cn";
 import { LOCALE_META, LOCALES } from "@/lib/constants";
-import { cn } from "@/lib/utils";
+import { getDictionary } from "@/lib/dictionaries";
 
 /**
  * Compact language switcher for the docs sidebar/chrome. Ghost icon button
@@ -19,6 +20,7 @@ import { cn } from "@/lib/utils";
  */
 export function LanguageToggle() {
   const { locale, onChange } = useI18n();
+  const dict = getDictionary(locale ?? "bn");
 
   return (
     <Popover>
@@ -27,7 +29,7 @@ export function LanguageToggle() {
           variant="ghost"
           size="icon"
           className="text-muted-foreground hover:text-foreground"
-          aria-label="Change language"
+          aria-label={dict.a11y.changeLanguage}
         >
           <Languages className="h-[1.2rem] w-[1.2rem]" />
         </Button>

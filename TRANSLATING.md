@@ -18,7 +18,7 @@ open a PR — you do **not** need to translate the whole book.
 - Fumadocs (`parser: "dot"`, configured in [`src/lib/i18n.ts`](src/lib/i18n.ts)) picks these
   up automatically. Missing translations fall back to Bengali via `fallbackLanguage`.
 - Currently supported languages: **`bn`** (default), **`en`**. Adding a new one is a few
-  lines — see [Add a new language](#add-a-new-language) below.
+  lines — see [Add a new language](#c-add-a-new-language) below.
 
 ---
 

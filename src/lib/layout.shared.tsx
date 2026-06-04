@@ -30,12 +30,15 @@ export const { provider } = defineI18nUI(i18n, {
 });
 
 export function baseOptions(lang: string): BaseLayoutProps {
-  const meta = LOCALE_META[lang as Locale] ?? LOCALE_META.bn;
+  // Normalize unknown locales to the default once, so metadata and nav.url stay
+  // consistent (no `bn` title paired with a `/<unsupported-locale>` URL).
+  const locale: Locale = lang in LOCALE_META ? (lang as Locale) : "bn";
+  const meta = LOCALE_META[locale];
   return {
     nav: {
       title: meta.siteName,
       // Bengali (default) is unprefixed; other locales are /<lang>.
-      url: lang === "bn" ? "/" : `/${lang}`,
+      url: locale === "bn" ? "/" : `/${locale}`,
     },
     // NOTE: we intentionally do NOT set `i18n: true` here. Instead we render our
     // own <LanguageToggle /> inline in the sidebar footer (see sd/layout.tsx) so

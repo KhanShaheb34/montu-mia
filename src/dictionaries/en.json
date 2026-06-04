@@ -6,6 +6,9 @@
     "heroSubtitle2": "You learned to code — but can the app survive without system design?",
     "ctaStart": "Start reading"
   },
+  "a11y": {
+    "changeLanguage": "Change language"
+  },
   "sidebar": {
     "aboutAuthor": "About the maker"
   },

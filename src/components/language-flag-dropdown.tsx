@@ -7,8 +7,9 @@ import {
 } from "fumadocs-ui/components/ui/popover";
 import { useI18n } from "fumadocs-ui/contexts/i18n";
 import { Check, ChevronDown } from "lucide-react";
+import { cn } from "@/lib/cn";
 import { LOCALE_META, LOCALES, type Locale } from "@/lib/constants";
-import { cn } from "@/lib/utils";
+import { getDictionary } from "@/lib/dictionaries";
 
 /**
  * Prominent flag-based language switcher for the landing page (top-right).
@@ -18,11 +19,12 @@ import { cn } from "@/lib/utils";
 export function LanguageFlagDropdown({ className }: { className?: string }) {
   const { locale, onChange } = useI18n();
   const current = LOCALE_META[locale as Locale] ?? LOCALE_META.bn;
+  const dict = getDictionary(locale ?? "bn");
 
   return (
     <Popover>
       <PopoverTrigger
-        aria-label="Change language"
+        aria-label={dict.a11y.changeLanguage}
         className={cn(
           "inline-flex items-center gap-2 rounded-full border border-border bg-background/80 px-2.5 py-1.5 shadow-sm backdrop-blur transition-colors hover:bg-accent cursor-pointer",
           className,

@@ -63,9 +63,9 @@ The project uses **Fumadocs** - a documentation framework built on Next.js. Cont
    - This path maps to `.source/*` via tsconfig path alias
    - Used in `src/lib/source.ts` which exports the `source` loader
 
-4. **Rendering**:
-   - `src/app/sd/[[...slug]]/page.tsx` - Catch-all route for rendering docs pages
-   - `src/app/sd/layout.tsx` - Uses Fumadocs `DocsLayout` component
+4. **Rendering** (all page routes live under the `[lang]` segment, see Internationalization):
+   - `src/app/[lang]/sd/[[...slug]]/page.tsx` - Catch-all route for rendering docs pages
+   - `src/app/[lang]/sd/layout.tsx` - Uses Fumadocs `DocsLayout` component
    - MDX components defined in `src/mdx-components.tsx`
 
 ### App Structure (Next.js App Router)
@@ -93,7 +93,7 @@ using Fumadocs' built-in i18n. **Subpath routing**: Bengali stays unprefixed
 - **Fumadocs chrome + language toggle**: `src/lib/layout.shared.tsx` exports `provider` (from `defineI18nUI`, passed to `<RootProvider i18n={provider(lang)}>`) and `baseOptions(lang)` (sets `nav.title` + `i18n: true` to render the toggle).
 - **Constants**: `src/lib/constants.ts` is the single source of truth — `BASE_URL`, `LOCALES`, `DEFAULT_LOCALE`, `LOCALE_META` (per-locale `ogLocale` + `siteName`), `buildUrl(locale, path)` (absolute, hreflang-safe/idempotent) and `localePath(locale, path)` (relative `<Link>` href).
 - **Metadata/SEO**: page `generateMetadata` sets dynamic `openGraph.locale`/`siteName` and `alternates.languages` hreflang (`bn-BD`/`en-US`/`x-default`); OG image path is locale-aware (`/og/sd/...` for bn, `/og/<lang>/sd/...` otherwise). Sitemap emits per-locale entries with hreflang.
-- **OG images**: `scripts/generate-og-images.ts` + `generate-index-og.ts` loop over `LOCALES`, reading `*.<lang>.mdx` (falling back to the Bengali title) and writing `public/og/<lang>/sd/...`.
+- **OG images**: `scripts/generate-og-images.ts` + `generate-index-og.ts` loop over `LOCALES`, reading `*.<lang>.mdx` (falling back to the Bengali title). Output paths mirror the URLs: the default locale (`bn`) is unprefixed (`public/og/sd/...`), other locales are prefixed (`public/og/<lang>/sd/...`). `bun run generate-og` runs both scripts (chapters then index).
 - **Adding a language** or translating: see `TRANSLATING.md`. Newsletter/email i18n is intentionally **out of scope** (still Bengali-only).
 
 ### Key Libraries
@@ -108,8 +108,8 @@ using Fumadocs' built-in i18n. **Subpath routing**: Bengali stays unprefixed
 
 ### Styling
 
-- Uses two fonts: Outfit (Latin) and Noto Sans Bengali (Bengali script)
-- Font variables: `--font-outfit`, `--font-bengali`
+- Uses two fonts: Bricolage Grotesque (Latin) and Noto Sans Bengali (Bengali script)
+- Font variables: `--font-bricolage`, `--font-bengali`
 - Tailwind configured via `@tailwindcss/postcss` plugin
 - Custom component utilities in `src/lib/cn.ts` (class merging)
 
