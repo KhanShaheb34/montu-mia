@@ -3,11 +3,8 @@ import type { BaseLayoutProps } from "fumadocs-ui/layouts/shared";
 import { LOCALE_META, type Locale } from "@/lib/constants";
 import { i18n } from "@/lib/i18n";
 
-// Fumadocs UI translations (the framework chrome: TOC heading, prev/next,
-// language toggle, etc.) + the per-locale `displayName` shown in the language
-// switcher. Bengali is the default, so we translate the chrome into Bengali
-// here (it previously fell back to the English defaults). `provider(lang)` is
-// passed to <RootProvider i18n={...}>.
+// Fumadocs chrome translations (TOC, prev/next, etc.) + per-locale switcher
+// `displayName`. `provider(lang)` is passed to <RootProvider i18n={...}>.
 export const { provider } = defineI18nUI(i18n, {
   translations: {
     bn: {
@@ -30,18 +27,14 @@ export const { provider } = defineI18nUI(i18n, {
 });
 
 export function baseOptions(lang: string): BaseLayoutProps {
-  // Normalize unknown locales to the default once, so metadata and nav.url stay
-  // consistent (no `bn` title paired with a `/<unsupported-locale>` URL).
+  // Normalize unknown locales to the default.
   const locale: Locale = lang in LOCALE_META ? (lang as Locale) : "bn";
   const meta = LOCALE_META[locale];
   return {
     nav: {
       title: meta.siteName,
-      // Bengali (default) is unprefixed; other locales are /<lang>.
       url: locale === "bn" ? "/" : `/${locale}`,
     },
-    // NOTE: we intentionally do NOT set `i18n: true` here. Instead we render our
-    // own <LanguageToggle /> inline in the sidebar footer (see sd/layout.tsx) so
-    // the language switcher sits on one row with the about link + theme toggle.
+    // No `i18n: true`: we render a custom <LanguageToggle /> in the sidebar footer instead.
   };
 }

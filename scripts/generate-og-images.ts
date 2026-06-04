@@ -4,15 +4,12 @@ import matter from "gray-matter";
 import puppeteer from "puppeteer-core";
 import { DEFAULT_LOCALE, LOCALE_META, LOCALES } from "../src/lib/constants";
 
-// A locale-suffixed content file, e.g. "introduction.en.mdx" or
-// "load-balancer/index.en.mdx". Base (default-locale) files do NOT match.
+// Matches a locale-suffixed file like "introduction.en.mdx" (not base files).
 function isLocaleSuffixed(name: string): boolean {
 	return /\.[a-z]{2}\.mdx$/.test(name);
 }
 
-// Recursively find all BASE .mdx files (Bengali default) in a directory,
-// skipping locale-suffixed siblings like *.en.mdx — those are looked up per
-// chapter when generating the English image.
+// Recursively find base .mdx files, skipping locale-suffixed siblings (*.en.mdx).
 function findMdxFiles(dir: string, baseDir: string = dir): string[] {
 	const files: string[] = [];
 	const entries = fs.readdirSync(dir, { withFileTypes: true });
@@ -43,8 +40,7 @@ function escapeHtml(text: string): string {
 		.replace(/'/g, "&#39;");
 }
 
-// Absolute output directory for a locale's OG images. Bengali (default) keeps
-// the original public/og/sd path; other locales use public/og/<lang>/sd.
+// OG output dir: default locale -> public/og/sd, others -> public/og/<lang>/sd.
 function ogDirForLocale(locale: string): string {
 	return locale === DEFAULT_LOCALE
 		? path.join(process.cwd(), "public", "og", "sd")
@@ -246,9 +242,7 @@ async function main() {
 		}
 
 		for (const locale of LOCALES) {
-			// Pick the source file for this locale: the base file for the default
-			// locale, the `.<locale>.mdx` sibling when it exists, otherwise fall
-			// back to the base file so /og/<locale>/sd/<slug> always resolves.
+			// Use the `.<locale>.mdx` sibling if it exists, else fall back to the base file.
 			let sourceRel = file;
 			if (locale !== DEFAULT_LOCALE) {
 				const localeRel = file.replace(/\.mdx$/, `.${locale}.mdx`);

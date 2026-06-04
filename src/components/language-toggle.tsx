@@ -12,12 +12,7 @@ import { cn } from "@/lib/cn";
 import { LOCALE_META, LOCALES } from "@/lib/constants";
 import { getDictionary } from "@/lib/dictionaries";
 
-/**
- * Compact language switcher for the docs sidebar/chrome. Ghost icon button
- * (matches ThemeToggle) that opens a popover listing the available languages
- * with their flag + label. Switching uses the Fumadocs i18n context, which
- * preserves the current path in the target locale.
- */
+// Compact language switcher for the docs sidebar (ghost icon + popover).
 export function LanguageToggle() {
   const { locale, onChange } = useI18n();
   const dict = getDictionary(locale ?? "bn");

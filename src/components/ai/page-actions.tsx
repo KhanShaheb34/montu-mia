@@ -131,9 +131,6 @@ export function ViewOptions({
    */
   githubUrl: string;
 
-  /**
-   * Active locale, used to localize the menu labels
-   */
   lang?: string;
 }) {
   const t = getDictionary(lang).actions;
@@ -245,9 +242,6 @@ export function ShareOptions({
    */
   title: string;
 
-  /**
-   * Active locale, used to localize the menu labels
-   */
   lang?: string;
 }) {
   const t = getDictionary(lang).actions;

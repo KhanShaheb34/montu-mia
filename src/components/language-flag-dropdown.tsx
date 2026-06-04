@@ -11,11 +11,7 @@ import { cn } from "@/lib/cn";
 import { LOCALE_META, LOCALES, type Locale } from "@/lib/constants";
 import { getDictionary } from "@/lib/dictionaries";
 
-/**
- * Prominent flag-based language switcher for the landing page (top-right).
- * Shows the current locale's flag; clicking reveals every language with its
- * flag + label. Switching uses the Fumadocs i18n context (preserves the path).
- */
+// Flag-based language switcher for the landing page (top-right).
 export function LanguageFlagDropdown({ className }: { className?: string }) {
   const { locale, onChange } = useI18n();
   const current = LOCALE_META[locale as Locale] ?? LOCALE_META.bn;

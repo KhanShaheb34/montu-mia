@@ -45,8 +45,7 @@ export async function generateMetadata({
       "মন্টু মিয়াঁর সিস্টেম ডিজাইন - A System Design Book in Bengali. Learn system design concepts with simple analogies.",
     metadataBase: new URL(BASE_URL),
     authors: [{ name: "Shakirul Hasan Khan" }],
-    // Homepage hreflang + canonical. Doc pages override `alternates` with their
-    // own per-page values in [[...slug]]/page.tsx; the homepage uses these.
+    // Homepage alternates; doc pages set their own in [[...slug]]/page.tsx.
     alternates: {
       canonical: buildUrl(lang, "/"),
       languages: hreflangAlternates("/"),

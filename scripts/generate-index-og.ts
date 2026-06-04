@@ -9,8 +9,7 @@ const INDEX_TEXT: Record<string, { title: string; desc: string }> = {
 	en: { title: "System Design", desc: "Learn system design through stories" },
 };
 
-// Absolute output path for a locale's index OG image. Bengali (default) keeps
-// public/og/sd/index; other locales use public/og/<lang>/sd/index.
+// Index OG output path: default locale -> public/og/sd/index, others -> public/og/<lang>/sd/index.
 function ogIndexPath(locale: string): string {
 	const segments =
 		locale === DEFAULT_LOCALE
