@@ -22,6 +22,42 @@ open a PR — you do **not** need to translate the whole book.
 
 ---
 
+## ✨ The golden rule: tell the story, don't trade words
+
+This is the most important thing on this page, so please read it before anything else.
+
+**Do not translate word for word. Translate the _story_.** The goal is for your version to
+read like it was written in your language from the very start, not like a machine ran over
+the Bengali. A reader who knows nothing about Bangla or Bangladesh should laugh at the same
+jokes, follow the same analogies, and never feel like they're missing an inside reference.
+
+In practice, that means:
+
+- **Adapt slang and forms of address; don't translate them literally.** In the Bengali, the
+  senior engineer Boltu affectionately calls Montu _"Bhatija"_ (literally "nephew").
+  Translated straight, "nephew" is just wrong and a little odd. The _feeling_ is an older
+  mentor good-naturedly ribbing a junior, so in English it becomes "kid", "rookie", or "champ".
+- **Swap idioms for your own language's idioms.** _"মৌচাকে ঢিল মারা"_ (lit. "throwing a stone
+  at a beehive") becomes "kicked the hornet's nest". _"একাই একশো"_ becomes "a one-man army".
+  Find the equivalent that lands; don't translate the literal picture.
+- **Localize cultural and local references.** A famous Dhaka restaurant or a specific local
+  market means little abroad, so reach for something globally recognizable instead (a tea
+  stall scaling up "like Starbucks or KFC", "the city's computer market"). Keep a little local
+  flavor where it's charming — Montu _is_ from Bangladesh — just make sure the point still
+  lands for everyone.
+- **Restore famous quotes to their original form.** When the Bengali is itself a translation
+  of a well-known line, use the real one. For example: _"There are only two hard things in
+  Computer Science: cache invalidation and naming things"_, or _"premature optimization is the
+  root of all evil"_.
+- **Keep the voice.** Playful, witty, story-first. Short, punchy sentences. If a line made you
+  smile in Bengali, it should make the reader smile in your language too. Keep the character
+  names (Montu Mia, Boltu) and the app name (BiralTube).
+
+A simple gut check: would this sentence sound natural coming from a friend explaining the idea
+over a cup of tea? If not, rewrite it until it does.
+
+---
+
 ## A. Translate a chapter (the common case)
 
 1. **Copy the Bengali file** and add your language suffix next to it:
@@ -39,13 +75,18 @@ open a PR — you do **not** need to translate the whole book.
    ---
    title: Introduction              # translate
    description: The beginning of... # translate
-   tags:                            # leave English (these are SEO keywords)
-     - Tutorial
-     - Introduction
+   tags:                            # page-specific English SEO keywords (4-8 terms,
+     - System Design Introduction   # in English even for non-English pages — they
+     - System Design for Beginners  # bridge English searches to your content)
    ---
 
    Translate the prose here, keeping the playful, story-driven tone...
    ```
+
+   > **Tip:** keep `tags` in English and make them specific to the chapter's topic (e.g.
+   > `Round Robin`, `Cache Invalidation`, `Horizontal Scaling`), not generic words like
+   > `Tutorial` or `Beginner`. They're combined with the site's default keywords to help
+   > people find Bengali (and translated) content via English search queries.
 
 3. **Don't touch the structural bits:**
    - **Image paths** stay the same (images are shared): `![Alt](/images/sd/introduction/1.png)`
