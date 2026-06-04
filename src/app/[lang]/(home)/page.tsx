@@ -1,6 +1,7 @@
 import { Github, Linkedin } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { LanguageFlagDropdown } from "@/components/language-flag-dropdown";
 import { SubscribeModal } from "@/components/subscribe-modal";
 import { Button } from "@/components/ui/button";
 import { LOCALES, localePath } from "@/lib/constants";
@@ -15,7 +16,10 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
   const t = getDictionary(lang).home;
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-6 text-center bg-background text-foreground">
+    <main className="relative flex min-h-screen flex-col items-center justify-center p-6 text-center bg-background text-foreground">
+      <div className="absolute right-4 top-4 z-10">
+        <LanguageFlagDropdown />
+      </div>
       <div className="container max-w-4xl space-y-8">
         {/* Hero Section */}
         <div className="flex flex-col items-center space-y-4">

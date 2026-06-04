@@ -3,15 +3,15 @@ import "../global.css";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
-import { Noto_Sans_Bengali, Outfit } from "next/font/google";
+import { Bricolage_Grotesque, Noto_Sans_Bengali } from "next/font/google";
 import { GoogleTag } from "@/components/analytics/google-tag";
 import { BASE_URL, buildUrl, LOCALE_META, type Locale } from "@/lib/constants";
 import { provider } from "@/lib/layout.shared";
 
-const outfit = Outfit({
+const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
-  variable: "--font-outfit",
+  variable: "--font-bricolage",
   display: "swap",
   preload: true,
 });
@@ -74,7 +74,7 @@ export default async function Layout({
   return (
     <html
       lang={lang}
-      className={`${outfit.variable} ${notoSansBengali.variable}`}
+      className={`${bricolage.variable} ${notoSansBengali.variable}`}
       suppressHydrationWarning
     >
       <head>
@@ -86,7 +86,7 @@ export default async function Layout({
         />
       </head>
       <body
-        className={`flex flex-col min-h-screen font-sans ${outfit.className} ${notoSansBengali.className}`}
+        className={`flex flex-col min-h-screen font-sans ${bricolage.className} ${notoSansBengali.className}`}
       >
         <RootProvider
           search={{

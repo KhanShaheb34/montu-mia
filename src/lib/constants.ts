@@ -7,13 +7,25 @@ export const DEFAULT_LOCALE = "bn" as const;
 export const LOCALES = ["bn", "en"] as const;
 export type Locale = (typeof LOCALES)[number];
 
-// Per-locale metadata used for OpenGraph + the site name shown in chrome/OG.
+// Per-locale metadata: OpenGraph locale + site name (chrome/OG), the language
+// switcher's display label, and its flag (a local SVG in /public/flags). To add
+// a language, add an entry here and drop a `<lang>.svg` into public/flags/.
 export const LOCALE_META: Record<
   Locale,
-  { ogLocale: string; siteName: string }
+  { ogLocale: string; siteName: string; label: string; flag: string }
 > = {
-  bn: { ogLocale: "bn_BD", siteName: "মন্টু মিয়াঁর সিস্টেম ডিজাইন" },
-  en: { ogLocale: "en_US", siteName: "Montu Mia's System Design" },
+  bn: {
+    ogLocale: "bn_BD",
+    siteName: "মন্টু মিয়াঁর সিস্টেম ডিজাইন",
+    label: "বাংলা",
+    flag: "/flags/bd.svg",
+  },
+  en: {
+    ogLocale: "en_US",
+    siteName: "Montu Mia's System Design",
+    label: "English",
+    flag: "/flags/us.svg",
+  },
 };
 
 function stripLocalePrefix(path: string): string {

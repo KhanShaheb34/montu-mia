@@ -1,5 +1,6 @@
 import { DocsLayout } from "fumadocs-ui/layouts/docs";
 import Link from "next/link";
+import { LanguageToggle } from "@/components/language-toggle";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { localePath } from "@/lib/constants";
 import { getDictionary } from "@/lib/dictionaries";
@@ -29,6 +30,7 @@ export default async function Layout({
                 {dict.sidebar.aboutAuthor}
               </span>
             </Link>
+            <LanguageToggle />
             <ThemeToggle />
           </div>
         ),

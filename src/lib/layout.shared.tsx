@@ -37,7 +37,8 @@ export function baseOptions(lang: string): BaseLayoutProps {
       // Bengali (default) is unprefixed; other locales are /<lang>.
       url: lang === "bn" ? "/" : `/${lang}`,
     },
-    // Render the language toggle in the navbar/sidebar.
-    i18n: true,
+    // NOTE: we intentionally do NOT set `i18n: true` here. Instead we render our
+    // own <LanguageToggle /> inline in the sidebar footer (see sd/layout.tsx) so
+    // the language switcher sits on one row with the about link + theme toggle.
   };
 }
