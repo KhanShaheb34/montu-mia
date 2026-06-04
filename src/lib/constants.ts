@@ -62,6 +62,8 @@ export function buildUrl(locale: string, path: string): string {
     path.startsWith("/") ? path : `/${path}`,
   );
   const prefix = locale === DEFAULT_LOCALE ? "" : `/${locale}`;
-  if (normalized === "/") return `${BASE_URL}${prefix}/`;
+  // Root: default locale -> "https://host/", other locales -> "https://host/en"
+  // (no trailing slash, matching the actual /en route).
+  if (normalized === "/") return prefix ? `${BASE_URL}${prefix}` : `${BASE_URL}/`;
   return `${BASE_URL}${prefix}${normalized}`;
 }
