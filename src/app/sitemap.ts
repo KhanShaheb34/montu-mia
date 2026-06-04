@@ -1,17 +1,12 @@
 import type { MetadataRoute } from "next";
-import { buildUrl } from "@/lib/constants";
+import { buildUrl, hreflangAlternates } from "@/lib/constants";
 import { source } from "@/lib/source";
 
-// hreflang alternates for a given locale-agnostic path (keys match the
-// per-page <link rel="alternate"> tags in generateMetadata).
+// hreflang alternates for a given locale-agnostic path. Shares the single
+// LOCALES-driven map with generateMetadata (see constants.ts), so the sitemap
+// and the per-page <link rel="alternate"> tags can never drift apart.
 function alternates(path: string) {
-  return {
-    languages: {
-      "bn-BD": buildUrl("bn", path),
-      "en-US": buildUrl("en", path),
-      "x-default": buildUrl("bn", path),
-    },
-  };
+  return { languages: hreflangAlternates(path) };
 }
 
 export default function sitemap(): MetadataRoute.Sitemap {

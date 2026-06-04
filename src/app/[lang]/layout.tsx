@@ -5,7 +5,13 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import { Bricolage_Grotesque, Noto_Sans_Bengali } from "next/font/google";
 import { GoogleTag } from "@/components/analytics/google-tag";
-import { BASE_URL, buildUrl, LOCALE_META, type Locale } from "@/lib/constants";
+import {
+  BASE_URL,
+  buildUrl,
+  hreflangAlternates,
+  LOCALE_META,
+  type Locale,
+} from "@/lib/constants";
 import { provider } from "@/lib/layout.shared";
 
 const bricolage = Bricolage_Grotesque({
@@ -43,11 +49,7 @@ export async function generateMetadata({
     // own per-page values in [[...slug]]/page.tsx; the homepage uses these.
     alternates: {
       canonical: buildUrl(lang, "/"),
-      languages: {
-        "bn-BD": buildUrl("bn", "/"),
-        "en-US": buildUrl("en", "/"),
-        "x-default": buildUrl("bn", "/"),
-      },
+      languages: hreflangAlternates("/"),
     },
     keywords: [
       "System Design",

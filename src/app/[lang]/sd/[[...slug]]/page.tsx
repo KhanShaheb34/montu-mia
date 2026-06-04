@@ -15,6 +15,7 @@ import {
   BASE_URL,
   buildUrl,
   DEFAULT_LOCALE,
+  hreflangAlternates,
   LOCALE_META,
   type Locale,
 } from "@/lib/constants";
@@ -132,11 +133,7 @@ export async function generateMetadata(
     keywords,
     alternates: {
       canonical,
-      languages: {
-        "bn-BD": buildUrl("bn", page.url),
-        "en-US": buildUrl("en", page.url),
-        "x-default": buildUrl("bn", page.url),
-      },
+      languages: hreflangAlternates(page.url),
     },
     openGraph: {
       title: page.data.title,

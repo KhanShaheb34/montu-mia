@@ -130,18 +130,48 @@ bun run types:check   # fails with "Property 'x' is missing" if a key is absent
 
 ## C. Add a new language
 
-Say you want to add Hindi (`hi`). Four small edits:
+Adding a language is **centralized**: you describe the language once in `LOCALE_META` and plug
+in a dictionary. Everything derived from that list — the `/<lang>` URL prefix, routing and
+Bengali fallback, the language toggle + flag dropdown, the sitemap, the `hreflang` SEO tags,
+and OG-image generation — updates automatically. There are no scattered spots to remember.
 
-1. **`src/lib/i18n.ts`** — add `"hi"` to `languages`.
-2. **`src/lib/constants.ts`** — add `"hi"` to `LOCALES` and an entry to `LOCALE_META`
-   (`ogLocale`, `siteName`).
-3. **`src/lib/layout.shared.tsx`** — add a `hi` entry to the `defineI18nUI` translations
-   (at minimum `displayName: "हिन्दी"`; optionally translate the Fumadocs chrome).
-4. **`src/dictionaries/hi.json`** — copy `bn.json` and translate the values.
+Say you want to add Hindi (`hi`). **Four edits + one asset:**
 
-Then add `*.hi.mdx` files as you translate chapters. Run `bun run types:check` — it will tell
-you if anything is missing. That's it; the language toggle and routing pick it up
-automatically.
+1. **`src/lib/constants.ts`** — add `"hi"` to `LOCALES`, and add a matching `LOCALE_META`
+   entry with **all five fields**:
+
+   ```ts
+   export const LOCALES = ["bn", "en", "hi"] as const;
+
+   // ...add inside LOCALE_META:
+   hi: {
+     ogLocale: "hi_IN",     // OpenGraph og:locale
+     siteName: "...",       // site title in your language
+     label: "हिन्दी",        // shown in the language switcher
+     flag: "/flags/hi.svg", // switcher flag (see step 2)
+     hreflang: "hi-IN",     // BCP-47 hreflang tag, for SEO
+   },
+   ```
+
+2. **`public/flags/hi.svg`** — drop in a small flag SVG (the `flag` path above points here).
+
+3. **`src/dictionaries/hi.json`** — copy `src/dictionaries/bn.json` and translate the values
+   (keep the keys identical). Then **register it** in `src/lib/dictionaries.ts`:
+
+   ```ts
+   import hi from "@/dictionaries/hi.json";
+   // ...
+   const dictionaries: Record<Locale, Dictionary> = { bn, en, hi };
+   ```
+
+4. **`src/lib/layout.shared.tsx`** — add a `hi` entry to the `defineI18nUI` translations (at
+   minimum `displayName: "हिन्दी"`; optionally translate the Fumadocs chrome strings too).
+
+Then add `*.hi.mdx` files as you translate chapters (Section A above). Run
+`bun run types:check` — because `LOCALES` drives a `Record<Locale, …>`, the type-checker turns
+a missing `LOCALE_META` field or `dictionaries` entry into a **compile error** and walks you
+through anything you forgot. That's it: the `/hi/...` routes, the toggle, fallback, the sitemap,
+and `hreflang` tags all light up on their own.
 
 ---
 
