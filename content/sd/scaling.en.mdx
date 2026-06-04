@@ -1,0 +1,73 @@
+---
+title: Scaling
+description: Go it alone, or split the work?
+tags:
+  - Scaling
+  - Horizontal Scaling
+  - Vertical Scaling
+  - Performance
+  - Infrastructure
+  - High Availability
+  - Server Architecture
+---
+
+When Montu Mia first built BiralTube, he grabbed the nearest thing lying around, an old, dusty laptop, and turned it into his server. "How many people are even going to show up at the start?" he figured.
+
+A few days after launch, Montu realized he'd kicked the hornet's nest. Users were complaining that the app crawled along at a snail's pace. He checked: just 100 users in, and his laptop's fan was already screaming like a helicopter. RAM and CPU pinned in the red at 100%. Every few minutes the poor laptop would just faint (read: the app crashed).
+
+Montu didn't waste any time. He hopped on his bike, rode down to the city's go-to computer market, and blew his savings on a giant, top-of-the-line beast of a machine. Out went the old laptop; in came a monster of a PC. Phew. Now even 500, no, 1,000 users would be no sweat.
+
+![A beast of a PC](/images/sd/scaling/1.png)
+
+But the good times didn't last (do they ever, for Montu?). Cat videos were in serious demand. Within days, users blew past 1,000. Under the flood of uploads, likes, and comments, even his shiny expensive machine started wheezing.
+
+Montu was stuck. "How much bigger a computer am I supposed to buy? Even the beefiest machine taps out eventually!"
+
+Back to the books. And Montu found out the problem wasn't the computer, it was his strategy. There are basically two ways to grow, or "scale," a system:
+
+- **Vertical Scaling:** also called **Scaling Up**. You keep your one server, but you beef it up. More RAM, 4 GB to 16 GB. A faster processor. And so on. (This is exactly what Montu had been doing.)
+
+- **Horizontal Scaling:** also called **Scaling Out**. Instead of making one machine stronger, you add more machines next to it and split the workload across all of them. Many hands make light work.
+
+![Vertical vs Horizontal Scaling](/images/sd/scaling/2.png)
+
+Montu jotted down the pros and cons of each:
+
+## Vertical Scaling (the one-man army)
+
+**Pros:**
+
+- Dead simple to set up (buy more RAM, plug it in, done).
+- Easy to maintain, since there's only one server.
+
+**Cons:**
+
+- **A hard ceiling:** you can't grow one computer forever. The motherboard has limits.
+- **Cost:** cheap at first, but high-end hardware gets exponentially more expensive.
+- **Single point of failure:** if that one server dies or needs a restart, the whole app goes dark. Users see nothing at all.
+
+## Horizontal Scaling (many hands make light work)
+
+Montu noticed this is how the big companies actually run.
+
+**Pros:**
+
+- **Practically unlimited power:** more users? Just add another cheap server alongside the rest. In theory there's no ceiling.
+- **Cheaper:** ten ordinary computers are often cheaper than one super-computer.
+- **Fault tolerance:** if one server dies, the other nine pick up the slack. The app never goes down.
+
+**Cons:**
+
+- Harder to maintain. Wrangling ten machines is no joke.
+- The architecture gets complicated. Load balancing, distributed databases, and other tricky stuff all enter the picture.
+- Network latency can creep in, because now the machines have to talk to each other.
+
+After weighing it all up, Montu made his call: he needed **horizontal scaling**. Forget the pricey super-computer, he'd run BiralTube on a bunch of ordinary servers.
+
+And right then, a new question popped into his head.
+
+"Hang on. If I set up 10 computers, how does a user's phone or browser know which one to connect to? Ten computers means ten different IP addresses!"
+
+![A confused user](/images/sd/scaling/3.png)
+
+Montu put his head in his hands again. The name of his new problem: traffic control, a.k.a. load balancing. Time to crack the books open once more...

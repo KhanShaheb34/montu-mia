@@ -1,0 +1,60 @@
+---
+title: "Push or Pull?"
+tags:
+  - Push CDN
+  - Pull CDN
+  - Caching Strategies
+  - Content Distribution
+  - CDN Strategies
+  - Cache Management
+  - Performance Tuning
+---
+
+Once the CDN idea clicked, a new question started bugging Montu. He asked, "Okay Boltu, my origin server has thousands of videos. So am I supposed to go around personally copying these thousands of videos onto every CDN server in the world? That's a ridiculous amount of busywork!"
+
+Boltu laughed. "Of course not! Why would you do it yourself? There are two systems here. In one, the CDN comes and takes it from you (**Pull**), and in the other, you go and push it onto the CDN yourself (**Push**)."
+
+To make it clear, Boltu reached for the example of a Chinese restaurant and an old-school biryani house.
+
+### 1. Pull CDN
+
+> The lazy but smart waiter
+
+Most modern CDNs (like Cloudflare, AWS CloudFront) run in this **Pull** mode by default.
+
+It's a lot like ordering soup at a Chinese restaurant:
+
+- **Order:** the first customer (the user) shows up and asks for soup.
+- **Check:** the waiter (the CDN) sees he doesn't have any soup ready.
+- **Pull:** the waiter dashes to the kitchen (the Origin Server), makes the soup, and brings it back.
+- **Serve and cache:** he gives the customer the soup, and smartly keeps a pot of it at the counter (Cache).
+- **Next customer:** the next person who asks for soup, the waiter won't head to the kitchen. He'll serve it straight from the counter.
+
+**Traits:**
+
+- By default, the CDN holds nothing. When the first user asks for a file, that's when the CDN **pulls** it from the origin server.
+- **Catch:** that first user has to wait a bit longer (since the file is being fetched from the origin right then). This is called the **First Request Penalty**.
+- **Updates (TTL):** the CDN doesn't keep the file forever. After a set time (called Time-to-Live, or TTL), it throws the file out. The next time someone asks, it grabs a fresh copy from the origin again.
+
+**Montu's win:** Montu doesn't have to do a thing. The CDN automatically works out which video is popular and worth caching. And setup is dead easy.
+
+### 2. Push CDN
+
+> Ready ahead of time
+
+This is like an old-school biryani house. Before a single customer walks in, the cook already has giant pots of biryani and chicken pulao all dished up and ready. The customer shows up and gets their food instantly, zero waiting.
+
+![push cdn](/images/sd/cdn/3.png)
+
+**Traits:**
+
+- Here, nobody sits around waiting for a user to ask. You (the developer) upload the files yourself and **push** them out to all of the CDN's servers.
+- **Upside:** even the very first user gets blazing-fast speed. No latency at all.
+- **Downside:** it's a hassle to maintain. If the content changes, you have to manually update it everywhere all over again. Plus, hoarding files you don't need racks up storage costs.
+
+**Where's it used?** Usually for huge files (like game installers or software updates), or files that rarely change. That's where Push CDN gets used.
+
+**Montu's decision:**
+After hearing it all, Montu said, "Boltu, videos get uploaded to BiralTube every single minute. If I had to push them manually, I'd lose my mind. And most of my content is the viral type anyway. So **Pull CDN** is best for me!"
+
+Boltu patted him on the back. "Good call! Pull CDN is the way to go for most modern apps. Set it up, and sleep easy!"

@@ -1,0 +1,48 @@
+---
+title: "The Nuts and Bolts of Data Sharding"
+description: "How do you cut up your database?"
+tags:
+  - Sharding Techniques
+  - Range-based Sharding
+  - Hash-based Sharding
+  - Geographic Sharding
+  - Directory-based Sharding
+---
+
+Boltu took a sip of his tea and cleared his throat. "Now we get to the real game. There are many ways to do horizontal partitioning, or sharding. How you cut up your database depends on your system's demands. Let me explain them one by one with examples."
+
+### 1. Range-based Sharding: the filing cabinet
+
+"Say you've got a huge library. How do you arrange the books? Simple math: books starting with A through M in one cabinet, N through Z in another. For a database, that's range-based sharding. You decide: users with IDs from 1 to 100,000 go on 'Shard 1', users with IDs from 100,001 to 200,000 go on 'Shard 2'. Or say you split by the video's upload year, all 2025 videos on one server, the 2026 ones on another."
+
+Montu nodded. "That's really simple and logical!"
+Boltu smiled. "Simple, sure, but there's a big catch. Say you split by year. Now everyone watches and uploads the newer, 2026 videos more, right? So you'll find your 2026 server smoking under the load while your 2025 server is twiddling its thumbs. That's called the 'Hotspot' problem."
+
+### 2. Hash-based Sharding: the magic formula (or lottery)
+
+"The way to dodge that hotspot problem is hash-based sharding. Here, a specific column of the database (like the user ID) gets sent through a magic math formula (called a hashing algorithm). That formula spits out a random but fixed result, which decides which shard the data goes to. Meaning the same user ID always gives the same result, so there's no fear of losing track of data. This spreads the data out evenly across all servers, like a lottery. No single server suddenly gets a mountain of load dumped on it."
+
+![range-vs-hash](/images/sd/data-partitioning/4.png)
+
+### 3. Geographic Sharding: the local branch office
+
+"Your BiralTube users aren't just at home anymore, they're in America too, right?" Boltu asked.
+"Yeah Boltu, just yesterday I saw a few people watching cat videos all the way from Uganda!" Montu said with a grin.
+
+"So listen, if a user in America tries to load a video off the Dhaka server, there's bound to be some lag. The fix is geographic sharding. You split the database by the users' location or region. You keep Bangladeshi users' data on a Singapore or Mumbai server, and American users' data on a Virginia server. Whoever's closest to a database gets their data from there. Fast service, just like a local branch office!"
+
+### 4. Directory-based Sharding: the receptionist
+
+"Now say you go to a huge hospital to find a patient. You're not going to go room to room searching, are you? You head to the receptionist downstairs. They check the computer and tell you, 'the patient's in cabin 305 on the 3rd floor.' Directory-based sharding works exactly like that. Here, before the main database, there's a small 'Lookup Table', or directory. The app first asks the directory, 'hey, where's so-and-so user's data?' The directory hands back the address of the specific shard. The biggest upside is, whenever you want, you can easily move the data behind the scenes from one server to another, just update the directory entry and you're done!"
+
+### 5. Dynamic Sharding: the automatic rubber band
+
+"This is the absolute latest tech! Kind of like a rubber band. If data keeps growing and a shard fills up, the system automatically breaks it into two pieces (Split). And when the data shrinks, two shards merge back into one (Merge). You don't have to stress about anything manually, the system sizes itself up and down on its own."
+
+### 6. Hybrid Sharding: the combo platter
+
+"Of all the techniques I've told you about, big systems don't actually run on just one. They mix a few methods together and shard the 'hybrid' way. Say you first do geographic sharding (Asia and America), then inside the Asia server you do hash-based sharding to balance the data. This makes the system both fast and flexible. But yeah, the system's architecture gets a bit more complex then."
+
+After hearing all that, Montu's eyes went wide and his head spun a little. "Boltu! So many ways? I can't even figure out which one to use and which to skip!"
+
+Boltu patted Montu on the back. "Hey, nothing to panic about! In software engineering there's no 'silver bullet', no cure-all. Every option has its own pros and cons (Trade-offs). You have to pick the one that fits best, based on BiralTube's current state, your budget, and your future plans."

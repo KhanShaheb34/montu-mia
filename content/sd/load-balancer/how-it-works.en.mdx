@@ -1,0 +1,89 @@
+---
+title: How Does a Load Balancer Actually Work?
+tags:
+  - Load Balancing Algorithms
+  - Round Robin
+  - Least Connections
+  - IP Hash
+  - Weighted Load Balancing
+  - Request Distribution
+  - Algorithms
+---
+
+So we know a load balancer catches a request and 'forwards' it to a server. But it's not as simple as it sounds.
+
+Montu thought about it: "I've got 10 servers. When the first user shows up, which one do I send them to? Number 1? Number 10?"
+
+To make that call, a load balancer runs on a set of rules, its **'algorithms'**. Montu grabbed his notebook and pencil and jotted down the popular ones:
+
+## Round Robin
+
+> Dealing cards 🃏
+
+This one's about as simple as it gets in the load-balancing world. You know how, when friends deal out a deck of cards, it goes one for you, one for me, one for them? Same idea.
+
+First request -> Server 1.
+Second request -> Server 2.
+...
+Tenth request -> Server 10.
+And the eleventh? Loops right back around to Server 1.
+
+**Pros:**
+
+- Stupidly easy to implement.
+- Every server gets equal traffic. Nobody sits idle.
+
+**Cons:**
+
+- **It's a dumb algorithm:** it never checks whether a server is busy or free. If Server 1 is already gasping under an earlier request, Round Robin will cheerfully dump a new one on it anyway.
+- If Montu's servers aren't equally powerful (say, one monster PC and one creaky laptop), the laptop drowns while the monster twiddles its thumbs.
+
+![Load Balancer Round Robin](/images/sd/load-balancer/2.png)
+
+## Weighted Round Robin
+
+> The stronger you are, the more you carry 💪
+
+Montu suddenly remembered: "Wait! I've got one shiny new monster PC and one creaky old laptop. If I run plain Round Robin, my powerful machine is wasted!"
+
+That's exactly what Weighted Round Robin fixes. Here you get to tell it how strong each server is.
+
+- Monster PC (Weight 5) -> hand it 5 requests at a time.
+- Laptop (Weight 1) -> hand it 1 request.
+
+Work gets divided by muscle.
+
+![Load Balancer Weighted Round Robin](/images/sd/load-balancer/3.png)
+
+## Least Connections
+
+> The supermarket checkout 🏦
+
+This one's a bit smarter. Say you're at the bank or the supermarket. There are 5 counters open. Which line do you join? The shortest one, obviously.
+
+Least Connections does exactly that. The load balancer keeps an eye on how many requests each server is currently chewing on. When a new request arrives, it finds the most relaxed server (fewest active connections) and sends it there.
+
+**When to use it?**
+
+When requests take wildly different amounts of time. One user is uploading a video (slow), another is just sending chat messages (quick). For cases like that, Least Connections shines.
+
+![Load Balancer Least Connection](/images/sd/load-balancer/4.png)
+
+## IP Hash
+
+> Your usual driver, your usual barber 🛺
+
+Sometimes you just won't let anyone but your usual barber touch your hair. Why? Because they know you, they know exactly how you like it.
+
+Software has the same need sometimes. Say a user named Karim logs in, and his session (or shopping cart) lives on the server he first landed on. Next time he sends a request, you want him sent back to that same server, not a random new one.
+
+The IP Hash algorithm looks at the user's IP address, remembers them, and routes them to the same specific server every time. This is also called a **'Sticky Session'**.
+
+> 📝 **Montu's quick note - filing away the rest:**
+>
+> Montu spotted a few more algorithm names in the book. He didn't read every detail, but he scribbled down what each one does in a line:
+>
+> - **Least Response Time:** kind of like a quiz show, fastest buzzer wins. Whichever server answers first (TTFB) gets the new work. Speed is everything here.
+> - **Least Bandwidth:** picks whichever server is currently pushing the least data (traffic in Mbps).
+> - **Random:** no thinking at all! Eyes closed, lottery-style, send the user to any server. If you're lucky, they land on a fast one. If not, they get the slow one. 🎲
+> - **Custom:** when none of the rules above scratch the itch, engineers write their own (for example: only premium users get the fast servers).

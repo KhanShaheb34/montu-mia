@@ -1,0 +1,28 @@
+---
+title: What's a Load Balancer, Really?
+tags:
+  - Load Balancer
+  - Load Balancing
+  - Server
+  - Traffic Management
+  - Distributed Systems
+  - Scalability
+---
+
+In plain terms, a load balancer is the **'traffic cop'** (or **'receptionist'**) standing in front of your servers.
+
+![Load Balancer Traffic Police](/images/sd/load-balancer/1.png)
+
+Picture walking into some big company's office. You don't barge straight into the CEO's room, right? You stop at the front desk first. The receptionist sizes up what you need and sends you off to the right person.
+
+The software world works exactly the same way.
+
+1. **From the user's side:** BiralTube's thousands of users only know one IP address (or domain), the load balancer's address. They all fire their requests ("play me this video!") at that single address.
+
+2. **What the load balancer does:** It catches those requests, then glances at the 10 servers behind it to see which one is free or under the least pressure. Whichever server has room gets the request forwarded to it.
+
+3. **The response:** The server does the work and hands the answer back to the load balancer, which delivers it to the user.
+
+The user never has the faintest clue that 10 servers are hustling behind the curtain. As far as they know, there's just the load balancer.
+
+> _Note: a load balancer can also sit between your servers and your database, or between multiple backend servers. But Montu's BiralTube isn't that complicated yet, so for now we'll only worry about frontend load balancing._

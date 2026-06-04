@@ -1,0 +1,11 @@
+{
+  "title": "Database Traffic Jams & Caching",
+  "pages": [
+    "index",
+    "benefits",
+    "strategies",
+    "eviction",
+    "invalidation",
+    "challenges"
+  ]
+}

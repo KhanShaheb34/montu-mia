@@ -1,0 +1,52 @@
+---
+title: "How Does a CDN Actually Work?"
+tags:
+  - CDN Architecture
+  - Origin Server
+  - Edge Server
+  - Request Routing
+  - Cache Mechanism
+  - Data Flow
+  - Distributed Systems
+---
+
+Montu shifted in his seat. "Boltu, I get the concept. But technically, how does it work? Does the user know whether they're watching the video from the main server or the local warehouse?"
+
+Boltu laughed. "Nope! Neither the user nor your app's frontend keeps track of any of that. It's automatic. The process goes something like this:"
+
+1. **Request:** say a user in Sylhet opens your app.
+
+2. **Routing:** your app's system checks where the user is. Since they're in Sylhet, instead of firing the request straight off to America, it sends it to the user's nearest CDN server (say, that's in Dhaka).
+
+3. **Checking (Cache Hit/Miss):** the Dhaka server reaches into its own pocket and checks, "Hey! Do I have this cat video?"
+
+    - **If it does (Cache Hit):** it hands the video over right away. Boom, done!
+    - **If it doesn't (Cache Miss):** it quietly downloads the video from the main server in America, gives it to the user, and keeps a copy for next time (Cache).
+
+Montu nodded. "Got it! So later, if someone else in Sylhet or Dhaka wants the same video, nobody has to sprint off to America."
+
+— "Exactly! In this whole process, mainly two kinds of servers are at work. Memorize their names, they'll come in handy for showing off in interviews."
+
+## 1. Origin Server
+
+> The main factory
+
+This is your website's head office, the main factory. All your original files (HTML, CSS, JS, high-quality video) live right here.
+
+- **Job:** it's the 'single source of truth'. The master copy of all the data is here.
+- **Problem:** if every user on earth piles into this one factory at once, the server crashes and the speed crawls.
+- **Relationship:** when a CDN server doesn't have a file, it reaches out and asks this origin server for it.
+
+## 2. Edge Server
+
+> The corner shop
+
+Those "warehouses" scattered all over the world that we talked about? In technical terms, those are Edge Servers. They get the name because they sit at the very edge of the user's network.
+
+- **Job:** they fetch data from the origin server, cache a copy, and serve it to nearby users.
+- **Upside:** the physical distance is small, so latency and buffering are basically nonexistent.
+- **Scalability:** if your app's traffic suddenly spikes, these thousands of edge servers handle it together. The origin server won't feel a thing.
+
+![cdn how it works](/images/sd/cdn/2.png)
+
+Montu jotted in the corner of his notebook: Origin = the main warehouse, Edge = the neighborhood pickup counter.
