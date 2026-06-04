@@ -1,12 +1,13 @@
 "use server";
 
 import {
-  SESv2Client,
-  CreateContactCommand,
   AlreadyExistsException,
+  CreateContactCommand,
+  SESv2Client,
 } from "@aws-sdk/client-sesv2";
 import { headers } from "next/headers";
-import { rateLimit, getClientIdentifier } from "@/lib/rate-limit";
+import { getDictionary } from "@/lib/dictionaries";
+import { getClientIdentifier, rateLimit } from "@/lib/rate-limit";
 
 const sesClient = new SESv2Client({
   region: process.env.AWS_REGION ?? "eu-west-1",
@@ -14,9 +15,11 @@ const sesClient = new SESv2Client({
 
 export async function subscribeToNewsletter(formData: FormData) {
   const email = formData.get("email") as string;
+  const locale = (formData.get("locale") as string) || "bn";
+  const t = getDictionary(locale).errors;
 
   if (!email || !email.includes("@")) {
-    return { error: "সঠিক ইমেইল দিতে হবে" };
+    return { error: t.invalidEmail };
   }
 
   // Rate limiting: 3 requests per 15 minutes per IP
@@ -32,14 +35,14 @@ export async function subscribeToNewsletter(formData: FormData) {
       (rateLimitResult.resetAt - Date.now()) / 60000,
     );
     return {
-      error: `অনেকবার চেষ্টা করা হয়েছে। অনুগ্রহ করে ${minutesRemaining} মিনিট পরে আবার চেষ্টা করুন।`,
+      error: t.rateLimit.replace("{minutes}", String(minutesRemaining)),
     };
   }
 
   const contactListName = process.env.SES_CONTACT_LIST_NAME;
   if (!contactListName) {
     console.error("SES_CONTACT_LIST_NAME is not defined");
-    return { error: "সার্ভার কনফিগারেশন এরর" };
+    return { error: t.serverConfig };
   }
 
   try {
@@ -56,6 +59,6 @@ export async function subscribeToNewsletter(formData: FormData) {
       return { success: true };
     }
     console.error("SES subscription error:", error);
-    return { error: "কিছু একটা সমস্যা হয়েছে। আবার চেষ্টা করুন।" };
+    return { error: t.generic };
   }
 }

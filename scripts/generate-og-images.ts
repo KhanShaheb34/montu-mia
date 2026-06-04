@@ -1,9 +1,18 @@
 import fs from "node:fs";
 import path from "node:path";
-import puppeteer from "puppeteer-core";
 import matter from "gray-matter";
+import puppeteer from "puppeteer-core";
+import { DEFAULT_LOCALE, LOCALE_META, LOCALES } from "../src/lib/constants";
 
-// Recursively find all .mdx files in a directory
+// A locale-suffixed content file, e.g. "introduction.en.mdx" or
+// "load-balancer/index.en.mdx". Base (default-locale) files do NOT match.
+function isLocaleSuffixed(name: string): boolean {
+	return /\.[a-z]{2}\.mdx$/.test(name);
+}
+
+// Recursively find all BASE .mdx files (Bengali default) in a directory,
+// skipping locale-suffixed siblings like *.en.mdx — those are looked up per
+// chapter when generating the English image.
 function findMdxFiles(dir: string, baseDir: string = dir): string[] {
 	const files: string[] = [];
 	const entries = fs.readdirSync(dir, { withFileTypes: true });
@@ -12,7 +21,11 @@ function findMdxFiles(dir: string, baseDir: string = dir): string[] {
 		const fullPath = path.join(dir, entry.name);
 		if (entry.isDirectory()) {
 			files.push(...findMdxFiles(fullPath, baseDir));
-		} else if (entry.isFile() && entry.name.endsWith(".mdx")) {
+		} else if (
+			entry.isFile() &&
+			entry.name.endsWith(".mdx") &&
+			!isLocaleSuffixed(entry.name)
+		) {
 			files.push(path.relative(baseDir, fullPath));
 		}
 	}
@@ -30,9 +43,18 @@ function escapeHtml(text: string): string {
 		.replace(/'/g, "&#39;");
 }
 
+// Absolute output directory for a locale's OG images. Bengali (default) keeps
+// the original public/og/sd path; other locales use public/og/<lang>/sd.
+function ogDirForLocale(locale: string): string {
+	return locale === DEFAULT_LOCALE
+		? path.join(process.cwd(), "public", "og", "sd")
+		: path.join(process.cwd(), "public", "og", locale, "sd");
+}
+
 async function generateOGImage(
 	title: string,
 	description: string,
+	siteName: string,
 	outputPath: string,
 ) {
 	console.log(`Generating OG image for: ${title}`);
@@ -66,7 +88,7 @@ async function generateOGImage(
     <html>
       <head>
         <style>
-          @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;700&display=swap');
+          @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;700&family=Outfit:wght@400;600;700&display=swap');
 
           body {
             margin: 0;
@@ -76,7 +98,7 @@ async function generateOGImage(
             box-sizing: border-box;
             background-color: #f8fafc;
             background-image: linear-gradient(to bottom right, #fef08a, #bfdbfe);
-            font-family: 'Hind Siliguri', sans-serif;
+            font-family: 'Hind Siliguri', 'Outfit', sans-serif;
             display: flex;
             flex-direction: row;
             align-items: center;
@@ -133,7 +155,7 @@ async function generateOGImage(
           <img src="${montuImageDataUrl}" alt="Montu Mia" />
         </div>
         <div class="content">
-          <div class="site-name">মন্টু মিয়াঁর সিস্টেম ডিজাইন</div>
+          <div class="site-name">${escapeHtml(siteName)}</div>
           <div class="title">${escapeHtml(title)}</div>
           <div class="desc">${escapeHtml(description)}</div>
         </div>
@@ -172,14 +194,18 @@ async function main() {
 	}
 
 	const contentDir = path.join(process.cwd(), "content", "sd");
-	const publicDir = path.join(process.cwd(), "public", "og", "sd");
 
-	// Clean existing OG images only when not filtering
-	if (!filterArg && fs.existsSync(publicDir)) {
-		fs.rmSync(publicDir, { recursive: true });
+	// Clean existing OG images for every locale only when not filtering
+	if (!filterArg) {
+		for (const locale of LOCALES) {
+			const dir = ogDirForLocale(locale);
+			if (fs.existsSync(dir)) {
+				fs.rmSync(dir, { recursive: true });
+			}
+		}
 	}
 
-	// Find all MDX files
+	// Find all BASE MDX files (Bengali); these define the chapter slug set
 	let mdxFiles = findMdxFiles(contentDir);
 
 	if (filterArg) {
@@ -188,7 +214,9 @@ async function main() {
 			const fullFilePath = path.join(contentDir, file).toLowerCase();
 			const relativePath = file.toLowerCase();
 			const slug = relativePath.replace(/\.mdx$/, "");
-			const slugWithoutIndex = slug.endsWith("/index") ? slug.replace(/\/index$/, "") : slug;
+			const slugWithoutIndex = slug.endsWith("/index")
+				? slug.replace(/\/index$/, "")
+				: slug;
 
 			return (
 				relativePath.includes(cleanFilter) ||
@@ -206,32 +234,52 @@ async function main() {
 
 	let count = 0;
 
-	// Generate OG images for matched pages
+	// Generate OG images for matched pages, once per locale.
 	for (const file of mdxFiles) {
-		const filePath = path.join(contentDir, file);
-		const content = fs.readFileSync(filePath, "utf-8");
-		const { data } = matter(content);
-
-		const title = data.title as string | undefined;
-		const description = (data.description as string | undefined) || "";
-
-		if (!title) {
-			console.warn(`Skipping ${file}: no title in frontmatter`);
-			continue;
-		}
-
-		// Convert file path to slug (remove .mdx extension and convert index to parent folder)
+		// Convert file path to slug (drop .mdx, collapse folder index to parent)
 		let slug = file.replace(/\.mdx$/, "");
 		if (slug.endsWith("/index")) {
 			slug = slug.replace(/\/index$/, "");
 		}
 		if (slug === "index") {
-			continue; // Skip root index
+			continue; // Skip root index (handled by generate-index-og.ts)
 		}
 
-		const outputPath = path.join(publicDir, slug, "image.png");
-		await generateOGImage(title, description, outputPath);
-		count++;
+		for (const locale of LOCALES) {
+			// Pick the source file for this locale: the base file for the default
+			// locale, the `.<locale>.mdx` sibling when it exists, otherwise fall
+			// back to the base file so /og/<locale>/sd/<slug> always resolves.
+			let sourceRel = file;
+			if (locale !== DEFAULT_LOCALE) {
+				const localeRel = file.replace(/\.mdx$/, `.${locale}.mdx`);
+				if (fs.existsSync(path.join(contentDir, localeRel))) {
+					sourceRel = localeRel;
+				}
+			}
+
+			const content = fs.readFileSync(
+				path.join(contentDir, sourceRel),
+				"utf-8",
+			);
+			const { data } = matter(content);
+
+			const title = data.title as string | undefined;
+			const description = (data.description as string | undefined) || "";
+
+			if (!title) {
+				console.warn(`Skipping ${sourceRel}: no title in frontmatter`);
+				continue;
+			}
+
+			const outputPath = path.join(ogDirForLocale(locale), slug, "image.png");
+			await generateOGImage(
+				title,
+				description,
+				LOCALE_META[locale].siteName,
+				outputPath,
+			);
+			count++;
+		}
 	}
 
 	console.log(`\n✓ Generated ${count} OG images successfully!`);
@@ -241,4 +289,3 @@ main().catch((error) => {
 	console.error("Error generating OG images:", error);
 	process.exit(1);
 });
-

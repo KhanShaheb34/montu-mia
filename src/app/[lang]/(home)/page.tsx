@@ -1,24 +1,19 @@
 import { Github, Linkedin } from "lucide-react";
-import Link from "next/link";
 import Image from "next/image";
-import dynamic from "next/dynamic";
+import Link from "next/link";
+import { SubscribeModal } from "@/components/subscribe-modal";
 import { Button } from "@/components/ui/button";
+import { LOCALES, localePath } from "@/lib/constants";
+import { getDictionary } from "@/lib/dictionaries";
 
-const SubscribeModal = dynamic(
-  () =>
-    import("@/components/subscribe-modal").then((mod) => ({
-      default: mod.SubscribeModal,
-    })),
-  {
-    loading: () => (
-      <Button variant="secondary" size="lg" disabled>
-        সাবস্ক্রাইব করুন
-      </Button>
-    ),
-  },
-);
+export function generateStaticParams() {
+  return LOCALES.map((lang) => ({ lang }));
+}
 
-export default function HomePage() {
+export default async function HomePage({ params }: PageProps<"/[lang]">) {
+  const { lang } = await params;
+  const t = getDictionary(lang).home;
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-6 text-center bg-background text-foreground">
       <div className="container max-w-4xl space-y-8">
@@ -27,7 +22,7 @@ export default function HomePage() {
           <div className="relative w-60 h-60 md:w-64 md:h-64 lg:w-80 lg:h-80">
             <Image
               src="/montu_hero.webp"
-              alt="Montu Mia System Design"
+              alt={t.imageAlt}
               fill
               className="object-contain"
               priority
@@ -38,21 +33,23 @@ export default function HomePage() {
 
           <div className="space-y-2 max-w-4xl mx-auto">
             <h1 className="text-xl font-bold sm:text-2xl md:text-4xl text-foreground">
-              মন্টু মিয়াঁর সিস্টেম ডিজাইন অভিযান
+              {t.heroTitle}
             </h1>
             <p className="text-md text-muted-foreground md:text-lg font-medium leading-relaxed">
-              বিড়ালটিউবের হাজারো ইউজার সামলাতে হিমশিম খাচ্ছেন মন্টু মিয়াঁ!
+              {t.heroSubtitle1}
               <br className="hidden sm:inline" />
-              কোডিং তো শিখলেন, কিন্তু সিস্টেম ডিজাইন না জানলে কি অ্যাপ বাঁচানো সম্ভব?
+              {t.heroSubtitle2}
             </p>
           </div>
 
           <div className="flex flex-col sm:flex-row items-center gap-4">
             <Button asChild size="lg">
-              <Link href="/sd/introduction">পড়া শুরু করুন</Link>
+              <Link href={localePath(lang, "/sd/introduction")}>
+                {t.ctaStart}
+              </Link>
             </Button>
 
-            <SubscribeModal />
+            <SubscribeModal lang={lang} />
           </div>
 
           <div className="flex items-center gap-4 text-muted-foreground mt-4">

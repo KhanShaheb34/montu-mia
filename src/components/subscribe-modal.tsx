@@ -1,6 +1,8 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { Loader2 } from "lucide-react";
+import { useRef, useState } from "react";
+import { subscribeToNewsletter } from "@/app/actions";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -12,10 +14,16 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { subscribeToNewsletter } from "@/app/actions";
-import { Loader2 } from "lucide-react";
+import { getDictionary } from "@/lib/dictionaries";
 
-export function SubscribeModal({ trigger }: { trigger?: React.ReactNode }) {
+export function SubscribeModal({
+  trigger,
+  lang = "bn",
+}: {
+  trigger?: React.ReactNode;
+  lang?: string;
+}) {
+  const t = getDictionary(lang).subscribe;
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
@@ -32,6 +40,7 @@ export function SubscribeModal({ trigger }: { trigger?: React.ReactNode }) {
 
     const formData = new FormData();
     formData.append("email", email);
+    formData.append("locale", lang);
 
     const result = await subscribeToNewsletter(formData);
 
@@ -41,7 +50,7 @@ export function SubscribeModal({ trigger }: { trigger?: React.ReactNode }) {
       setMessage({ text: result.error, type: "error" });
     } else {
       setMessage({
-        text: "ধন্যবাদ! সফলভাবে সাবস্ক্রাইব করা হয়েছে।",
+        text: t.success,
         type: "success",
       });
       setEmail("");
@@ -67,27 +76,25 @@ export function SubscribeModal({ trigger }: { trigger?: React.ReactNode }) {
           trigger
         ) : (
           <Button variant="secondary" size="lg" className="cursor-pointer">
-            সাবস্ক্রাইব করুন
+            {t.trigger}
           </Button>
         )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-md max-h-[90dvh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>আপডেট পেতে সাবস্ক্রাইব করুন</DialogTitle>
-          <DialogDescription>
-            নতুন অধ্যায় রিলিজ হলে আমরা আপনাকে ইমেইলে জানিয়ে দিব।
-          </DialogDescription>
+          <DialogTitle>{t.title}</DialogTitle>
+          <DialogDescription>{t.description}</DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="flex items-center space-x-2">
             <div className="grid flex-1 gap-2">
               <label htmlFor="email" className="sr-only">
-                Email
+                {t.emailLabel}
               </label>
               <Input
                 ref={inputRef}
                 id="email"
-                placeholder="name@example.com"
+                placeholder={t.placeholder}
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -112,7 +119,7 @@ export function SubscribeModal({ trigger }: { trigger?: React.ReactNode }) {
               disabled={loading}
             >
               {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              সাবস্ক্রাইব
+              {t.submit}
             </Button>
           </DialogFooter>
         </form>

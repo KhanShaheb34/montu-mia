@@ -70,11 +70,31 @@ The project uses **Fumadocs** - a documentation framework built on Next.js. Cont
 
 ### App Structure (Next.js App Router)
 
-- `src/app/(home)/` - Homepage route group
-- `src/app/sd/` - System design docs section (main content)
-- `src/app/api/search/` - Search API endpoint
-- `src/app/og/` - Dynamic OG image generation
+All page routes live under a `[lang]` segment (see Internationalization below):
+
+- `src/app/[lang]/(home)/` - Homepage route group (per-locale)
+- `src/app/[lang]/sd/` - System design docs section (main content, per-locale)
+- `src/app/[lang]/layout.tsx` - Root layout (owns `<html lang>`, `RootProvider` i18n). There is **no** `src/app/layout.tsx`.
+- `src/app/api/unsubscribe/` - Newsletter unsubscribe endpoint (locale-independent)
 - `src/app/actions.ts` - Server actions (newsletter subscription via AWS SES)
+- `src/app/sitemap.ts` / `src/app/robots.ts` - SEO (locale-independent; sitemap emits hreflang)
+- `src/proxy.ts` - Next.js 16 i18n routing middleware (NOT `middleware.ts`, and must live in `src/` because the app uses a `src/` directory)
+
+### Internationalization (i18n)
+
+The site is **Bengali-first with optional translations** (currently `bn` default + `en`),
+using Fumadocs' built-in i18n. **Subpath routing**: Bengali stays unprefixed
+(`/sd/...` — existing URLs preserved), other languages are prefixed (`/en/sd/...`).
+
+- **Config**: `src/lib/i18n.ts` — `defineI18n({ defaultLanguage: 'bn', languages: ['bn','en'], hideLocale: 'default-locale', fallbackLanguage: 'bn' })`. `hideLocale: 'default-locale'` rewrites unprefixed paths to `bn`; `/bn/...` 307-redirects to the clean URL. `fallbackLanguage: 'bn'` means untranslated pages render Bengali — nothing 404s.
+- **Content** (`parser: 'dot'`, the default): translations are **sibling files** — `introduction.mdx` (bn) → `introduction.en.mdx` (en); nav `meta.json` → `meta.en.json`. Existing Bengali files are never moved.
+- **Source/loader**: `src/lib/source.ts` passes `i18n` to `loader()`. Use `source.getPage(slug, lang)`, `source.getPageTree(lang)`, `source.getLanguages()`.
+- **UI strings** (non-MDX chrome): typed JSON dictionaries in `src/dictionaries/{bn,en}.json` + `getDictionary(lang)` in `src/lib/dictionaries.ts`. The `Dictionary` type derives from `bn.json`, so a missing key in another locale is a **compile error** in `bun run types:check`. Server components call `getDictionary(lang)` directly; client components (`subscribe-modal`, `ai/page-actions`) take a `lang` prop and call it internally.
+- **Fumadocs chrome + language toggle**: `src/lib/layout.shared.tsx` exports `provider` (from `defineI18nUI`, passed to `<RootProvider i18n={provider(lang)}>`) and `baseOptions(lang)` (sets `nav.title` + `i18n: true` to render the toggle).
+- **Constants**: `src/lib/constants.ts` is the single source of truth — `BASE_URL`, `LOCALES`, `DEFAULT_LOCALE`, `LOCALE_META` (per-locale `ogLocale` + `siteName`), `buildUrl(locale, path)` (absolute, hreflang-safe/idempotent) and `localePath(locale, path)` (relative `<Link>` href).
+- **Metadata/SEO**: page `generateMetadata` sets dynamic `openGraph.locale`/`siteName` and `alternates.languages` hreflang (`bn-BD`/`en-US`/`x-default`); OG image path is locale-aware (`/og/sd/...` for bn, `/og/<lang>/sd/...` otherwise). Sitemap emits per-locale entries with hreflang.
+- **OG images**: `scripts/generate-og-images.ts` + `generate-index-og.ts` loop over `LOCALES`, reading `*.<lang>.mdx` (falling back to the Bengali title) and writing `public/og/<lang>/sd/...`.
+- **Adding a language** or translating: see `TRANSLATING.md`. Newsletter/email i18n is intentionally **out of scope** (still Bengali-only).
 
 ### Key Libraries
 
@@ -304,6 +324,6 @@ Always run `bun run types:check` before committing. This command:
 
 - Base URL for docs: `/sd` (configured in `src/lib/source.ts`)
 - Site title: "মন্টু মিয়াঁর সিস্টেম ডিজাইন" (Montu Mia's System Design)
-- Primary language: Bengali (`lang="bn"`)
+- Default language: Bengali (`bn`, unprefixed). `<html lang>` is set dynamically per locale; English (`en`) is served under `/en`. See Internationalization above.
 - Production URL: https://www.montumia.com
 - License: CC-BY-NC-SA-4.0 (content), MIT (code snippets)

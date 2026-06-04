@@ -40,6 +40,13 @@ bun dev
 
 লেখায় কোনো ভুল থাকলে ইস্যু ওপেন অথবা সরাসরি পুল রিকোয়েস্ট করতে পারেন।
 
+## 🌍 Translations
+
+The book is Bengali-first, but it's built to be translated. Bengali stays the default
+(`montumia.com/sd/...`); other languages live under a prefix (English at `montumia.com/en/...`).
+You can translate **one chapter at a time** — untranslated pages fall back to Bengali, so
+nothing breaks. See **[TRANSLATING.md](TRANSLATING.md)** to get started.
+
 ## Star History
 
 <a href="https://www.star-history.com/#KhanShaheb34/montu-mia&type=timeline&legend=top-left">

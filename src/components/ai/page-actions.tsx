@@ -1,5 +1,11 @@
 "use client";
-import { useMemo, useState } from "react";
+import { buttonVariants } from "fumadocs-ui/components/ui/button";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "fumadocs-ui/components/ui/popover";
+import { useCopyButton } from "fumadocs-ui/utils/use-copy-button";
 import {
   Check,
   ChevronDown,
@@ -7,14 +13,9 @@ import {
   ExternalLinkIcon,
   ShareIcon,
 } from "lucide-react";
+import { useMemo, useState } from "react";
 import { cn } from "@/lib/cn";
-import { useCopyButton } from "fumadocs-ui/utils/use-copy-button";
-import { buttonVariants } from "fumadocs-ui/components/ui/button";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "fumadocs-ui/components/ui/popover";
+import { getDictionary } from "@/lib/dictionaries";
 
 /**
  * Simple LRU cache implementation with max size
@@ -66,9 +67,12 @@ export function LLMCopyButton({
    * A URL to fetch the raw Markdown/MDX content of page
    */
   markdownUrl,
+  lang = "bn",
 }: {
   markdownUrl: string;
+  lang?: string;
 }) {
+  const t = getDictionary(lang).actions;
   const [isLoading, setLoading] = useState(false);
   const [checked, onClick] = useCopyButton(async () => {
     const cached = cache.get(markdownUrl);
@@ -107,7 +111,7 @@ export function LLMCopyButton({
       onClick={onClick}
     >
       {checked ? <Check /> : <Copy />}
-      Copy Markdown
+      {t.copyMarkdown}
     </button>
   );
 }
@@ -115,6 +119,7 @@ export function LLMCopyButton({
 export function ViewOptions({
   markdownUrl,
   githubUrl,
+  lang = "bn",
 }: {
   /**
    * A URL to the raw Markdown/MDX content of page
@@ -125,18 +130,26 @@ export function ViewOptions({
    * Source file URL on GitHub
    */
   githubUrl: string;
+
+  /**
+   * Active locale, used to localize the menu labels
+   */
+  lang?: string;
 }) {
+  const t = getDictionary(lang).actions;
   const items = useMemo(() => {
     const fullMarkdownUrl =
       typeof window !== "undefined"
-          //Fix: strip .mdx extension from generated markdown URL
-          ? new URL(markdownUrl, window.location.origin).toString().replace(/\.mdx$/, "")
+        ? //Fix: strip .mdx extension from generated markdown URL
+          new URL(markdownUrl, window.location.origin)
+            .toString()
+            .replace(/\.mdx$/, "")
         : "loading";
     const q = `Read ${fullMarkdownUrl}, I want to ask questions about it.`;
 
     return [
       {
-        title: "Open in GitHub",
+        title: t.openInGitHub,
         href: githubUrl,
         icon: (
           <svg fill="currentColor" role="img" viewBox="0 0 24 24">
@@ -147,7 +160,7 @@ export function ViewOptions({
       },
 
       {
-        title: "Open in ChatGPT",
+        title: t.openInChatGPT,
         href: `https://chatgpt.com/?${new URLSearchParams({
           hints: "search",
           q,
@@ -165,7 +178,7 @@ export function ViewOptions({
         ),
       },
       {
-        title: "Open in Claude",
+        title: t.openInClaude,
         href: `https://claude.ai/new?${new URLSearchParams({
           q,
         })}`,
@@ -182,7 +195,7 @@ export function ViewOptions({
         ),
       },
     ];
-  }, [githubUrl, markdownUrl]);
+  }, [githubUrl, markdownUrl, t]);
 
   return (
     <Popover>
@@ -195,7 +208,7 @@ export function ViewOptions({
           }),
         )}
       >
-        Open
+        {t.open}
         <ChevronDown className="size-3.5 text-fd-muted-foreground" />
       </PopoverTrigger>
       <PopoverContent className="flex flex-col">
@@ -220,6 +233,7 @@ export function ViewOptions({
 export function ShareOptions({
   url,
   title,
+  lang = "bn",
 }: {
   /**
    * The URL to share
@@ -230,7 +244,13 @@ export function ShareOptions({
    * The title of the page
    */
   title: string;
+
+  /**
+   * Active locale, used to localize the menu labels
+   */
+  lang?: string;
 }) {
+  const t = getDictionary(lang).actions;
   const items = useMemo(() => {
     const encodedUrl = encodeURIComponent(url);
     const encodedTitle = encodeURIComponent(title);
@@ -315,7 +335,7 @@ export function ShareOptions({
         )}
       >
         <ShareIcon className="size-3.5" />
-        Share
+        {t.share}
         <ChevronDown className="size-3.5 text-fd-muted-foreground" />
       </PopoverTrigger>
       <PopoverContent className="flex flex-col">
@@ -337,7 +357,7 @@ export function ShareOptions({
           className="text-sm p-2 rounded-lg inline-flex items-center gap-2 hover:text-fd-accent-foreground hover:bg-fd-accent [&_svg]:size-4 text-start cursor-pointer"
         >
           <Copy className="size-4" />
-          Copy Link
+          {t.copyLink}
         </button>
       </PopoverContent>
     </Popover>
