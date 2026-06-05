@@ -1,5 +1,5 @@
 import { defineI18n } from "fumadocs-core/i18n";
-import { DEFAULT_LOCALE, type Locale, LOCALES } from "@/lib/constants";
+import { DEFAULT_LOCALE, LOCALES, type Locale } from "@/lib/constants";
 
 // Fumadocs i18n: Bengali default + unprefixed (`hideLocale`); untranslated pages
 // fall back to Bengali instead of 404ing. Locales come from constants.ts.
