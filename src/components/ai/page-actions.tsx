@@ -15,7 +15,6 @@ import {
 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { cn } from "@/lib/cn";
-import { getDictionary } from "@/lib/dictionaries";
 
 /**
  * Simple LRU cache implementation with max size
@@ -67,12 +66,9 @@ export function LLMCopyButton({
    * A URL to fetch the raw Markdown/MDX content of page
    */
   markdownUrl,
-  lang = "bn",
 }: {
   markdownUrl: string;
-  lang?: string;
 }) {
-  const t = getDictionary(lang).actions;
   const [isLoading, setLoading] = useState(false);
   const [checked, onClick] = useCopyButton(async () => {
     const cached = cache.get(markdownUrl);
@@ -111,7 +107,7 @@ export function LLMCopyButton({
       onClick={onClick}
     >
       {checked ? <Check /> : <Copy />}
-      {t.copyMarkdown}
+      Copy Markdown
     </button>
   );
 }
@@ -119,7 +115,6 @@ export function LLMCopyButton({
 export function ViewOptions({
   markdownUrl,
   githubUrl,
-  lang = "bn",
 }: {
   /**
    * A URL to the raw Markdown/MDX content of page
@@ -130,10 +125,7 @@ export function ViewOptions({
    * Source file URL on GitHub
    */
   githubUrl: string;
-
-  lang?: string;
 }) {
-  const t = getDictionary(lang).actions;
   const items = useMemo(() => {
     const fullMarkdownUrl =
       typeof window !== "undefined"
@@ -146,7 +138,7 @@ export function ViewOptions({
 
     return [
       {
-        title: t.openInGitHub,
+        title: "Open in GitHub",
         href: githubUrl,
         icon: (
           <svg fill="currentColor" role="img" viewBox="0 0 24 24">
@@ -157,7 +149,7 @@ export function ViewOptions({
       },
 
       {
-        title: t.openInChatGPT,
+        title: "Open in ChatGPT",
         href: `https://chatgpt.com/?${new URLSearchParams({
           hints: "search",
           q,
@@ -175,7 +167,7 @@ export function ViewOptions({
         ),
       },
       {
-        title: t.openInClaude,
+        title: "Open in Claude",
         href: `https://claude.ai/new?${new URLSearchParams({
           q,
         })}`,
@@ -192,7 +184,7 @@ export function ViewOptions({
         ),
       },
     ];
-  }, [githubUrl, markdownUrl, t]);
+  }, [githubUrl, markdownUrl]);
 
   return (
     <Popover>
@@ -205,7 +197,7 @@ export function ViewOptions({
           }),
         )}
       >
-        {t.open}
+        Open
         <ChevronDown className="size-3.5 text-fd-muted-foreground" />
       </PopoverTrigger>
       <PopoverContent className="flex flex-col">
@@ -230,7 +222,6 @@ export function ViewOptions({
 export function ShareOptions({
   url,
   title,
-  lang = "bn",
 }: {
   /**
    * The URL to share
@@ -241,10 +232,7 @@ export function ShareOptions({
    * The title of the page
    */
   title: string;
-
-  lang?: string;
 }) {
-  const t = getDictionary(lang).actions;
   const items = useMemo(() => {
     const encodedUrl = encodeURIComponent(url);
     const encodedTitle = encodeURIComponent(title);
@@ -329,7 +317,7 @@ export function ShareOptions({
         )}
       >
         <ShareIcon className="size-3.5" />
-        {t.share}
+        Share
         <ChevronDown className="size-3.5 text-fd-muted-foreground" />
       </PopoverTrigger>
       <PopoverContent className="flex flex-col">
@@ -351,7 +339,7 @@ export function ShareOptions({
           className="text-sm p-2 rounded-lg inline-flex items-center gap-2 hover:text-fd-accent-foreground hover:bg-fd-accent [&_svg]:size-4 text-start cursor-pointer"
         >
           <Copy className="size-4" />
-          {t.copyLink}
+          Copy Link
         </button>
       </PopoverContent>
     </Popover>

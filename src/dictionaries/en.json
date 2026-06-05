@@ -3,24 +3,14 @@
     "imageAlt": "Montu Mia's System Design",
     "heroTitle": "Montu Mia's System Design Adventure",
     "heroSubtitle1": "Montu Mia is struggling to handle thousands of BiralTube users!",
-    "heroSubtitle2": "You learned to code — but can the app survive without system design?",
+    "heroSubtitle2": "You learned to code, but can the app survive without system design?",
     "ctaStart": "Start reading"
   },
   "a11y": {
     "changeLanguage": "Change language"
   },
   "sidebar": {
-    "aboutAuthor": "About the maker"
-  },
-  "actions": {
-    "subscribe": "Subscribe",
-    "open": "Open",
-    "copyMarkdown": "Copy Markdown",
-    "openInGitHub": "Open in GitHub",
-    "openInChatGPT": "Open in ChatGPT",
-    "openInClaude": "Open in Claude",
-    "share": "Share",
-    "copyLink": "Copy Link"
+    "aboutAuthor": "About the writer"
   },
   "subscribe": {
     "trigger": "Subscribe",

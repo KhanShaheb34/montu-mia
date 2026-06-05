@@ -19,7 +19,6 @@ import {
   LOCALE_META,
   type Locale,
 } from "@/lib/constants";
-import { getDictionary } from "@/lib/dictionaries";
 import { source } from "@/lib/source";
 import { cn } from "@/lib/utils";
 import { getMDXComponents } from "@/mdx-components";
@@ -28,8 +27,6 @@ export default async function Page(props: PageProps<"/[lang]/sd/[[...slug]]">) {
   const { lang, slug } = await props.params;
   const page = source.getPage(slug, lang);
   if (!page) notFound();
-
-  const dict = getDictionary(lang);
 
   const MDX = page.data.body;
   const gitConfig = {
@@ -55,16 +52,8 @@ export default async function Page(props: PageProps<"/[lang]/sd/[[...slug]]">) {
       </DocsBody>
 
       <div className="flex flex-row gap-2 items-center">
-        <ViewOptions
-          markdownUrl={`${page.url}.mdx`}
-          githubUrl={githubUrl}
-          lang={lang}
-        />
-        <ShareOptions
-          url={buildUrl(lang, page.url)}
-          title={page.data.title}
-          lang={lang}
-        />
+        <ViewOptions markdownUrl={`${page.url}.mdx`} githubUrl={githubUrl} />
+        <ShareOptions url={buildUrl(lang, page.url)} title={page.data.title} />
         <SubscribeModal
           lang={lang}
           trigger={
@@ -79,7 +68,7 @@ export default async function Page(props: PageProps<"/[lang]/sd/[[...slug]]">) {
               )}
             >
               <Mail className="size-3.5" />
-              {dict.actions.subscribe}
+              Subscribe
             </button>
           }
         />

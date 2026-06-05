@@ -113,11 +113,15 @@ over a cup of tea? If not, rewrite it until it does.
 
 ## B. Translate the site UI (buttons, modals, errors)
 
-The non-article UI strings (homepage hero, the subscribe modal, share/copy buttons, error
-messages) live in small JSON dictionaries:
+The non-article UI strings (homepage hero, the subscribe modal, error messages) live in
+small JSON dictionaries:
 
 - `src/dictionaries/bn.json` — Bengali (source of truth)
 - `src/dictionaries/en.json` — English
+
+> The doc-page action bar (Open / Share / Copy Link / Open in GitHub·ChatGPT·Claude /
+> Subscribe) is intentionally kept in **English for every language**, so there's nothing to
+> translate there.
 
 To translate the UI into an existing language, edit that language's JSON file. **The keys
 must mirror `bn.json` exactly** — a missing key is caught automatically:

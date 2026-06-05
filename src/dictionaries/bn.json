@@ -12,16 +12,6 @@
   "sidebar": {
     "aboutAuthor": "মন্টুর কারিগর"
   },
-  "actions": {
-    "subscribe": "সাবস্ক্রাইব",
-    "open": "খুলুন",
-    "copyMarkdown": "মার্কডাউন কপি",
-    "openInGitHub": "গিটহাবে খুলুন",
-    "openInChatGPT": "ChatGPT-তে খুলুন",
-    "openInClaude": "Claude-তে খুলুন",
-    "share": "শেয়ার",
-    "copyLink": "লিংক কপি"
-  },
   "subscribe": {
     "trigger": "সাবস্ক্রাইব করুন",
     "title": "আপডেট পেতে সাবস্ক্রাইব করুন",
