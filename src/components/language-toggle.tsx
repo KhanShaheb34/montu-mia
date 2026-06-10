@@ -37,6 +37,7 @@ export function LanguageToggle() {
             <button
               key={l}
               type="button"
+              aria-current={active ? "true" : undefined}
               onClick={() => onChange?.(l)}
               className={cn(
                 "flex items-center gap-2.5 rounded-md p-2 text-sm text-start transition-colors",
@@ -52,7 +53,7 @@ export function LanguageToggle() {
                 aria-hidden
                 width={20}
                 height={14}
-                className="shrink-0 rounded-[2px] ring-1 ring-black/10"
+                className="shrink-0 rounded-[2px] ring-1 ring-border"
               />
               {meta.label}
             </button>

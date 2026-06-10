@@ -5,8 +5,12 @@ import puppeteer from "puppeteer-core";
 import { DEFAULT_LOCALE, LOCALE_META, LOCALES } from "../src/lib/constants";
 
 // Matches a locale-suffixed file like "introduction.en.mdx" (not base files).
+// Derived from LOCALES so the script and Fumadocs' dot-parser can't disagree.
+const LOCALE_SUFFIX = new RegExp(
+	`\\.(${LOCALES.filter((l) => l !== DEFAULT_LOCALE).join("|")})\\.mdx$`,
+);
 function isLocaleSuffixed(name: string): boolean {
-	return /\.[a-z]{2}\.mdx$/.test(name);
+	return LOCALE_SUFFIX.test(name);
 }
 
 // Recursively find base .mdx files, skipping locale-suffixed siblings (*.en.mdx).

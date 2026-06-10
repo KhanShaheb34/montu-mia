@@ -15,11 +15,10 @@ import {
   BASE_URL,
   buildUrl,
   DEFAULT_LOCALE,
-  hreflangAlternates,
   LOCALE_META,
-  type Locale,
+  normalizeLocale,
 } from "@/lib/constants";
-import { source } from "@/lib/source";
+import { isFallbackPage, pageHreflang, source } from "@/lib/source";
 import { cn } from "@/lib/utils";
 import { getMDXComponents } from "@/mdx-components";
 
@@ -88,8 +87,13 @@ export async function generateMetadata(
   const page = source.getPage(slug, lang);
   if (!page) notFound();
 
-  const meta = LOCALE_META[lang as Locale] ?? LOCALE_META.bn;
-  const canonical = buildUrl(lang, page.url);
+  // A fallback page serves Bengali content at a non-default URL; its metadata
+  // must identify as the Bengali page (canonical -> bn URL), not a translation.
+  const isFallback = isFallbackPage(page, lang);
+  const meta = LOCALE_META[isFallback ? DEFAULT_LOCALE : normalizeLocale(lang)];
+  const canonical = isFallback
+    ? buildUrl(DEFAULT_LOCALE, page.url)
+    : buildUrl(lang, page.url);
 
   // Locale-aware OG image; guard empty slug to avoid /og/sd//image.png.
   const slugPath = page.slugs.length > 0 ? page.slugs.join("/") : "index";
@@ -118,7 +122,7 @@ export async function generateMetadata(
     keywords,
     alternates: {
       canonical,
-      languages: hreflangAlternates(page.url),
+      languages: pageHreflang(page.slugs, page.url),
     },
     openGraph: {
       title: page.data.title,

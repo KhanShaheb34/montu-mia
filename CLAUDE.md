@@ -90,6 +90,7 @@ using Fumadocs' built-in i18n. **Subpath routing**: Bengali stays unprefixed
 - **Content** (`parser: 'dot'`, the default): translations are **sibling files** — `introduction.mdx` (bn) → `introduction.en.mdx` (en); nav `meta.json` → `meta.en.json`. Existing Bengali files are never moved.
 - **Source/loader**: `src/lib/source.ts` passes `i18n` to `loader()`. Use `source.getPage(slug, lang)`, `source.getPageTree(lang)`, `source.getLanguages()`.
 - **UI strings** (non-MDX chrome): typed JSON dictionaries in `src/dictionaries/{bn,en}.json` + `getDictionary(lang)` in `src/lib/dictionaries.ts`. The `Dictionary` type derives from `bn.json`, so a missing key in another locale is a **compile error** in `bun run types:check`. Server components call `getDictionary(lang)` directly; the `subscribe-modal` client component takes a `lang` prop and calls it internally. The doc-page action bar (`ai/page-actions`: Open / Share / Copy / Open-in-GitHub·ChatGPT·Claude / Subscribe) is intentionally **English in every locale** — hardcoded in the component, not in the dictionaries.
+- **Raw markdown for LLMs**: every doc page serves its processed markdown at `${page.url}.mdx` (`/sd/foo.mdx` for bn, `/en/sd/foo.mdx` for en) — used by the Copy Markdown button and the ChatGPT/Claude prompts. Implemented as `src/app/llms.mdx/[lang]/[[...slug]]/route.ts` (uses `getLLMText` from `source.ts`) plus rewrites in `next.config.mjs`, because `src/proxy.ts` skips dotted paths so the middleware never locale-rewrites these URLs. The bn rewrite hardcodes `bn` — it must match `DEFAULT_LOCALE`.
 - **Fumadocs chrome + language toggle**: `src/lib/layout.shared.tsx` exports `provider` (from `defineI18nUI`, passed to `<RootProvider i18n={provider(lang)}>`) and `baseOptions(lang)` (sets `nav.title`/`nav.url`). The switcher is **not** Fumadocs' built-in `i18n: true` toggle — instead a custom `<LanguageToggle />` (`src/components/language-toggle.tsx`) is rendered inline in the sidebar footer so it shares one row with the about link + theme toggle, and a `<LanguageFlagDropdown />` (`src/components/language-flag-dropdown.tsx`) sits top-right on the home page.
 - **Constants**: `src/lib/constants.ts` is the single source of truth — `BASE_URL`, `LOCALES`, `DEFAULT_LOCALE`, `LOCALE_META` (per-locale `ogLocale`, `siteName`, `label`, `flag`), `buildUrl(locale, path)` (absolute, hreflang-safe/idempotent) and `localePath(locale, path)` (relative `<Link>` href).
 - **Metadata/SEO**: page `generateMetadata` sets dynamic `openGraph.locale`/`siteName` and `alternates.languages` hreflang (`bn-BD`/`en-US`/`x-default`); OG image path is locale-aware (`/og/sd/...` for bn, `/og/<lang>/sd/...` otherwise). Sitemap emits per-locale entries with hreflang.
@@ -225,15 +226,15 @@ The project uses static OG images generated locally using Puppeteer. Images are 
    ```
 
    This script:
-   - Reads all MDX files from `content/sd/`
+   - Reads all MDX files from `content/sd/` (per locale: base files for `bn`, `*.<lang>.mdx` siblings for others, falling back to the Bengali frontmatter)
    - Parses frontmatter (title, description)
-   - Generates OG images using Puppeteer
-   - Saves images to `public/og/sd/{slug}/image.png`
+   - Generates OG images using Puppeteer, once per locale in `LOCALES`
+   - Saves images to `public/og/sd/{slug}/image.png` for the default locale (`bn`) and `public/og/<lang>/sd/{slug}/image.png` for other locales
    - Uses light color theme (yellow-blue gradient) matching the website design
 
 3. **How It Works**:
-   - Static images served from `public/og/sd/` directory
-   - Pages reference images via `/og/sd/{slug}/image.png` path
+   - Static images served from `public/og/sd/` (bn) and `public/og/<lang>/sd/` (other locales)
+   - Pages reference images via the matching locale-aware path
    - No serverless/runtime generation needed
    - Faster page loads (static files)
    - No Vercel deployment issues

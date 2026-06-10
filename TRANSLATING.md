@@ -173,9 +173,10 @@ Say you want to add Hindi (`hi`). **Four edits + one asset:**
 
 Then add `*.hi.mdx` files as you translate chapters (Section A above). Run
 `bun run types:check` — because `LOCALES` drives a `Record<Locale, …>`, the type-checker turns
-a missing `LOCALE_META` field or `dictionaries` entry into a **compile error** and walks you
-through anything you forgot. That's it: the `/hi/...` routes, the toggle, fallback, the sitemap,
-and `hreflang` tags all light up on their own.
+a missing `LOCALE_META` field, `dictionaries` entry, or index-OG text (`INDEX_TEXT` in
+`scripts/generate-index-og.ts`) into a **compile error** and walks you through anything you
+forgot. That's it: the `/hi/...` routes, the toggle, fallback, the sitemap, and `hreflang`
+tags all light up on their own.
 
 ---
 
@@ -188,7 +189,8 @@ bun dev
 
 - Bengali (unchanged): `http://localhost:3000/sd/<chapter>`
 - Your language: `http://localhost:3000/<lang>/sd/<chapter>` (e.g. `/en/sd/introduction`)
-- Use the **language toggle** in the top bar to switch between them.
+- Use the **language toggle** in the docs sidebar footer (next to the theme toggle), or the
+  flag dropdown at the top-right of the homepage, to switch between them.
 - Untranslated pages will show the Bengali fallback under your language's chrome.
 
 ### (Optional) Regenerate social share images

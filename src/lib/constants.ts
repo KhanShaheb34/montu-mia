@@ -31,6 +31,17 @@ export const LOCALE_META: Record<
   },
 };
 
+// Allowlist-normalize an untrusted locale string (URL segment, FormData field)
+// to a known Locale. Uses LOCALES.includes — a plain object index would let
+// prototype keys like "toString" slip past an `?? fallback`.
+export function normalizeLocale(lang: string | undefined | null): Locale {
+  return LOCALES.includes(lang as Locale) ? (lang as Locale) : DEFAULT_LOCALE;
+}
+
+export function isLocale(lang: string): lang is Locale {
+  return LOCALES.includes(lang as Locale);
+}
+
 // Strip a leading `/<locale>` for any locale (incl. default) so buildUrl is idempotent.
 function stripLocalePrefix(path: string): string {
   for (const locale of LOCALES) {

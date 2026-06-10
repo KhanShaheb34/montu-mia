@@ -4,13 +4,14 @@ import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import { Bricolage_Grotesque, Noto_Sans_Bengali } from "next/font/google";
+import { notFound } from "next/navigation";
 import { GoogleTag } from "@/components/analytics/google-tag";
 import {
   BASE_URL,
   buildUrl,
   hreflangAlternates,
+  isLocale,
   LOCALE_META,
-  type Locale,
 } from "@/lib/constants";
 import { provider } from "@/lib/layout.shared";
 
@@ -34,7 +35,10 @@ export async function generateMetadata({
   params,
 }: LayoutProps<"/[lang]">): Promise<Metadata> {
   const { lang } = await params;
-  const meta = LOCALE_META[lang as Locale] ?? LOCALE_META.bn;
+  // Unknown locales must 404: the proxy matcher skips dotted/api-prefixed
+  // paths, so this segment is the authoritative allowlist check.
+  if (!isLocale(lang)) notFound();
+  const meta = LOCALE_META[lang];
 
   return {
     title: {
@@ -82,20 +86,13 @@ export default async function Layout({
   children,
 }: LayoutProps<"/[lang]">) {
   const { lang } = await params;
+  if (!isLocale(lang)) notFound();
   return (
     <html
       lang={lang}
       className={`${bricolage.variable} ${notoSansBengali.variable}`}
       suppressHydrationWarning
     >
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-      </head>
       <body
         className={`flex flex-col min-h-screen font-sans ${bricolage.className} ${notoSansBengali.className}`}
       >

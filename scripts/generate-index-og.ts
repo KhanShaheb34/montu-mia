@@ -1,13 +1,29 @@
 import fs from "node:fs";
 import path from "node:path";
 import puppeteer from "puppeteer-core";
-import { DEFAULT_LOCALE, LOCALE_META, LOCALES } from "../src/lib/constants";
+import {
+	DEFAULT_LOCALE,
+	type Locale,
+	LOCALE_META,
+	LOCALES,
+} from "../src/lib/constants";
 
 // Index/landing hero text per locale (chapter OG text comes from frontmatter).
-const INDEX_TEXT: Record<string, { title: string; desc: string }> = {
+// Typed Record<Locale, ...> so adding a language to LOCALES makes a missing
+// entry here a compile error in `bun run types:check`.
+const INDEX_TEXT: Record<Locale, { title: string; desc: string }> = {
 	bn: { title: "সিস্টেম ডিজাইন", desc: "বাংলায় সিস্টেম ডিজাইন শিখুন" },
 	en: { title: "System Design", desc: "Learn system design through stories" },
 };
+
+function escapeHtml(text: string): string {
+	return text
+		.replace(/&/g, "&amp;")
+		.replace(/</g, "&lt;")
+		.replace(/>/g, "&gt;")
+		.replace(/"/g, "&quot;")
+		.replace(/'/g, "&#39;");
+}
 
 // Index OG output path: default locale -> public/og/sd/index, others -> public/og/<lang>/sd/index.
 function ogIndexPath(locale: string): string {
@@ -18,11 +34,9 @@ function ogIndexPath(locale: string): string {
 	return path.join(process.cwd(), ...segments);
 }
 
-async function generateIndexOG(locale: string) {
-	const text = INDEX_TEXT[locale] ?? INDEX_TEXT.bn;
-	const siteName =
-		LOCALE_META[locale as keyof typeof LOCALE_META]?.siteName ??
-		LOCALE_META.bn.siteName;
+async function generateIndexOG(locale: Locale) {
+	const text = INDEX_TEXT[locale];
+	const siteName = LOCALE_META[locale].siteName;
 
 	console.log(`Generating fallback OG image for index page (${locale})...`);
 
@@ -121,9 +135,9 @@ async function generateIndexOG(locale: string) {
           <img src="${montuImageDataUrl}" alt="Montu Mia" />
         </div>
         <div class="content">
-          <div class="site-name">${siteName}</div>
-          <div class="title">${text.title}</div>
-          <div class="desc">${text.desc}</div>
+          <div class="site-name">${escapeHtml(siteName)}</div>
+          <div class="title">${escapeHtml(text.title)}</div>
+          <div class="desc">${escapeHtml(text.desc)}</div>
         </div>
       </body>
     </html>

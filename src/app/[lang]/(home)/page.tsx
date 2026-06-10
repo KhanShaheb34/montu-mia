@@ -17,7 +17,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
 
   return (
     <main className="relative flex min-h-screen flex-col items-center justify-center p-6 text-center bg-background text-foreground">
-      <div className="absolute right-4 top-4 z-10">
+      <div className="absolute end-4 top-4 z-10">
         <LanguageFlagDropdown />
       </div>
       <div className="container max-w-4xl space-y-8">
@@ -39,7 +39,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
             <h1 className="text-xl font-bold sm:text-2xl md:text-4xl text-foreground">
               {t.heroTitle}
             </h1>
-            <p className="text-md text-muted-foreground md:text-lg font-medium leading-relaxed">
+            <p className="text-base text-muted-foreground md:text-lg font-medium leading-relaxed">
               {t.heroSubtitle1}
               <br className="hidden sm:inline" />
               {t.heroSubtitle2}

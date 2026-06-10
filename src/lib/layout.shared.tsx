@@ -1,6 +1,6 @@
 import { defineI18nUI } from "fumadocs-ui/i18n";
 import type { BaseLayoutProps } from "fumadocs-ui/layouts/shared";
-import { LOCALE_META, type Locale } from "@/lib/constants";
+import { LOCALE_META, localePath, normalizeLocale } from "@/lib/constants";
 import { i18n } from "@/lib/i18n";
 
 // Fumadocs chrome translations (TOC, prev/next, etc.) + per-locale switcher
@@ -27,13 +27,12 @@ export const { provider } = defineI18nUI(i18n, {
 });
 
 export function baseOptions(lang: string): BaseLayoutProps {
-  // Normalize unknown locales to the default.
-  const locale: Locale = lang in LOCALE_META ? (lang as Locale) : "bn";
+  const locale = normalizeLocale(lang);
   const meta = LOCALE_META[locale];
   return {
     nav: {
       title: meta.siteName,
-      url: locale === "bn" ? "/" : `/${locale}`,
+      url: localePath(locale, "/"),
     },
     // No `i18n: true`: we render a custom <LanguageToggle /> in the sidebar footer instead.
   };
