@@ -51,15 +51,15 @@ function safeEqual(expected: string, actual: string): boolean {
 /**
  * Verify an email hash against the current HMAC format, falling back to
  * the legacy format for links sent before the migration.
+ *
+ * No try/catch here on purpose: a wrong hash returns false (safeEqual never
+ * throws), and the ONLY throw path is a missing UNSUBSCRIBE_SECRET. That must
+ * propagate so the unsubscribe route can return a 500 config error instead of
+ * masking it as a 403 invalid-hash.
  */
 export function verifyEmailHash(email: string, hash: string): boolean {
-  try {
-    return (
-      safeEqual(generateEmailHash(email), hash) ||
-      safeEqual(generateLegacyEmailHash(email), hash)
-    );
-  } catch (error) {
-    console.error("Hash verification failed:", error);
-    return false;
-  }
+  return (
+    safeEqual(generateEmailHash(email), hash) ||
+    safeEqual(generateLegacyEmailHash(email), hash)
+  );
 }
