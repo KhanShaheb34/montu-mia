@@ -1,0 +1,30 @@
+{
+  "home": {
+    "imageAlt": "Montu Mia'nın Sistem Tasarımı",
+    "heroTitle": "Montu Mia'nın Sistem Tasarımı Macerası",
+    "heroSubtitle1": "Montu Mia binlerce BiralTube kullanıcısıyla başa çıkmakta zorlanıyor!",
+    "heroSubtitle2": "Kod yazmayı öğrendin, ama uygulama sistem tasarımı olmadan ayakta kalabilir mi?",
+    "ctaStart": "Okumaya başla"
+  },
+  "a11y": {
+    "changeLanguage": "Dili değiştir"
+  },
+  "sidebar": {
+    "aboutAuthor": "Yazar hakkında"
+  },
+  "subscribe": {
+    "trigger": "Abone ol",
+    "title": "Güncellemelere abone ol",
+    "description": "Yeni bir bölüm yayınlandığında sana e-posta göndereceğiz.",
+    "emailLabel": "E-posta",
+    "placeholder": "ad@ornek.com",
+    "submit": "Abone ol",
+    "success": "Teşekkürler! Başarıyla abone oldun."
+  },
+  "errors": {
+    "invalidEmail": "Lütfen geçerli bir e-posta adresi girin",
+    "rateLimit": "Çok fazla deneme. Lütfen {minutes} dakika sonra tekrar deneyin.",
+    "serverConfig": "Sunucu yapılandırma hatası",
+    "generic": "Bir şeyler ters gitti. Lütfen tekrar deneyin."
+  }
+}
