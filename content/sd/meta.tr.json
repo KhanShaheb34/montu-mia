@@ -1,0 +1,16 @@
+{
+  "title": "Montu Mia'nın Sistem Tasarımı",
+  "root": true,
+  "pages": [
+    "introduction",
+    "what-is-system-design",
+    "scaling",
+    "load-balancer",
+    "networking",
+    "cdn",
+    "caching",
+    "data-partitioning",
+    "replication",
+    "hook"
+  ]
+}

@@ -1,7 +1,7 @@
 export const BASE_URL = "https://www.montumia.com";
 
 export const DEFAULT_LOCALE = "bn" as const;
-export const LOCALES = ["bn", "en"] as const;
+export const LOCALES = ["bn", "en", "tr"] as const;
 export type Locale = (typeof LOCALES)[number];
 
 // Per-locale metadata. To add a language, add an entry here (see TRANSLATING.md).
@@ -28,6 +28,13 @@ export const LOCALE_META: Record<
     label: "English",
     flag: "/flags/us.svg",
     hreflang: "en-US",
+  },
+  tr: {
+    ogLocale: "tr_TR",
+    siteName: "Montu Mia'nın Sistem Tasarımı",
+    label: "Türkçe",
+    flag: "/flags/tr.svg",
+    hreflang: "tr-TR",
   },
 };
 
