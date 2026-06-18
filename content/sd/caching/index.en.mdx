@@ -1,0 +1,46 @@
+---
+title: "What Is Caching?"
+description: What caching is, and why a memory layer like Redis saves a struggling database.
+tags:
+  - System Design
+  - Caching Introduction
+  - Backend Optimization
+  - Redis
+  - Memcached
+---
+
+Boltu was lounging back, sipping his tea, when Montu blew in like a storm. From the look on his face, you'd think he'd just seen a ghost.
+
+— "Boltu! It's over! My BiralTube is finished!" Montu panted.
+
+Boltu, unfazed, took a sip and said, "What now? You set up the CDN just fine. Videos should be running at rocket speed. What happened this time?"
+
+Montu put his head in his hands and flopped into a chair. "The videos ARE running at rocket speed, Boltu. But a strange new bug has crept in! Users are watching videos fine, but when they try to comment, sometimes the comment just won't post. They like a video and the like count doesn't budge. Profile pages take so long to load that people have started cursing me out."
+
+Boltu gave a little smile. "I told you the other day, you made the frontend fast, sure, but the moment the backend database hit a jam, you'd come running back. Now tell me, what's the database's CPU usage?"
+
+Montu, near tears, said, "Boltu, the CPU is brushing 100%! The database can barely breathe. But why is this happening? I bought a good server and everything."
+
+![db suffering](/images/sd/caching/1.png)
+
+Boltu set his teacup on the table and sat up straight. "Listen, Montu, where does your database (like **PostgreSQL** or **MySQL**) save its data? On a hard disk, right? A hard disk or SSD is very safe, you don't lose data even when the power goes out. But physically reading (**Read**) or writing (**Write**) data from a hard disk takes a good while."
+
+Montu listened intently.
+
+Boltu went on. "Picture this. You go to a huge library to research a topic. After a long hunt, you pull out a thick book and start reading. A bit later, you need to check one line from that book again. Are you going to walk all the way back to the library's corner? Or smartly keep the book right there on your own desk?"
+
+Montu nodded. "Oh, no way! The books I'm reading right now, I'd keep them right in front of me on the desk. No point pawing through the library shelves over and over."
+
+— "Exactly! Your main database is that huge library. And your desk is the memory, the **RAM**. Instead of digging through the database's giant hard disk for the same data again and again, if we pull the data we need into the server's RAM, the lookup time drops to almost zero! And the load on the database drops too. The software that manages this 'desk' is stuff like **Redis** or **Memcached**."
+
+![ram vs db](/images/sd/caching/2.png)
+
+Montu's eyes went wide. "Okay Boltu, then why not just bring the whole library onto the desk! I mean, if I keep ALL the data in RAM, there's no problem at all."
+
+Boltu laughed. "You got the money to buy a desk big enough for the whole library? RAM costs hundreds of times more than a hard disk or SSD! That's exactly why we only keep the data in memory that users search for the most, or that puts the most strain on the database."
+
+Montu scratched his head. "So backend caching is a super-fast storage layer sitting between my app and the database. The data you need is saved there for a short while, so the database gets to catch its breath."
+
+— "Exactly!" said Boltu. "And remember, the caching layer doesn't only sit between the database and the backend. It can sit between the client (the browser) and the server, or between multiple microservices too. That CDN you set up? That's also a kind of caching (**Edge Caching**). But for today, just think about database caching."
+
+Montu, looking a bit worried, said, "Got it, Boltu. But won't bolting another service (Redis) onto this system just create more hassle? Can it actually fix those ghostly bugs?"

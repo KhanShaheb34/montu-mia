@@ -1,0 +1,45 @@
+---
+title: "The Flavors of Partitioning"
+description: "Ways to split it up"
+tags:
+  - Horizontal Partitioning
+  - Vertical Partitioning
+  - Hybrid Partitioning
+  - Database Optimization
+---
+
+Boltu drew a square box on the whiteboard and started explaining. "Listen, there are mainly two ways to do this data-splitting. Say I draw a big table on a sheet of paper, hand you a pair of scissors, and tell you to cut it in two. What do you do? You could cut the paper crosswise (along the Rows), or lengthwise (along the Columns). For a database, the concept is exactly the same. Let me walk you through it."
+
+![types](/images/sd/data-partitioning/3.png)
+
+### 1. The crosswise cut: Horizontal Partitioning (or Sharding)
+
+"Say you decide to split your database's 'User' table in two. Every user in your system has a unique numerical ID. You set a rule: users with even IDs go on 'Server A', users with odd IDs go on 'Server B'. Boom, that's horizontal partitioning! This is what we usually call **Sharding**. Now when a user logs in, your app just looks at their ID, works out whether it's odd or even, and sends them straight to the right server, or shard."
+
+Montu jumped up, delighted. "Oh, super simple! So if I want to split the database into 3 parts, instead of odd-even I just take the ID modulo 3, right Boltu?"
+
+Boltu smiled. "Not so fast, kid! Sharding has a few tricks of its own. Pick the wrong technique, and later, when you go to add or remove servers, you'll be in deep trouble. We'll get to that, let me clear up the basics first."
+
+### 2. The lengthwise cut: Vertical Partitioning
+
+Boltu turned to Montu with a question. "Okay Montu, tell me, how many columns does your BiralTube 'video metadata' table have right now?"
+
+— "Boltu, easily over a hundred! Video size, resolution, upload date, likes, dislikes, you wouldn't believe how much got stuffed in there!"
+
+— "Just as I thought! Now tell me, when a user just wants to see a video's thumbnail and title on the homepage, do you need the data from all hundred of those columns?"
+
+— "No, Boltu, a handful, like 15 or 20 columns, does the job. The rest only matter after the video plays, or for analytics."
+
+— "So you tell me, for those 15-20 useful columns, your database has to scan 100 columns every single time! That's pointless strain on both memory and performance. The fix is **Vertical Partitioning**. You can cut that big table lengthwise into a few separate tables. Like: one table for basic info (title, thumbnail), and another for advanced info. Then you connect the tables using just the 'video ID'. So when the homepage loads, your app only searches the small table, it doesn't even touch the big one."
+
+Montu looked a little glum. "I never thought about it that way! I rushed and crammed everything into one table. If I'd known earlier, I'd have built nice separate tables from the start."
+
+Boltu put a hand on Montu's shoulder and said with a smile, "Come on, that's exactly where you're getting it wrong! You did the right thing. When you started out, you had few users, no budget, and barely any time. If you'd sat around doing all this high-end optimization back then, this BiralTube might never have seen the light of day! That habit of trying to make everything perfect from day one has a name in software engineering: **'Premature Optimization', the root of all evil**. Now your users are growing, you need to scale, so you're redesigning the system. For a startup or a small team, this is the most perfect approach there is."
+
+### 3. Slicing both ways: Hybrid Partitioning
+
+A smile came back to Montu's face. "Thanks, Boltu, you took a load off my mind! So we can split data either of those two ways?"
+
+— "Hold on, there's one more secret weapon. In big systems, cutting just one way doesn't cut it. To optimize the database you split columns lengthwise, and to balance the load you also shard crosswise. When you apply both methods together, it's called **Hybrid Partitioning**. Pretty much all the big systems in the industry run on this hybrid model."
+
+Montu nodded in agreement. "Crystal clear, Boltu! So let me go start carving up the data. But you said sharding has its own separate techniques too, what are those?"

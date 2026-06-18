@@ -1,0 +1,49 @@
+---
+title: "CDN, Now What?"
+description: What a Content Delivery Network is, and how it makes far-away users' videos load instantly.
+tags:
+  - Content Delivery Network
+  - CDN Introduction
+  - Global Infrastructure
+  - Static Content
+  - Web Optimization
+  - Network Latency
+  - Edge Caching
+  - Static Asset Delivery
+---
+
+Life was good for Montu after setting up his load balancer. More users? He'd just add more servers. Users happy. Montu happy. Tons of videos getting uploaded every day. And the more videos piled up, the faster the viewer count climbed, several times faster, in fact. But this happiness didn't last long either. A few days in, the users started complaining again.
+
+This time, though, the complaint was a little odd. Montu noticed that users close to the server (the local ones) had their videos playing just fine. But anyone running BiralTube from far away, or from another country, would sit through buffering that dragged on forever!
+
+![slow buffering](/images/sd/cdn/1.png)
+
+Montu figured, "Ugh! Must be short on servers." So he piled on a few more. But at the end of the month, his AWS bill made his jaw drop! The videos hadn't gotten any faster, and on top of that, his server costs had shot through the roof.
+
+Out of options, he ran back to Boltu's place. "Boltu, save me! I added servers, I poured in money, and the far-away users are still cursing me out."
+
+Boltu heard it all, gave a little smile, and said, "You never touched the root of the problem. You don't need more servers right now, you need a **Content Delivery Network**, a **CDN**."
+
+Hearing Boltu's tip, Montu buried himself in the books. He had to crack this one. Giving users the best experience possible was his only goal now. Let's tag along with Montu and find out what this CDN thing is, and how it's going to bail him out.
+
+## So what is a CDN?
+
+Boltu calmed Montu down. "Look, say BiralTube's main server (the origin) sits in America. Now if a user in Dhaka wants to watch a video, that request travels from Dhaka all the way to America, grabs the video file, and comes all the way back to Dhaka. All that back-and-forth takes time (Latency), right?"
+
+Montu nodded. "It sure does."
+
+— "Now imagine you open a little warehouse, a branch office, right there in Dhaka, and you keep a copy of the popular videos from America in it. Would the Dhaka user still have to trek all the way to America?"
+
+Montu jumped up. "No! He'd grab the video from the warehouse next door!"
+
+— "Exactly! The network of these 'local warehouses' is what we call a **CDN (Content Delivery Network)**."
+
+In plain terms, a CDN is a network of servers scattered all over the world. Their job is to keep a copy (Cache) of the **static content** from the main server, things like videos, images, HTML, CSS, and JS.
+
+When a user wants to watch a video, the CDN works out which server is closest to their home. Then, instead of the main server, it delivers the video from that nearby one.
+
+**Which gets you two wins:**
+
+1. **Speed:** the video comes from a server close to home, so no buffering (Low Latency).
+
+2. **Server load and cost:** not every request goes to the main server anymore, so the load on it drops and you save on bandwidth costs too.

@@ -1,0 +1,40 @@
+---
+title: So What Even Is System Design?
+description: What system design really means, and why writing good code alone isn't enough at scale.
+tags:
+  - Architecture
+  - Software Architecture
+  - Design Patterns
+  - Software Design
+  - Fundamentals
+  - Concepts
+---
+
+Montu Mia blinked. System design? He knew how to write code, wrangle a database, ship it to a server. What else was there to "design"?
+
+Honestly, you can't blame him. A lot of us assume that writing good code is the whole job. But here's the truth: if writing code is laying bricks, then system design is drawing up the blueprint for the entire building.
+
+Quick example.
+
+Say you open a tiny tea stall on the street corner. You don't need much of a plan. A few planks of wood, a kettle, some cups. You brew the tea yourself, you handle the cash yourself. Two or three customers show up, ten on a busy day. No problem.
+
+Now say you get ambitious: "I'm going to open a hundred branches across the country, like Starbucks or KFC, and serve millions of people a day." Are a few planks of wood going to cut it? Can you run all of that single-handed?
+
+Of course not. Now you have to think about things like:
+
+1. How sturdy does the building need to be so it doesn't collapse when thousands of people pour in?
+2. Where does the kitchen go so food gets out fast?
+3. Which door do the supplies come through, and where does the trash go out?
+4. Where are the fire exits?
+
+![Montu's tea stall vs the big chain](/images/sd/what-is-system-design/1.png)
+
+Software works exactly the same way.
+
+**System design is this:** before you build a system, you plan out its architecture, its modules, how the pieces talk to each other, and how data flows through it. The whole blueprint, drawn up front.
+
+When BiralTube was tiny (the tea stall), one ordinary server and one database handled everything just fine. But the moment millions of users showed up (the packed restaurant), Montu needed a real plan. Which database makes search fast? How do new servers spin up automatically when traffic spikes? How do a viewer in New York and a viewer in Dhaka both get smooth, no-buffering video? Working out answers to questions like these, that is system design.
+
+In one line: system design is the craft that turns ordinary code into a system that's massively scalable and rock-solid reliable.
+
+Montu sat up straight. All this time he'd been laying bricks without ever drawing the blueprint. Time to start thinking like an architect.

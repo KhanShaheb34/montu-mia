@@ -1,0 +1,23 @@
+---
+title: "Data Redundancy"
+description: "The key to uninterrupted service"
+tags:
+  - Data Redundancy
+  - Single Point of Failure
+  - Backup vs Redundancy
+  - Fault Tolerance
+  - High Availability
+  - System Reliability
+---
+
+Coffee mug in hand, Boltu started explaining. "Right now there's only one copy of your BiralTube data, right? Meaning, one server goes down and that data's gone with it. The way to get rid of this 'Single Point of Failure' is Data Redundancy. In plain terms: keeping multiple copies of the same data on different servers or data centers."
+
+Montu thought for a moment. "Got it. So keeping a backup of the data to boost the system's Fault Tolerance and Reliability, that's what redundancy is?"
+
+Boltu snapped at him. "That's exactly where you all make the biggest mistake! Backup and redundancy are not the same thing. A backup is saving the data and tucking it away in a cupboard, so you can recover it later if the system crashes. That takes time, and users get a service outage in the meantime. Redundancy is keeping a clone, a 'hot copy', of the live server. If one server fails, the system instantly reroutes requests to another healthy server. The user won't even notice that a server died behind the scenes! This keeps your system's Availability absolutely top-class. And when you want to upgrade the system, you can send servers off for maintenance one at a time, with zero downtime."
+
+![backup-vs-redundancy](/images/sd/replication/2.png)
+
+Montu's eyes went wide. "Whoa! That's slick! So I can sleep soundly now. But Boltu, am I supposed to sit there every hour manually copy-pasting data from one server to another? What if the data gets lost before I even copy it?"
+
+Boltu laughed. "No, you nut! Why would you do the grunt work yourself? That magical process of automatically copying data and keeping it in sync is called 'Replication'. Come on, let me walk you through the nuts and bolts of replication now."

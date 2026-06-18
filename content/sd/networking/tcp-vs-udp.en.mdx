@@ -1,0 +1,103 @@
+---
+title: "TCP and UDP"
+description: "Registered mail vs shouting through a megaphone"
+tags:
+  - TCP
+  - UDP
+  - Networking
+  - Transport Layer
+  - Protocol
+---
+
+Most networking protocols stand on top of these two. Get the difference between them, and you're golden.
+
+Boltu looked at Montu and asked, "Say you're sending a letter to your sweetheart. You want to be sure it lands in her hands, and that she reads it and writes back. What do you do?"
+Montu said, "Send it by registered mail, so I get a delivery receipt."
+
+— "Good! That's **TCP**."
+
+— "Now what if, instead, you're standing in the market handing out flyers, or making announcements over a megaphone? Do you check who got the message and who didn't?"
+Montu shook his head. "Nope."
+
+— "That's **UDP**."
+
+![tcp vs udp](/images/sd/networking/3.png)
+
+Let's go a little deeper...
+
+## 1. TCP (Transmission Control Protocol)
+
+> The Gentleman
+
+Boltu said, "TCP is the 'gentleman' of the networking world. It doesn't just start talking out of nowhere, and it doesn't walk off mid-conversation either."
+
+Its headline trait is **reliability**. You know that little sense of calm when you send someone a WhatsApp message and see the double ticks (Delivered)? TCP does exactly that. It makes sure the data packets you sent actually reached their destination. If a packet goes missing along the way, TCP hunts it down and tells the server, _"Boss, that packet's missing, send it again!"_
+
+### How does it work? (the famous 3-way handshake)
+
+TCP doesn't just start firing off data. First it sets up a connection, called the **'Three-way Handshake'**. It's a lot like calling someone on the phone:
+
+1. **SYN (Hello, you there?):** Montu (the client) sends the server a request: "Hey, I want to connect with you."
+2. **SYN-ACK (Yep, I'm here!):** The server replies: "I'm ready! Can you hear me?"
+3. **ACK (Okay, starting now):** Montu confirms: "Yep, loud and clear! Sending data now."
+
+Only after that three-step handshake does the real data exchange begin. And it doesn't stop at setup, the whole time, TCP runs **'Flow Control'** so that if Montu talks too fast the server can keep up, and if the network slows down, it eases off the speed.
+
+### TCP's traits, in plain terms:
+
+- **Connection-oriented:** clears the line before talking (Connection Establishment).
+- **Guaranteed delivery:** keeps a receipt (Acknowledgement) for whether the data arrived. If it didn't, it sends it again (Retransmission).
+- **Keeps order:** send packets 1, 2, 3 and the receiver gets them as 1, 2, 3. No scrambling.
+- **Traffic-aware:** if the network is slow, it slows its own sending too (Congestion Control), so it doesn't cause a jam.
+
+### Where is it used?
+
+Anywhere losing data would be a disaster, TCP is a must!
+
+- Web browsing (HTTP/HTTPS), so half the text doesn't vanish while a page loads.
+- Email (SMTP/IMAP), so "Hello" doesn't drop an 'o' and turn into "Hell"! 😅
+- File transfer (FTP).
+
+> **Quick note:** Boltu added, the newer **HTTP/3** actually walks the opposite way. It ditches TCP and uses UDP! Why? We'll find out later. For now, just get to know the gentleman, TCP.
+
+## 2. UDP (User Datagram Protocol)
+
+> The Careless Speedster
+
+While Montu sat there starry-eyed over TCP, Boltu said, "Hold on, don't get too impressed. Manners don't work everywhere. Sometimes you need someone who follows no rules and just gets the job done in the blink of an eye. That's **UDP**."
+
+If TCP is a suited-up officer, UDP is the delivery guy racing through traffic on a motorbike. He's got one rule: **"Fire and Forget."**
+
+### How does it work?
+
+UDP hasn't got the time to set up a connection first (Handshake) or to check whether you even got the message (Acknowledgement).
+
+It just lobs the data packets out of the server like cannonballs. Did you catch them? Great. Did one or two slip through your fingers and hit the floor? Not his problem. He's already chucking the next one.
+
+### UDP's personality, in plain terms:
+
+- **Connectionless:** no time for "Hello, you there?". It jumps straight to the point.
+- **Unreliable:** whether data got lost, or arrived out of order, it couldn't care less.
+- **Super fast:** with no checking or handshaking to bother with, it's way faster than TCP.
+- **Lightweight:** its header is tiny, so it puts much less strain on the network.
+
+Funny thing, companies like Google noticed that if you took UDP's raw speed and bolted a security layer on top, you'd have the best of both worlds! And that's exactly where the future of the internet is being born, **QUIC** and **HTTP/3**.
+
+### So what's the point of this "rude" protocol?
+
+Montu, baffled, said, "Boltu, what do I want with something that just drops data?"
+
+Boltu laughed. "Come on, think! When you make a **video call** or play an **online game (PUBG/Valorant)**, what happens? Say one frame of the video glitches out. Do you want the whole thing to freeze right there and wait for that one lost frame? Or do you want it to keep playing, even if it goes a little grainy?"
+
+Montu said, "Keep playing! It's infuriating when a live match freezes up."
+
+— "Exactly! For all this **real-time** stuff, UDP is king. Here, **not being late (Low Latency)** matters way more than getting 100% of the data."
+
+![game over](/images/sd/networking/4.png)
+
+### Where is it used?
+
+- Video streaming and live broadcasts (you might need this for BiralTube's live feature!).
+- Online gaming (where a one-second delay means eating a headshot and dying).
+- Voice calls (VoIP).
+- DNS (Domain Name System), because we want the IP the instant we type a site's name, no waiting around.

@@ -1,9 +1,10 @@
 import {
+  NotFoundException,
   SESv2Client,
   UpdateContactCommand,
-  NotFoundException,
 } from "@aws-sdk/client-sesv2";
 import { type NextRequest, NextResponse } from "next/server";
+import { BASE_URL } from "@/lib/constants";
 import { verifyEmailHash } from "@/lib/email-hash";
 
 const sesClient = new SESv2Client({
@@ -104,7 +105,7 @@ export async function POST(request: NextRequest) {
   <h1>আনসাবস্ক্রাইব সফল হয়েছে</h1>
   <p>আপনাকে মন্টু মিয়াঁর সিস্টেম ডিজাইন নিউজলেটার থেকে আনসাবস্ক্রাইব করা হয়েছে।</p>
   <p>আপনি আর কোন ইমেইল পাবেন না।</p>
-  <p><a href="https://www.montumia.com">মূল পাতায় ফিরে যান</a></p>
+  <p><a href="${BASE_URL}">মূল পাতায় ফিরে যান</a></p>
 </body>
 </html>`,
       {
@@ -153,7 +154,7 @@ export async function GET(request: NextRequest) {
 <body>
   <h1>ভুল লিংক</h1>
   <p>আনসাবস্ক্রাইব লিংক টি সঠিক নয়।</p>
-  <p><a href="https://www.montumia.com">মূল পাতায় ফিরে যান</a></p>
+  <p><a href="${BASE_URL}">মূল পাতায় ফিরে যান</a></p>
 </body>
 </html>`,
       {
@@ -189,7 +190,7 @@ export async function GET(request: NextRequest) {
 <body>
   <h1>ভুল লিংক</h1>
   <p>আনসাবস্ক্রাইব লিংক টি সঠিক নয়।</p>
-  <p><a href="https://www.montumia.com">মূল পাতায় ফিরে যান</a></p>
+  <p><a href="${BASE_URL}">মূল পাতায় ফিরে যান</a></p>
 </body>
 </html>`,
         {
@@ -223,7 +224,7 @@ export async function GET(request: NextRequest) {
 <body>
   <h1>সার্ভার ত্রুটি</h1>
   <p>দুঃখিত, একটি অভ্যন্তরীণ সমস্যা হয়েছে (UNSUBSCRIBE_SECRET missing)।</p>
-  <p><a href="https://www.montumia.com">মূল পাতায় ফিরে যান</a></p>
+  <p><a href="${BASE_URL}">মূল পাতায় ফিরে যান</a></p>
 </body>
 </html>`,
       {
@@ -282,7 +283,7 @@ export async function GET(request: NextRequest) {
     <input type="hidden" name="email" value="${escapedEmail}">
     <input type="hidden" name="hash" value="${escapedHash}">
     <button type="submit">হ্যাঁ, আনসাবস্ক্রাইব করুন</button>
-    <a href="https://www.montumia.com" class="cancel">না, থাক</a>
+    <a href="${BASE_URL}" class="cancel">না, থাক</a>
   </form>
 </body>
 </html>`,

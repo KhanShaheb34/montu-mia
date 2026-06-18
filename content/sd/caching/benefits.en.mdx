@@ -1,0 +1,30 @@
+---
+title: "How Caching Saves the Day"
+description: How an in-memory caching layer rescues an overloaded database and keeps your app fast.
+tags:
+  - Cache Benefits
+  - Low Latency
+  - Scalability
+  - Database Load
+  - Performance Optimization
+---
+
+Boltu smiled. "Look, to solve a problem you first have to understand it. The mess on your BiralTube is mainly because of too much read (**Read**) pressure on the database."
+
+"You've got a few hundred thousand users now. You're using a CDN to make videos fast, good. But the video **metadata** (title, description), the **like counts**, and the thousands of **comments**, all that text data still comes from that one poor database, right?"
+
+Montu nodded. "Yeah, no doubt."
+
+— "Say a video goes viral the instant it's uploaded. Thousands of people are watching it every second. Every time the app opens, your server tells the database, 'give me the video title, tell me the like count, show me the comments.' And while the database is struggling just to keep up with all those read requests, when someone tries to add a new like or comment (a **Write Request**), the database isn't in any state to take it. That's exactly when your 'gremlin problem' hits, likes don't register, comments vanish into thin air."
+
+"Here's how caching helps: the data people keep asking for over and over (like a viral video's title or like count), you pull it out of the database (the hard disk) and keep it in memory (RAM)."
+
+Which means:
+
+- **Lower latency:** data comes out of memory in the blink of an eye.
+- **Better scalability:** even if users suddenly spike, the database doesn't take the hit.
+- **User experience:** the app runs smooth as butter, and those ghostly bugs run for the hills too.
+
+![cache architecture](/images/sd/caching/3.png)
+
+Montu shifted forward. "So this thing is seriously useful! It'll take some effort, but I've got to set up Redis between the server and the database. But Boltu, which data goes into this cache and which doesn't, do I pick that manually, or does it happen automatically?"

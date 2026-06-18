@@ -22,10 +22,20 @@ Thank you for your interest in contributing to **Montu Mia's System Design**! We
 - Push to the branch (`git push origin feature/AmazingFeature`).
 - Open a Pull Request.
 
+### 4. Translating to Other Languages 🌍
+
+- The book is Bengali-first, but translations are very welcome! Bengali stays the default
+  language; other languages live under a path prefix (e.g. English at `/en/...`).
+- You can translate a **single chapter** at a time — untranslated pages automatically fall
+  back to Bengali, so nothing breaks.
+- See **[TRANSLATING.md](TRANSLATING.md)** for the step-by-step guide (file naming, the UI
+  string dictionaries, previewing locally, and how to add a brand-new language).
+
 ## Guidelines
 
 - Please keep the tone **casual, fun, and easy to understand**, just like Montu Mia would explain.
-- Use **Bengali** for the main content.
+- **Bengali** is the source language for the main content. Translations into other languages
+  are welcome — see [TRANSLATING.md](TRANSLATING.md).
 - Ensure all analogies are relatable to the local context.
 
 ## License

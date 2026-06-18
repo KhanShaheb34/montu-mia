@@ -1,0 +1,4 @@
+{
+  "title": "Data Partitioning",
+  "pages": ["index", "types", "sharding-techniques", "trade-offs"]
+}

@@ -1,0 +1,16 @@
+{
+  "title": "Montu Mia's System Design",
+  "root": true,
+  "pages": [
+    "introduction",
+    "what-is-system-design",
+    "scaling",
+    "load-balancer",
+    "networking",
+    "cdn",
+    "caching",
+    "data-partitioning",
+    "replication",
+    "hook"
+  ]
+}

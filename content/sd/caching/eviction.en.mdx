@@ -1,0 +1,28 @@
+---
+title: "Cache Eviction Policy"
+description: "When the fridge is full"
+tags:
+  - Cache Eviction
+  - LRU
+  - LFU
+  - FIFO
+  - Memory Management
+---
+
+"Think about the fridge at your place," Boltu said, settling into story mode. "Say you do the grocery run regularly. Every so often you notice the fridge is packed to bursting. So how do you make room for the new groceries?"
+
+Montu answered in a flash. — "Easy! Whatever food nobody's eaten in ages, or has gone stale, I toss it out to free up space."
+
+Boltu snapped his fingers. — "Picture the cache doing exactly that. When it's saving new data and sees that memory (RAM) is already full, it hunts down whichever data has gone the longest without anyone using it (**Least Recently Used**). Delete those, and you've got room for the new data. This method is called the **LRU (Least Recently Used)** policy."
+
+![LRU cache](/images/sd/caching/5.png)
+
+Pleased, Montu said, "Oh nice, clever idea! So only the data users are actively using right now gets to stay in the cache, like VIPs."
+
+— "Yep. But that's not the only way. There are a few other policies, good to know, they'll come in handy:
+
+- **LFU (Least Frequently Used):** here it looks at which data has been used the 'fewest times'. Whatever isn't popular gets the boot.
+- **FIFO (First In First Out):** whoever got in first is the first to be kicked out when you need space.
+- **Random:** eyes closed, lottery-style, just delete any random piece of data.
+
+But for your BiralTube, **LRU** is the killer move. With services like Redis or Memcached, you can configure these policies and experiment to see which one works best for you."

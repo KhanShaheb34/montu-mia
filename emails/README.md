@@ -100,8 +100,9 @@ The email system includes a robust unsubscribe mechanism:
 
 ### Security
 
-- Each unsubscribe link is secured with a SHA-256 hash
-- Hash is generated using the recipient's email + your `UNSUBSCRIBE_SECRET`
+- Each unsubscribe link is secured with an HMAC-SHA256 hash
+- Hash is an HMAC of the recipient's email, keyed by your `UNSUBSCRIBE_SECRET`
+- Verification is constant-time and also accepts the legacy `sha256(email + secret)` format so links from already-sent newsletters keep working
 - Links cannot be forged without knowing the secret
 - Prevents malicious unsubscribes
 

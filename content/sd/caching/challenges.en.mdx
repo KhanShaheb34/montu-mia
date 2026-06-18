@@ -1,0 +1,52 @@
+---
+title: "The Thorns of Caching"
+description: "When the cure becomes the curse"
+tags:
+  - Caching Challenges
+  - Thundering Herd
+  - Cache Penetration
+  - Big Key Problem
+  - Cache Pollution
+---
+
+After all that praise for caching, Montu was floating on air. But Boltu brought him right back down to earth.
+
+— "Listen, Montu, setting up a cache doesn't magically make life beautiful. Caching has its own side effects. Handle it wrong and it can backfire badly."
+
+Montu's face fell. — "You're kidding, Boltu! What's the catch this time?"
+
+Boltu started counting them off on his fingers.
+
+### 1. Thundering Herd - when the biryani pot runs dry!
+
+"Say a video on your BiralTube goes super viral. Thousands of people are watching it every second. The data's in the cache, so no problem. But suddenly the cache's lifespan (**TTL**) runs out!"
+
+"This is a lot like the biryani pot at a big wedding feast. As long as there's biryani, everyone's happy. The moment the pot runs dry (**Cache Expire**), thousands of hungry guests (**User Requests**) all pounce on the one chef (**Database**) at once, 'Chef, more biryani!'. Can a single chef handle that many people? He's going to have a heart attack! That's the **Thundering Herd** problem."
+
+![Thundering Herd](/images/sd/caching/6.png)
+
+**The fix:** tell the chef, "don't let everyone rush in at once, make them line up (**Staggered Expiration**)." Or keep a fresh pot ready before the old one runs out (**Background Refresh**).
+
+### 2. Big Key - a heavyweight passenger on a rickshaw
+
+"Picture your Redis memory as a rickshaw. Two skinny people can sit on it just fine. But if you force a giant 200-kilo list of videos (**Big Key**) onto it, what happens? Nobody else can squeeze on, and the rickshaw can't even move. The network jams up."
+
+**The fix:** break the huge data into smaller pieces, or compress (**Compress**) it.
+
+### 3. Cache Pollution - a house full of junk
+
+"You've got some old newspapers and a broken chair in your storeroom that nobody's touched in 5 years, right? They're just wasting space. The same thing happens in a cache. Data that nobody's looking for just sits there hogging room, while there's no space left for the new data you actually need. That's **Cache Pollution**."
+
+**The fix:** that **LRU (Least Recently Used)** policy I mentioned, sweep the old junk out the door!
+
+### 4. Cache Penetration - chasing a ghost
+
+"Say some hacker, or just a clueless user, searches for a video ID that isn't even in your database (like `id=-999`). It won't be in the cache (**Cache Miss**), so the request goes to the database. It's not in the database either. Now if millions of people keep hunting for this 'doesn't exist' data, your cache gets bypassed and all the load lands on the database. The database ends up doing pointless work for nothing."
+
+**The fix:** for data that doesn't exist, tell the cache, "hey, this one doesn't exist, remember that too." So next time someone asks, the cache itself can turn them away.
+
+Boltu patted him on the back. "Anyway, these are corner cases. You're just getting started, so don't stress too much. Good old Redis is plenty smart on its own, it'll handle a lot of this for you."
+
+With all of it finally clear, Montu was thrilled. He happily said his goodbyes to Boltu, came home, and sat right down to set up Redis between the server and the database. No more gremlins, and no more getting cursed out by users.
+
+Montu thought to himself, "This system design stuff really is like magic!"

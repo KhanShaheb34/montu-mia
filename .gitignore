@@ -28,3 +28,4 @@ next-env.d.ts
 
 # aws logs
 aws-logs
+.gstack/

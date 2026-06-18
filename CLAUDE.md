@@ -63,18 +63,39 @@ The project uses **Fumadocs** - a documentation framework built on Next.js. Cont
    - This path maps to `.source/*` via tsconfig path alias
    - Used in `src/lib/source.ts` which exports the `source` loader
 
-4. **Rendering**:
-   - `src/app/sd/[[...slug]]/page.tsx` - Catch-all route for rendering docs pages
-   - `src/app/sd/layout.tsx` - Uses Fumadocs `DocsLayout` component
+4. **Rendering** (all page routes live under the `[lang]` segment, see Internationalization):
+   - `src/app/[lang]/sd/[[...slug]]/page.tsx` - Catch-all route for rendering docs pages
+   - `src/app/[lang]/sd/layout.tsx` - Uses Fumadocs `DocsLayout` component
    - MDX components defined in `src/mdx-components.tsx`
 
 ### App Structure (Next.js App Router)
 
-- `src/app/(home)/` - Homepage route group
-- `src/app/sd/` - System design docs section (main content)
-- `src/app/api/search/` - Search API endpoint
-- `src/app/og/` - Dynamic OG image generation
+All page routes live under a `[lang]` segment (see Internationalization below):
+
+- `src/app/[lang]/(home)/` - Homepage route group (per-locale)
+- `src/app/[lang]/sd/` - System design docs section (main content, per-locale)
+- `src/app/[lang]/layout.tsx` - Root layout (owns `<html lang>`, `RootProvider` i18n). There is **no** `src/app/layout.tsx`.
+- `src/app/api/unsubscribe/` - Newsletter unsubscribe endpoint (locale-independent)
 - `src/app/actions.ts` - Server actions (newsletter subscription via AWS SES)
+- `src/app/sitemap.ts` / `src/app/robots.ts` - SEO (locale-independent; sitemap emits hreflang)
+- `src/proxy.ts` - Next.js 16 i18n routing middleware (NOT `middleware.ts`, and must live in `src/` because the app uses a `src/` directory)
+
+### Internationalization (i18n)
+
+The site is **Bengali-first with optional translations** (currently `bn` default + `en`),
+using Fumadocs' built-in i18n. **Subpath routing**: Bengali stays unprefixed
+(`/sd/...` — existing URLs preserved), other languages are prefixed (`/en/sd/...`).
+
+- **Config**: `src/lib/i18n.ts` — `defineI18n<Locale>({ defaultLanguage: DEFAULT_LOCALE, languages: [...LOCALES], hideLocale: 'default-locale', fallbackLanguage: DEFAULT_LOCALE })`. The locale list is **sourced from `constants.ts`**, so `i18n.ts` needs no edit to add a language. `hideLocale: 'default-locale'` rewrites unprefixed paths to `bn`; `/bn/...` 307-redirects to the clean URL. `fallbackLanguage: 'bn'` means untranslated pages render Bengali — nothing 404s.
+- **Content** (`parser: 'dot'`, the default): translations are **sibling files** — `introduction.mdx` (bn) → `introduction.en.mdx` (en); nav `meta.json` → `meta.en.json`. Existing Bengali files are never moved.
+- **Source/loader**: `src/lib/source.ts` passes `i18n` to `loader()`. Use `source.getPage(slug, lang)`, `source.getPageTree(lang)`, `source.getLanguages()`.
+- **UI strings** (non-MDX chrome): typed JSON dictionaries in `src/dictionaries/{bn,en}.json` + `getDictionary(lang)` in `src/lib/dictionaries.ts`. The `Dictionary` type derives from `bn.json`, so a missing key in another locale is a **compile error** in `bun run types:check`. Server components call `getDictionary(lang)` directly; the `subscribe-modal` client component takes a `lang` prop and calls it internally. The doc-page action bar (`ai/page-actions`: Open / Share / Copy / Open-in-GitHub·ChatGPT·Claude / Subscribe) is intentionally **English in every locale** — hardcoded in the component, not in the dictionaries.
+- **Raw markdown for LLMs**: every doc page serves its processed markdown at `${page.url}.mdx` (`/sd/foo.mdx` for bn, `/en/sd/foo.mdx` for en) — used by the Copy Markdown button and the ChatGPT/Claude prompts. Implemented as `src/app/llms.mdx/[lang]/[[...slug]]/route.ts` (uses `getLLMText` from `source.ts`) plus rewrites in `next.config.mjs`, because `src/proxy.ts` skips dotted paths so the middleware never locale-rewrites these URLs. The bn rewrite hardcodes `bn` — it must match `DEFAULT_LOCALE`.
+- **Fumadocs chrome + language toggle**: `src/lib/layout.shared.tsx` exports `provider` (from `defineI18nUI`, passed to `<RootProvider i18n={provider(lang)}>`) and `baseOptions(lang)` (sets `nav.title`/`nav.url`). The switcher is **not** Fumadocs' built-in `i18n: true` toggle — instead a custom `<LanguageToggle />` (`src/components/language-toggle.tsx`) is rendered inline in the sidebar footer so it shares one row with the about link + theme toggle, and a `<LanguageFlagDropdown />` (`src/components/language-flag-dropdown.tsx`) sits top-right on the home page.
+- **Constants**: `src/lib/constants.ts` is the single source of truth — `BASE_URL`, `LOCALES`, `DEFAULT_LOCALE`, `LOCALE_META` (per-locale `ogLocale`, `siteName`, `label`, `flag`), `buildUrl(locale, path)` (absolute, hreflang-safe/idempotent) and `localePath(locale, path)` (relative `<Link>` href).
+- **Metadata/SEO**: page `generateMetadata` sets dynamic `openGraph.locale`/`siteName` and `alternates.languages` hreflang (`bn-BD`/`en-US`/`x-default`); OG image path is locale-aware (`/og/sd/...` for bn, `/og/<lang>/sd/...` otherwise). Sitemap emits per-locale entries with hreflang.
+- **OG images**: `scripts/generate-og-images.ts` + `generate-index-og.ts` loop over `LOCALES`, reading `*.<lang>.mdx` (falling back to the Bengali title). Output paths mirror the URLs: the default locale (`bn`) is unprefixed (`public/og/sd/...`), other locales are prefixed (`public/og/<lang>/sd/...`). `bun run generate-og` runs both scripts (chapters then index).
+- **Adding a language** or translating: see `TRANSLATING.md`. Newsletter/email i18n is intentionally **out of scope** (still Bengali-only).
 
 ### Key Libraries
 
@@ -88,8 +109,8 @@ The project uses **Fumadocs** - a documentation framework built on Next.js. Cont
 
 ### Styling
 
-- Uses two fonts: Outfit (Latin) and Noto Sans Bengali (Bengali script)
-- Font variables: `--font-outfit`, `--font-bengali`
+- Uses two fonts: Bricolage Grotesque (Latin) and Noto Sans Bengali (Bengali script)
+- Font variables: `--font-bricolage`, `--font-bengali`
 - Tailwind configured via `@tailwindcss/postcss` plugin
 - Custom component utilities in `src/lib/cn.ts` (class merging)
 
@@ -205,15 +226,15 @@ The project uses static OG images generated locally using Puppeteer. Images are 
    ```
 
    This script:
-   - Reads all MDX files from `content/sd/`
+   - Reads all MDX files from `content/sd/` (per locale: base files for `bn`, `*.<lang>.mdx` siblings for others, falling back to the Bengali frontmatter)
    - Parses frontmatter (title, description)
-   - Generates OG images using Puppeteer
-   - Saves images to `public/og/sd/{slug}/image.png`
+   - Generates OG images using Puppeteer, once per locale in `LOCALES`
+   - Saves images to `public/og/sd/{slug}/image.png` for the default locale (`bn`) and `public/og/<lang>/sd/{slug}/image.png` for other locales
    - Uses light color theme (yellow-blue gradient) matching the website design
 
 3. **How It Works**:
-   - Static images served from `public/og/sd/` directory
-   - Pages reference images via `/og/sd/{slug}/image.png` path
+   - Static images served from `public/og/sd/` (bn) and `public/og/<lang>/sd/` (other locales)
+   - Pages reference images via the matching locale-aware path
    - No serverless/runtime generation needed
    - Faster page loads (static files)
    - No Vercel deployment issues
@@ -304,6 +325,6 @@ Always run `bun run types:check` before committing. This command:
 
 - Base URL for docs: `/sd` (configured in `src/lib/source.ts`)
 - Site title: "মন্টু মিয়াঁর সিস্টেম ডিজাইন" (Montu Mia's System Design)
-- Primary language: Bengali (`lang="bn"`)
+- Default language: Bengali (`bn`, unprefixed). `<html lang>` is set dynamically per locale; English (`en`) is served under `/en`. See Internationalization above.
 - Production URL: https://www.montumia.com
 - License: CC-BY-NC-SA-4.0 (content), MIT (code snippets)

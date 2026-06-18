@@ -1,16 +1,39 @@
+import { defineI18nUI } from "fumadocs-ui/i18n";
 import type { BaseLayoutProps } from "fumadocs-ui/layouts/shared";
+import { LOCALE_META, localePath, normalizeLocale } from "@/lib/constants";
+import { i18n } from "@/lib/i18n";
 
-export function baseOptions(): BaseLayoutProps {
+// Fumadocs chrome translations (TOC, prev/next, etc.) + per-locale switcher
+// `displayName`. `provider(lang)` is passed to <RootProvider i18n={...}>.
+export const { provider } = defineI18nUI(i18n, {
+  translations: {
+    bn: {
+      displayName: "বাংলা",
+      search: "সার্চ করুন",
+      searchNoResult: "কোন ফলাফল পাওয়া যায়নি",
+      toc: "এই পেজে",
+      tocNoHeadings: "কোন শিরোনাম নেই",
+      lastUpdate: "সর্বশেষ আপডেট",
+      chooseLanguage: "ভাষা নির্বাচন করুন",
+      nextPage: "পরবর্তী",
+      previousPage: "পূর্ববর্তী",
+      chooseTheme: "থিম",
+      editOnGithub: "গিটহাবে এডিট করুন",
+    },
+    en: {
+      displayName: "English",
+    },
+  },
+});
+
+export function baseOptions(lang: string): BaseLayoutProps {
+  const locale = normalizeLocale(lang);
+  const meta = LOCALE_META[locale];
   return {
     nav: {
-      title: "মন্টু মিয়াঁর সিস্টেম ডিজাইন",
+      title: meta.siteName,
+      url: localePath(locale, "/"),
     },
-    // links: [
-    //   {
-    //     text: "Documentation",
-    //     url: "/docs",
-    //     active: "nested-url",
-    //   },
-    // ],
+    // No `i18n: true`: we render a custom <LanguageToggle /> in the sidebar footer instead.
   };
 }

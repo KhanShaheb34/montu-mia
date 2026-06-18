@@ -1,5 +1,11 @@
 "use client";
-import { useMemo, useState } from "react";
+import { buttonVariants } from "fumadocs-ui/components/ui/button";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "fumadocs-ui/components/ui/popover";
+import { useCopyButton } from "fumadocs-ui/utils/use-copy-button";
 import {
   Check,
   ChevronDown,
@@ -7,14 +13,8 @@ import {
   ExternalLinkIcon,
   ShareIcon,
 } from "lucide-react";
+import { useMemo, useState } from "react";
 import { cn } from "@/lib/cn";
-import { useCopyButton } from "fumadocs-ui/utils/use-copy-button";
-import { buttonVariants } from "fumadocs-ui/components/ui/button";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "fumadocs-ui/components/ui/popover";
 
 /**
  * Simple LRU cache implementation with max size
@@ -80,6 +80,11 @@ export function LLMCopyButton({
       await navigator.clipboard.write([
         new ClipboardItem({
           "text/plain": fetch(markdownUrl).then(async (res) => {
+            if (!res.ok) {
+              throw new Error(
+                `Failed to fetch markdown from ${markdownUrl}: HTTP ${res.status}`,
+              );
+            }
             const content = await res.text();
             cache.set(markdownUrl, content);
 
@@ -129,8 +134,10 @@ export function ViewOptions({
   const items = useMemo(() => {
     const fullMarkdownUrl =
       typeof window !== "undefined"
-          //Fix: strip .mdx extension from generated markdown URL
-          ? new URL(markdownUrl, window.location.origin).toString().replace(/\.mdx$/, "")
+        ? //Fix: strip .mdx extension from generated markdown URL
+          new URL(markdownUrl, window.location.origin)
+            .toString()
+            .replace(/\.mdx$/, "")
         : "loading";
     const q = `Read ${fullMarkdownUrl}, I want to ask questions about it.`;
 

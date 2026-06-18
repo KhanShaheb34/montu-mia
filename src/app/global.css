@@ -5,9 +5,9 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  --font-sans: var(--font-outfit), var(--font-bengali), ui-sans-serif, system-ui,
-    sans-serif;
-  --font-heading: var(--font-outfit), var(--font-bengali), ui-sans-serif,
+  --font-sans: var(--font-bricolage), var(--font-bengali), ui-sans-serif,
+    system-ui, sans-serif;
+  --font-heading: var(--font-bricolage), var(--font-bengali), ui-sans-serif,
     system-ui, sans-serif;
 }
 

@@ -1,9 +1,44 @@
 import fs from "node:fs";
 import path from "node:path";
 import puppeteer from "puppeteer-core";
+import {
+	DEFAULT_LOCALE,
+	type Locale,
+	LOCALE_META,
+	LOCALES,
+} from "../src/lib/constants";
 
-async function generateIndexOG() {
-	console.log("Generating fallback OG image for index page...");
+// Index/landing hero text per locale (chapter OG text comes from frontmatter).
+// Typed Record<Locale, ...> so adding a language to LOCALES makes a missing
+// entry here a compile error in `bun run types:check`.
+const INDEX_TEXT: Record<Locale, { title: string; desc: string }> = {
+	bn: { title: "সিস্টেম ডিজাইন", desc: "বাংলায় সিস্টেম ডিজাইন শিখুন" },
+	en: { title: "System Design", desc: "Learn system design through stories" },
+};
+
+function escapeHtml(text: string): string {
+	return text
+		.replace(/&/g, "&amp;")
+		.replace(/</g, "&lt;")
+		.replace(/>/g, "&gt;")
+		.replace(/"/g, "&quot;")
+		.replace(/'/g, "&#39;");
+}
+
+// Index OG output path: default locale -> public/og/sd/index, others -> public/og/<lang>/sd/index.
+function ogIndexPath(locale: string): string {
+	const segments =
+		locale === DEFAULT_LOCALE
+			? ["public", "og", "sd", "index", "image.png"]
+			: ["public", "og", locale, "sd", "index", "image.png"];
+	return path.join(process.cwd(), ...segments);
+}
+
+async function generateIndexOG(locale: Locale) {
+	const text = INDEX_TEXT[locale];
+	const siteName = LOCALE_META[locale].siteName;
+
+	console.log(`Generating fallback OG image for index page (${locale})...`);
 
 	const executablePath =
 		process.platform === "win32"
@@ -33,7 +68,7 @@ async function generateIndexOG() {
     <html>
       <head>
         <style>
-          @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;700&display=swap');
+          @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;700&family=Outfit:wght@400;600;700&display=swap');
 
           body {
             margin: 0;
@@ -43,7 +78,7 @@ async function generateIndexOG() {
             box-sizing: border-box;
             background-color: #f8fafc;
             background-image: linear-gradient(to bottom right, #fef08a, #bfdbfe);
-            font-family: 'Hind Siliguri', sans-serif;
+            font-family: 'Hind Siliguri', 'Outfit', sans-serif;
             display: flex;
             flex-direction: row;
             align-items: center;
@@ -100,9 +135,9 @@ async function generateIndexOG() {
           <img src="${montuImageDataUrl}" alt="Montu Mia" />
         </div>
         <div class="content">
-          <div class="site-name">মন্টু মিয়াঁর সিস্টেম ডিজাইন</div>
-          <div class="title">সিস্টেম ডিজাইন</div>
-          <div class="desc">বাংলায় সিস্টেম ডিজাইন শিখুন</div>
+          <div class="site-name">${escapeHtml(siteName)}</div>
+          <div class="title">${escapeHtml(text.title)}</div>
+          <div class="desc">${escapeHtml(text.desc)}</div>
         </div>
       </body>
     </html>
@@ -114,15 +149,8 @@ async function generateIndexOG() {
 		});
 
 		const buffer = await page.screenshot({ type: "png" });
-		const outputPath = path.join(
-			process.cwd(),
-			"public",
-			"og",
-			"sd",
-			"index",
-			"image.png",
-		);
-
+		const outputPath = ogIndexPath(locale);
+		fs.mkdirSync(path.dirname(outputPath), { recursive: true });
 		fs.writeFileSync(outputPath, buffer);
 		console.log(`✓ Saved fallback OG image: ${outputPath}`);
 	} finally {
@@ -130,7 +158,13 @@ async function generateIndexOG() {
 	}
 }
 
-generateIndexOG().catch((error) => {
+async function main() {
+	for (const locale of LOCALES) {
+		await generateIndexOG(locale);
+	}
+}
+
+main().catch((error) => {
 	console.error("Error generating fallback OG image:", error);
 	process.exit(1);
 });

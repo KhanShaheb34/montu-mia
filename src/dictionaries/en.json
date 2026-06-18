@@ -1,0 +1,30 @@
+{
+  "home": {
+    "imageAlt": "Montu Mia's System Design",
+    "heroTitle": "Montu Mia's System Design Adventure",
+    "heroSubtitle1": "Montu Mia is struggling to handle thousands of BiralTube users!",
+    "heroSubtitle2": "You learned to code, but can the app survive without system design?",
+    "ctaStart": "Start reading"
+  },
+  "a11y": {
+    "changeLanguage": "Change language"
+  },
+  "sidebar": {
+    "aboutAuthor": "About the writer"
+  },
+  "subscribe": {
+    "trigger": "Subscribe",
+    "title": "Subscribe for updates",
+    "description": "We'll email you whenever a new chapter is released.",
+    "emailLabel": "Email",
+    "placeholder": "name@example.com",
+    "submit": "Subscribe",
+    "success": "Thank you! You've been subscribed successfully."
+  },
+  "errors": {
+    "invalidEmail": "Please enter a valid email",
+    "rateLimit": "Too many attempts. Please try again in {minutes} minutes.",
+    "serverConfig": "Server configuration error",
+    "generic": "Something went wrong. Please try again."
+  }
+}

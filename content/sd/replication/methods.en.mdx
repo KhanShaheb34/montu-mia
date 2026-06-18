@@ -1,0 +1,55 @@
+---
+title: "Replication Topologies"
+description: "In the world of servers, who's the boss and who's the sidekick?"
+tags:
+  - Replication Topologies
+  - Single Leader Replication
+  - Multi-Leader Replication
+  - Leaderless Replication
+  - Read Replicas
+  - System Architecture
+---
+
+Boltu started scribbling on the whiteboard with a marker. "So you'll do replication, but among all these servers, who holds the control? If everyone tries to edit data at once, all-out war breaks out inside your servers! So first you have to decide who's the leader and who's the follower. The server that takes write or update orders directly from the client, that's the 'Leader' (the boss). The servers that quietly copy from the boss and keep their own copy are the 'Followers' (the sidekicks). Based on how many leaders there are, you mainly get three kinds of architecture."
+
+### 1. Single Leader: the dictatorship
+
+"In this method, the whole system has just one boss, one leader. Every write request from clients (new video uploads, likes, comments), all of it goes to this one server. Then the leader syncs the data down to its followers. The followers' only job is to let people 'read' data. This is also called the master-slave architecture.
+
+For a read-heavy system like your BiralTube, this is great! Because there's just one leader, there's no squabble or conflict over who gets to write data first."
+
+![single-leader](/images/sd/replication/4.png)
+
+Montu thought for a bit. "But Boltu, what if the boss has a heart attack? I mean, if the leader server fails, all writes to the system come to a complete halt until a new leader is picked! And users on the other side of the world will feel the lag when they try to write to a single leader."
+
+Boltu smiled. "You hit the point dead-on! Simple as it is, the risk of a single point of failure is always there."
+
+### 2. Multi-Leader: several dons in town
+
+"To get rid of single-leader's lag and failure problems, along came the multi-leader architecture. Here there's more than one leader. Say you keep one leader server in Dhaka and another in America. Dhaka users write to Dhaka, American users write to America. This boosts speed, and if one leader dies, you keep running with the other."
+
+Montu's eyes lit up. "Whoa, this is the best one!"
+
+Boltu gave a devilish grin. "Best? Multi-leader's single biggest headache is called 'conflict'. Say two users, one from Dhaka and one from America, edit the title of the same cat video in the exact same millisecond! Both leaders accept their write. Then, when they go to sync data with each other, whose title gets saved as final in the database? Resolving that conflict is one of the most troublesome jobs in all of system design."
+
+![multi-leader](/images/sd/replication/5.png)
+
+### 3. Leaderless: power to the people (democracy)
+
+"What if the system has no boss at all? Everyone's equal! The client can fire a write or read request at any server it likes. That's leaderless, or Peer-to-Peer, replication. Here, to keep track of who took data first, a 'Quorum', or voting system, is used. Meaning, for a write to be successful, you need the agreement of a majority of the servers."
+
+Montu frowned. "Boltu, just hearing it, this sounds really complex."
+
+![leaderless](/images/sd/replication/6.png)
+
+"Complex it is! But this system has no single point of failure and no bottleneck. Amazon's DynamoDB and Apache Cassandra are built on exactly this concept." Boltu said, capping the whiteboard marker. "Besides these three main methods, there are a few more patterns, like:
+
+- Read Replica
+- Chain Replication
+- Snapshot Replication
+
+For your BiralTube, getting your head around these three concepts is enough for now. Google the rest."
+
+Now happy, Montu said, "Crystal clear, Boltu. Then let me get to work! I'll set it all up before any real trouble actually hits the system."
+
+"Go on, get out there," said Boltu, sending Montu off for the day.
