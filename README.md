@@ -47,16 +47,6 @@ The book is Bengali-first, but it's built to be translated. Bengali stays the de
 You can translate **one chapter at a time** — untranslated pages fall back to Bengali, so
 nothing breaks. See **[TRANSLATING.md](TRANSLATING.md)** to get started.
 
-## Star History
-
-<a href="https://www.star-history.com/#KhanShaheb34/montu-mia&type=timeline&legend=top-left">
- <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=KhanShaheb34/montu-mia&type=timeline&theme=dark&legend=top-left" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=KhanShaheb34/montu-mia&type=timeline&legend=top-left" />
-   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=KhanShaheb34/montu-mia&type=timeline&legend=top-left" />
- </picture>
-</a>
-
 ## License
 
 [![License: CC BY-NC-SA 4.0](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
