@@ -32,13 +32,8 @@ Montu finally had a lightbulb moment. "That means, Bhai, there is no magic in th
 Boltu Bhai patted Montu on the back. "Exactly! You're finally starting to think like a real software architect."
 
 ```mermaid
----
-config:
-  theme: base
-  look: handDrawn
----
 graph TD
-    Start[Is the network partitioned?] -->|Yes| Partition[During a partition, pick one]
+    Start[Is the network partitioned?] -->|"Yes (P)"| Partition[During a partition, pick one]
     Start -->|No| Normal[The rest of the time, pick one]
 
     Partition -->|Choose A| A[Availability <br/>Keep answering requests]
