@@ -1,0 +1,22 @@
+---
+title: "When Consistency is King"
+description: "When money is on the line"
+---
+
+Boltu Bhai looked at Montu. "Let's say you're ordering a bulk shipment of premium tea from Sylhet for everyone at your company. You need to send the supplier 10,000 Taka. You open your banking app and hit 'Send Money'."
+
+"Right," Montu nodded.
+
+"The exact millisecond you hit 'Send', the network cable between the bank's Dhaka server and their Sylhet server gets sliced! Boom, a Partition (P) just happened. The Dhaka server has absolutely no way of talking to the Sylhet server."
+
+Montu leaned in, listening intently.
+
+"Now, if the bank decides to prioritize Availability (A), the system will happily accept your request. It will deduct 10,000 Taka from your account, but it can't tell the Sylhet server about it. The money never shows up in the supplier's account! You lose your money, and you don't get your tea!"
+
+Montu gasped. "Are you kidding me? I'd sue the bank!"
+
+"Exactly," Boltu Bhai smiled. "This is why in banking systems or financial transactions, Consistency (C) is vastly more important than Availability. When the network drops, the bank's system refuses to take a gamble. It will immediately throw an error on your screen: 'Transaction Failed' or 'Service Unavailable'. That means the system is temporarily down, or not Available. But your money is perfectly safe. Nothing was deducted, and nothing vanished into thin air. Because the bank chose Consistency (C) over Availability (A) during a Partition (P), banking is a classic **CP system**."
+
+![cp-system](/images/sd/trade-offs/4.png)
+
+"Makes sense, Bhai. This sounds like the perfect setup, no messed-up data. Why would anyone even need an AP system then?" Montu asked, feeling pretty pleased with his new understanding.

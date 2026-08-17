@@ -1,0 +1,25 @@
+---
+title: "C, A, and P - What Are They?"
+---
+
+Boltu Bhai grabbed a marker and wrote three big letters on the whiteboard: C, A, P.
+
+— "Listen, Montu. You'll read on the internet or in textbooks that the CAP theorem means picking any two out of these three. But in the world of distributed systems, that is a flat-out lie."
+
+Montu looked confused. "What do you mean, a lie? Bhai, you literally just said..."
+
+"Listen, rookie, let me finish!" Boltu Bhai scolded playfully. "A distributed system, by definition, means you have multiple servers—just like those multiple bus counters. And when you have multiple servers, network cables _will_ get cut, routers _will_ fry, or water _will_ leak into a satellite. In other words, a **Partition (P)** is inevitable. You can't prevent it, no matter how hard you try."
+
+![partition-tolerance](/images/sd/trade-offs/3.png)
+
+Boltu Bhai underlined the 'P'.
+
+— "Since there's no way to avoid P, you don't actually have three options—you only have two. When P happens, you have to sacrifice either C or A. Let's break these three down in plain English:"
+
+- **P - Partition Tolerance:** Even if the cable between your two servers gets cut or communication drops, the system won't crash and burn. It will stay alive and kicking. In a distributed system, this is a 100% non-negotiable requirement.
+- **A - Availability:** The system will always respond. No matter what happens to the servers, if a user makes a request, they will get _some_ kind of answer (even if it's outdated or slightly incorrect data). The system will never just sit there showing a 'Server Down' message to the user.
+- **C - Consistency:** All servers in the system will always hold the exact same data. A user checking from Dhaka will see the exact same data as a user checking from New York. No one will ever see wrong or outdated information.
+
+Montu nodded. "So that means, Bhai, for any distributed system, I have to choose either **CP** (Consistency + Partition Tolerance) or **AP** (Availability + Partition Tolerance)?"
+
+"Bingo!" Boltu Bhai said happily. "Now let me give you two real-life examples. That'll show you exactly when to build a CP system and when to build an AP system."
