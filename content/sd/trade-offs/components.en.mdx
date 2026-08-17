@@ -14,11 +14,11 @@ Montu looked confused. "What do you mean, a lie? Bhai, you literally just said..
 
 Boltu Bhai underlined the 'P'.
 
-— "Since there's no way to avoid P, you don't actually have three options—you only have two. When P happens, you have to sacrifice either C or A. Let's break these three down in plain English:"
+— "Since you can't prevent network cables from getting cut or messages from dropping, a Partition (P) will inevitably happen in a distributed system. And while a partition is happening, expecting the system to guarantee both Consistency (C) and Availability (A) at the same time is pure fantasy. Let's break these three down more precisely:"
 
-- **P - Partition Tolerance:** Even if the cable between your two servers gets cut or communication drops, the system won't crash and burn. It will stay alive and kicking. In a distributed system, this is a 100% non-negotiable requirement.
-- **A - Availability:** The system will always respond. No matter what happens to the servers, if a user makes a request, they will get _some_ kind of answer (even if it's outdated or slightly incorrect data). The system will never just sit there showing a 'Server Down' message to the user.
-- **C - Consistency:** All servers in the system will always hold the exact same data. A user checking from Dhaka will see the exact same data as a user checking from New York. No one will ever see wrong or outdated information.
+- **P - Partition Tolerance:** Even if there's a delay in communication between your servers, messages get dropped, or the network gets completely severed, the system can still keep chugging along without crashing. In a distributed system, this is 100% non-negotiable.
+- **A - Availability:** Every active, working node will provide a valid (non-error) response to every incoming request (even if that means serving slightly stale or older data during a partition). The system will never just sit there throwing a 'server down' error.
+- **C - Consistency:** Every read operation will return either the absolute latest write or an error. Whether checking from Dhaka or New York, the system guarantees that no client will ever see outdated or stale data. If it can't give you the fresh update, it throws an error instead of lying to you!
 
 Montu nodded. "So that means, Bhai, for any distributed system, I have to choose either **CP** (Consistency + Partition Tolerance) or **AP** (Availability + Partition Tolerance)?"
 
