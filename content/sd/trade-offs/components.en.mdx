@@ -1,0 +1,32 @@
+---
+title: "C, A, and P - What Are They?"
+tags:
+  - CAP Theorem
+  - Consistency
+  - Availability
+  - Partition Tolerance
+  - CP Systems
+  - AP Systems
+---
+
+Boltu Bhai grabbed a marker and wrote three big letters on the whiteboard: C, A, P.
+
+— "Listen, Montu. You'll read on the internet or in textbooks that the CAP theorem means picking any two out of these three. But in the world of distributed systems, that is a flat-out lie."
+
+Montu looked confused. "What do you mean, a lie? Bhai, you literally just said..."
+
+"Listen, rookie, let me finish!" Boltu Bhai scolded playfully. "A distributed system, by definition, means you have multiple servers—just like those multiple bus counters. And when you have multiple servers, network cables _will_ get cut, routers _will_ fry, or water _will_ leak into a satellite. In other words, a **Partition (P)** is inevitable. You can't prevent it, no matter how hard you try."
+
+![partition-tolerance](/images/sd/trade-offs/3.png)
+
+Boltu Bhai underlined the 'P'.
+
+— "Since you can't prevent network cables from getting cut or messages from dropping, a Partition (P) will inevitably happen in a distributed system. And while a partition is happening, expecting the system to guarantee both Consistency (C) and Availability (A) at the same time is pure fantasy. Let's break these three down more precisely:"
+
+- **P - Partition Tolerance:** Even if there's a delay in communication between your servers, messages get dropped, or the network gets completely severed, the system can still keep chugging along without crashing. In a distributed system, this is 100% non-negotiable.
+- **A - Availability:** Every active, working node will provide a valid (non-error) response to every incoming request (even if that means serving slightly stale or older data during a partition). The system will never just sit there throwing a 'server down' error.
+- **C - Consistency:** Every read operation will return either the absolute latest write or an error. Whether checking from Dhaka or New York, the system guarantees that no client will ever see outdated or stale data. If it can't give you the fresh update, it throws an error instead of lying to you!
+
+Montu nodded. "So that means, Bhai, for any distributed system, I have to choose either **CP** (Consistency + Partition Tolerance) or **AP** (Availability + Partition Tolerance)?"
+
+"Bingo!" Boltu Bhai said happily. "Now let me give you two real-life examples. That'll show you exactly when to build a CP system and when to build an AP system."

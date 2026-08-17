@@ -1,0 +1,37 @@
+---
+title: "When Uptime is Everything"
+description: "The Like Button Dilemma"
+tags:
+  - AP Systems
+  - Availability
+  - Partition Tolerance
+  - Eventual Consistency
+  - High Availability Architecture
+  - Social Media System Design
+---
+
+Boltu Bhai laughed. "It's great to have flawless math when money is involved, but does the whole world run on bank ledgers? Take your BiralTube, for example."
+
+Montu sat up straight.
+
+"Imagine a cute cat video goes absolutely viral on BiralTube. Thousands of people are watching and smashing the like button every second. Suddenly, a Network Partition (P) hits between your Dhaka server and your Singapore server. Neither can sync data with the other."
+
+"Okay," Montu nodded along.
+
+"Now, what happens if you built BiralTube as a CP system, just like the bank? Since the Singapore server can't send like updates to the Dhaka server, it will just stop accepting requests altogether. When a user hits 'Like', the screen will spit out an error: 'Action failed' or 'Service unavailable'. Think about it—if your system crashes just because someone tried to like or watch a cat video, are your users going to stick around?"
+
+Montu shook his head instantly. "No way! They'd delete their accounts and run for the hills."
+
+"Exactly," Boltu Bhai explained. "That's why for social media or video platforms, Availability (A) is vastly more critical than Consistency (C). When the network drops, your system should just accept the like instead of throwing an error. Sure, a user in Dhaka might see 50,000 likes on the video, while a user in Singapore sees 49,990 likes. That 10-like difference is a data mismatch, or inconsistency. But the user doesn't care! The video is playing, the like button works—the user is happy!"
+
+![ap-system](/images/sd/trade-offs/5.png)
+
+Montu's eyes lit up. "I get it! Since it doesn't matter if the data isn't 100% perfectly accurate, but it's an absolute disaster if the system goes down or freezes, BiralTube has to be an **AP system**."
+
+Boltu Bhai took a sip of his tea and said, "Spot on. System design is all about making the right architectural decisions based on your specific business needs. If you need the data to be flawless at all times, you go with CP. If you don't strictly need the absolute latest data instantly, you go with AP."
+
+Montu breathed a huge sigh of relief. "Thank God! So that means as long as the internet is working fine, I have nothing to worry about. My system is 100% perfect then!"
+
+Boltu Bhai burst into laughter. "Who told you that, rookie? Even when the internet is working flawlessly, you still have to make another massive trade-off. Enter the PACELC theorem!"
+
+Montu was stunned. "Another new theorem? What on earth is that?"

@@ -49,13 +49,13 @@ const TEST_RECIPIENT: EmailRecipient = {
 // Email content configuration
 const EMAIL_CONTENT: EmailContentConfig = {
   lastEpisodeSummary:
-    "শার্ডিং করে মন্টু তার ডাটাবেসের ডাটা টুকরো টুকরো করে ছড়িয়ে দিল পৃথিবীর নানা প্রান্তের ডাটাসেন্টারে। রাইট অপারেশনের জ্যাম ছুটল ঠিকই, কিন্তু নতুন দুশ্চিন্তা — একটা সার্ভার গেলেই তো সব ডাটা হাওয়া!",
+    "কীভাবে মন্টু রিডান্ডেন্সি আর রেপ্লিকেশনের সাহায্যে ডাটা হারানো থেকে বাঁচার উপায় শিখেছিল।",
   currentTopicTeaser:
-    "ডাটাসেন্টার ডুবে যাওয়ার দুঃস্বপ্নে ঘুম ভাঙল মন্টুর। এবার বল্টু ভাই শেখাবেন ডাটা বাঁচানোর জাদুমন্ত্র — রিডান্ডেন্সি আর রেপ্লিকেশন। সিঙ্ক্রোনাস না অ্যাসিঙ্ক্রোনাস? আর সার্ভারের দুনিয়ায় কে বস আর কে চামচা?",
-  articleTitle: "ডাটা বাঁচানোর জাদুমন্ত্র (রিডান্ডেন্সি ও রেপ্লিকেশন)",
-  articleImageUrl: "https://www.montumia.com/linkedin/replication.jpeg",
-  linkedinArticleUrl: "https://trak.sh/montu08",
-  campaign: "replication",
+    "ডিস্ট্রিবিউটেড সিস্টেমের দুনিয়ায় চাইলেই সবকিছু একসাথে পাওয়া যায় কি না। বল্টু ভাইয়ের ড্রয়িংরুমে মন্টু আজ শিখবে CAP ও PACELC থিওরি!",
+  articleTitle: "সিস্টেম ডিজাইনের ট্রেড অফস (CAP ও PACELC থিওরি)",
+  articleImageUrl: "https://www.montumia.com/linkedin/trade-offs.jpeg",
+  linkedinArticleUrl: "https://trak.sh/montu09",
+  campaign: "trade-offs",
 };
 
 /**

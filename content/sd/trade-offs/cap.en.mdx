@@ -1,0 +1,39 @@
+---
+title: "CAP Theorem"
+description: "Two Passengers, One Seat"
+tags:
+  - CAP Theorem
+  - Consistency
+  - Availability
+  - Partition Tolerance
+  - Network Partitions
+  - Distributed Systems Trade-offs
+---
+
+Sipping his tea, Boltu Bhai slipped into storyteller mode. "Imagine, Montu, you start an intercity bus service called 'Redline'. You have 10 buses traveling from Dhaka to Chittagong every day. Each bus has 50 seats, giving you 500 seats in total. You also have 5 ticket counters spread across Dhaka. Now, all 5 counter managers need to know if there are any seats left before selling a ticket. So, you create a WhatsApp group for them. The rule is simple: whenever someone sells a ticket, they drop a message in the group, and everyone else updates their own ledgers. Once 500 tickets are sold for the day, the counters close."
+
+— "Wow, brilliant idea! Zero hassle."
+
+— "The hassle is just beginning! One day, the nationwide internet goes down completely. Your managers' WhatsApp stops working. Nobody can tell anyone else how many tickets they've sold. As the owner of the bus company, you only have two options to handle this crisis."
+
+![partition](/images/sd/trade-offs/2.png)
+
+— "What are they?"
+
+— "Option one: you give your managers strict orders that the moment WhatsApp goes down, ticket sales stop instantly! Nobody sells a single ticket until they can verify the inventory with the other counters."
+
+— "If I do that, my business is doomed! Sending customers away will ruin our reputation. What's the other option?"
+
+— "Option two: you tell your managers to screw the ledger. Internet or no internet, do not turn any customers away! Keep selling whatever tickets you have, and we'll deal with the mess later."
+
+— "But Bhai, if they can't talk to each other, what if they accidentally sell 700 or 800 tickets instead of 500? The customers will literally tear me apart when they board the bus and find no seats!"
+
+Montu went completely quiet. He finally understood the problem.
+
+Boltu Bhai put a hand on Montu's shoulder. "This loss of internet that completely severed communication between your counters? In distributed systems, this is called a **Network Partition**. And in the real world, networks _will_ fail at some point. Accepting this harsh reality and preparing for it is known as **Partition Tolerance (P)**."
+
+Montu nodded slowly. "Got it, Bhai."
+
+— "Whenever the counters lose connection, as the owner, you are forced to choose one of those two options. You can choose to halt all sales to prevent double booking, ensuring your data and ledgers remain absolutely flawless, this system property is called **Consistency (C)**. On the other hand, if you want your counters to remain open no matter what so that no customer goes home empty-handed, you have to keep selling at the risk of messing up the ledgers, this is called **Availability (A)**."
+
+Boltu Bhai took another sip of his tea and continued, "Even if you have multiple counters, as long as they can communicate with each other perfectly, you can maintain both Consistency and Availability. The real problem only starts when that communication is actually severed. During that Network Partition, you simply cannot guarantee both flawless Consistency and total Availability at the exact same time. You have to make a sacrifice on one side. That is the fundamental truth of the CAP Theorem."
