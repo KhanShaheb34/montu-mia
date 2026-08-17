@@ -18,11 +18,11 @@ Boltu Bhai looked at Montu. "Let's say you're ordering a bulk shipment of premiu
 
 Montu leaned in, listening intently.
 
-“Now, if the system prioritized Availability (A) and just blindly processed writes without coordinating across nodes during a partition, it would spell disaster. For instance, the Dhaka server might deduct the money from your account, but because the Sylhet server is offline, it wouldn't know to credit the supplier. As a result, the ledgers on both servers would completely drift apart—your money would vanish into the void, and the supplier wouldn't get paid!”
+"Now, if the system prioritized Availability (A) and just blindly processed writes without coordinating across nodes during a partition, it would spell disaster. For instance, the Dhaka server might deduct the money from your account, but because the Sylhet server is offline, it wouldn't know to credit the supplier. As a result, the ledgers on both servers would completely drift apart—your money would vanish into the void, and the supplier wouldn't get paid!"
 
-Montu gasped, “Are you kidding me? I'd sue the bank!”
+Montu gasped, "Are you kidding me? I'd sue the bank!"
 
-“Exactly why,” Boltu Bhai smiled, “when it comes to financial transactions, Consistency (C) is way more important than Availability. In a proper CP system, the moment a Network Partition (P) hits, the system refuses to take any chances. If the Dhaka server realizes it can't talk to the Sylhet server, it cancels the transaction right then and there—aborting before any final commit—and throws a 'Service Unavailable' error on your screen. No split data, no messed-up ledgers, and your money stays safe. Because the system chooses Consistency (C) over Availability (A) during a partition, banking is a classic **CP system**.”
+"Exactly why," Boltu Bhai smiled, "when it comes to financial transactions, Consistency (C) is way more important than Availability. In a proper CP system, the moment a Network Partition (P) hits, the system refuses to take any chances. If the Dhaka server realizes it can't talk to the Sylhet server, it cancels the transaction right then and there—aborting before any final commit—and throws a 'Service Unavailable' error on your screen. No split data, no messed-up ledgers, and your money stays safe. Because the system chooses Consistency (C) over Availability (A) during a partition, banking is a classic **CP system**."
 
 ![cp-system](/images/sd/trade-offs/4.png)
 
