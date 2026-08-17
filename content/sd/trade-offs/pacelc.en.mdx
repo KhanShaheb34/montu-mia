@@ -23,9 +23,9 @@ Montu nodded. "Yeah, most of the time it's fine."
 
 Montu looked confused. "When everything is fine, what kind of trade-off could there possibly be between speed and flawless data?"
 
-"Take your BiralTube, for instance," Boltu Bhai began to explain. "All server connections are healthy. A user likes a video. You want them to see that like count instantly (Latency/speed). But to do that, if you don't wait for every single server to sync immediately, it might take a few milliseconds for that update to reach other servers. As a result, other users will see an older like count for a brief moment.
+"Take your BiralTube, for instance," Boltu Bhai began to explain. "All server connections are healthy. A user likes a video. If you prioritize Latency (speed), the system will quickly confirm the write on the local server and instantly respond to the user, while pushing the updates to the other servers quietly in the background (asynchronous replication). Because of this background sync lag, other users might see a slightly older like count for a brief few milliseconds.
 
-On the other hand, if you want everyone to see the exact 100% synchronized like count at the exact same time (Consistency), you have to force every server to finish updating before confirming success. That means the user who hit 'like' will have to wait longer for a response (Latency goes up)."
+On the other hand, if you prioritize Consistency, the system can't just take shortcuts. Before confirming that write, it has to coordinate with a leader or a quorum (a majority of nodes) to make sure everyone is on the same page. All that extra network chatter and round-trip coordination takes time, meaning the user who hit 'like' will have to wait longer for a response—so your Latency goes up."
 
 Montu finally had a lightbulb moment. "That means, Bhai, there is no magic in the database world. If I'm building a real-time chat app or BiralTube, I have to prioritize speed, or Latency. But if I'm building a banking transaction system, I have to prioritize Consistency, even if it runs a little slower."
 
