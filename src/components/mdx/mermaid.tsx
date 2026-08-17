@@ -36,13 +36,14 @@ function MermaidContent({ chart }: { chart: string }) {
   );
 
   const isDark = resolvedTheme === "dark";
+  const renderId = id.replace(/:/g, "_");
 
   const { svg, bindFunctions } = use(
-    cachePromise(`${chart}-${resolvedTheme}`, () => {
+    cachePromise(`${renderId}-${chart}-${resolvedTheme}`, () => {
       mermaid.initialize({
         startOnLoad: false,
         securityLevel: "loose",
-        fontFamily: "inherit",
+        fontFamily: "var(--font-bricolage), var(--font-bengali), sans-serif",
         themeCSS: "margin: 1.5rem auto 0;",
         look: "handDrawn",
         theme: "base",
@@ -116,7 +117,7 @@ function MermaidContent({ chart }: { chart: string }) {
             },
       });
 
-      return mermaid.render(id.replace(/:/g, "_"), chart.replaceAll("\\n", "\n"));
+      return mermaid.render(renderId, chart.replaceAll("\\n", "\n"));
     }),
   );
 
