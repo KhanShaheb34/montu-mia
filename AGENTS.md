@@ -348,3 +348,12 @@ Always run `bun run types:check` before committing. This command:
 - Default language: Bengali (`bn`, unprefixed). `<html lang>` is set dynamically per locale; English (`en`) is served under `/en`. See Internationalization above.
 - Production URL: https://www.montumia.com
 - License: CC-BY-NC-SA-4.0 (content), MIT (code snippets)
+
+## Cursor Cloud specific instructions
+
+- **Package manager is Bun** (see `bun.lock`), which is not part of the base image. It is installed to `~/.bun/bin` by the startup update script. If `bun` is ever not found in a shell, prefix commands with `PATH="$HOME/.bun/bin:$PATH"` (non-login shells don't source `~/.bashrc`).
+- **Node 22** is preinstalled; only Bun needs bootstrapping.
+- **Running the app**: start the dev server with `bun dev` (Next.js Turbopack, serves on `http://localhost:3000`). All lint/test/build commands are already documented above under "Commands" — use those (`bun run lint`, `bun run types:check`, `bun run build`). There is no automated unit-test suite; correctness is verified via `types:check` + `build` + manual browsing.
+- **No env vars are needed to run the core docs site.** `bun dev`, `bun run build`, and doc rendering all work with zero configuration. The AWS SES / Algolia variables in `.env.example` are only for the newsletter, unsubscribe API, email preview, and search scripts (`send-emails`, `email:preview`, `subscribers`, `migrate-to-ses`) — those will fail without credentials, but they are not required for the website itself.
+- **Lint has pre-existing warnings/errors** in committed code (import ordering, `noExplicitAny`, formatting). `bun run lint` exiting non-zero is not caused by environment setup.
+- `bun install` runs the `fumadocs-mdx` postinstall automatically, regenerating the gitignored `.source/` directory that content imports depend on.
