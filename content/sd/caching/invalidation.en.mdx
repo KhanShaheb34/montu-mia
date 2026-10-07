@@ -41,7 +41,7 @@ flowchart LR
 You can tell from the name, this one 'steps around' or bypasses the cache.
 
 - **Process:** the app writes data straight to the database. It doesn't put the new data in the cache. But careful! The old data sitting in the cache doesn't disappear on its own. So the app has to delete the old cache key, or rely on that data's lifespan (TTL) running out. Otherwise users keep getting the stale copy from the cache.
-- **Next step:** later, when someone goes to read that data, there's a 'cache miss' (because the data isn't in the cache). Then the cache fetches the new data from the database again and updates itself.
+- **Next step:** later, when someone goes to read that data, there's a 'cache miss' (because the old key was deleted, so the data isn't in the cache). Then the cache fetches the new data from the database again and updates itself.
 - **Upside:** data that rarely gets read (like logs or archives) doesn't waste cache space.
 - **Downside:** if someone comes to read right after the data is updated, they have to wait a bit (because of the cache miss).
 
