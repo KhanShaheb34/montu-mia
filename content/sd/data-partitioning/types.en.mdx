@@ -18,7 +18,7 @@ Boltu drew a square box on the whiteboard and started explaining. "Listen, there
 
 Montu jumped up, delighted. "Oh, super simple! So if I want to split the database into 3 parts, instead of odd-even I just take the ID modulo 3, right Boltu?"
 
-Boltu smiled. "Not so fast, kid! Sharding has a few tricks of its own. Pick the wrong technique, and later, when you go to add or remove servers, you'll be in deep trouble. We'll get to that, let me clear up the basics first."
+Boltu smiled. "Not so fast, kid! Sharding has a few tricks of its own. Pick the wrong technique, and later, when you go to add or remove servers, you'll be in deep trouble. Take your modulo 3. Say users pile in tomorrow, you add a fourth server, and start doing modulo 4. The math flips! ID 5 used to live on Server 2 (5 mod 3 = 2), now it belongs on Server 1 (5 mod 4 = 1). Roughly three out of every four users' data would have to move to a different server, basically reshuffling the whole database overnight! To dodge that mess, big systems usually use **Consistent Hashing**, where adding a server only moves a small slice of the data. Anyway, let me clear up the basics first."
 
 ### 2. The lengthwise cut: Vertical Partitioning
 

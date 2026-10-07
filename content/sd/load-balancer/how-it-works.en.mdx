@@ -78,7 +78,7 @@ Sometimes you just won't let anyone but your usual barber touch your hair. Why? 
 
 Software has the same need sometimes. Say a user named Karim logs in, and his session (or shopping cart) lives on the server he first landed on. Next time he sends a request, you want him sent back to that same server, not a random new one.
 
-The IP Hash algorithm looks at the user's IP address, remembers them, and routes them to the same specific server every time. This is also called a **'Sticky Session'**.
+The IP Hash algorithm runs the user's IP address through a calculation (a hash) to pick a server. It doesn't need to remember anyone: the same IP always gives the same answer, so the user lands on the same specific server every time. Sending the same user back to the same server like this is called a **'Sticky Session'**. IP Hash is just one way to get it; another common way is a cookie that remembers which server the user belongs to.
 
 > 📝 **Montu's quick note - filing away the rest:**
 >

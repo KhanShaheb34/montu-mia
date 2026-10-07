@@ -20,8 +20,8 @@ A little digging, and Montu found that a load balancer is basically a Swiss Army
 Montu thought: "BiralTube's superstar, Mr. Treat, has a birthday coming up. What happens if he announces a midnight livestream?"
 Every cat lover on the planet would pile in at once. Montu's 10 servers would crash in a heartbeat.
 
-This is where the load balancer's magic kicks in. Montu can tell it: "Listen, the moment server load (CPU usage) crosses 80%, spin up 10 more servers right away."
-And once the stream ends and the load drops, it shuts the extra servers back down. The whole thing happens automatically. No waking up at 3 a.m. to flip servers on and off.
+This is where the load balancer's magic kicks in. It works hand in hand with auto-scaling. Montu can tell the auto-scaler: "Listen, the moment server load (CPU usage) crosses 80%, spin up 10 more servers right away." As soon as the new servers come up, the load balancer starts sending users to them.
+And once the stream ends and the load drops, the auto-scaler shuts the extra servers back down, and the load balancer stops sending them users just before it does. The whole thing happens automatically. No waking up at 3 a.m. to flip servers on and off.
 
 ## Sending sick servers home (Health Check) 🏥
 
