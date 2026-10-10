@@ -23,6 +23,9 @@ export const { provider } = defineI18nUI(i18n, {
     en: {
       displayName: "English",
     },
+    tr: {
+      displayName: "Türkçe",
+    },
   },
 });
 
